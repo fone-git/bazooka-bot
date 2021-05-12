@@ -34,7 +34,7 @@ class Conf:
                     'for each round. Numbers should be space separated and quoted to be '
                     'one argument. EG start "1 3 3 5".'}
 
-    COMMAND_PREFIX = '!'
+    COMMAND_PREFIX = 'bb'
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
