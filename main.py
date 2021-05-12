@@ -40,7 +40,9 @@ def main():
         await ctx.send(f'{user_display} registered with id: {id_}')
 
     @bot.command(**Conf.COMMAND.DISPLAY)
-    async def display(ctx):
+    async def display(ctx, full=None):
+        if full is not None:
+            tournament.calc_all_rounds()
         await ctx.send(tournament)
 
     @bot.command(**Conf.COMMAND.RESET)

@@ -8,7 +8,7 @@ class Conf:
             'help': 'Unregisters you for the tournament'}
         DISPLAY = {
             'name': 'display',
-            'help': 'Shows current board state'}
+            'help': 'Shows current board state. Add "full" argument to force full board generation'}
         RESET = {
             'name': 'reset',
             'help': 'Starts a new tournament. WARNING: Old data is cleared'}
