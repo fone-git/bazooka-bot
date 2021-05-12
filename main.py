@@ -1,13 +1,21 @@
-import discord
-import os
-import requests
 import json
+import os
 import random
-from replit import db
+
+import discord
+import requests
+
 from board_display import display_start
+from log import log, setup_logging
+
+try:
+    from replit import db
+except ModuleNotFoundError:
+    db = {}  # For working locally (Assume empty db)
 
 
 def main():
+    log('Main Started')
     client = discord.Client()
 
     sad_words = ["sad", "depressed", "unhappy", "angry", "miserable",
@@ -44,7 +52,7 @@ def main():
 
     @client.event
     async def on_ready():
-        print('We have logged in as {0.user}'.format(client))
+        log(f'Logged in as {client.user}')
 
     @client.event
     async def on_message(message):
@@ -99,4 +107,5 @@ def main():
 
 
 if __name__ == '__main__':
+    setup_logging()
     main()
