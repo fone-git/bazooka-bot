@@ -85,8 +85,16 @@ def main():
 
     @bot.command(**Conf.COMMAND.COUNT)
     async def count(ctx):
-        player_count, round_count = tournament.count()
-        await ctx.send(f'There are {player_count} players registered forming  {round_count} rounds')
+        await ctx.send(tournament.count_as_str())
+
+    @bot.command(**Conf.COMMAND.STATUS)
+    async def count(ctx):
+        await ctx.send(tournament.status())
+
+    @bot.command(**Conf.COMMAND.START)
+    async def count(ctx, rounds_best_out_of):
+        tournament.start([int(x) for x in rounds_best_out_of.split()])
+        await ctx.send(f'Tournament Started')
 
     @bot.event
     async def on_command_error(ctx, error):

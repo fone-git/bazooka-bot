@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 from discord.ext import commands
 
@@ -57,9 +58,18 @@ class Tournament:
         self.next_id += 1
         return self.next_id
 
-    def close_registration(self):
-        # TODO Fill out rest of rounds
-        pass
+    def start(self, rounds_best_out_of: List[int]):
+        if not self.is_reg_open:
+            raise commands.errors.UserInputError(f'Tournament already started!')
+
+        self.calc_all_rounds()
+        if len(rounds_best_out_of) != len(self.rounds):
+            raise commands.errors.UserInputError(
+                f'Number of rounds does not match count of number passed.\n'
+                f'Rounds {len(self.rounds)}. Count of numbers passed: {len(rounds_best_out_of)}')
+
+        for best_out_of, round in zip(rounds_best_out_of, self.rounds):
+            round.best_out_of = best_out_of
 
     @property
     def rounds(self):
@@ -86,6 +96,14 @@ class Tournament:
             self.calc_all_rounds()
         round_count = len(self.rounds)
         return player_count, round_count
+
+    def count_as_str(self):
+        player_count, round_count = self.count()
+        return f'There are {player_count} players registered forming  {round_count} rounds'
+
+    def status(self):
+        return f'**Status Report**:\nRegistration: {"open" if self.is_reg_open else "closed"}\n' \
+               f'{self.count_as_str()}'
 
     def invalidate_computed_values(self):
         self.rounds_ = None

@@ -24,6 +24,15 @@ class Conf:
         COUNT = {
             'name': 'count',
             'help': 'Returns the number of registered players and rounds'}
+        STATUS = {
+            'name': 'status',
+            'help': 'Returns the status of the system including the present state of registration'}
+        START = {
+            'name': 'start',
+            'help': 'Starts the tournament. Stops registration and disables shuffle. '
+                    'NB: Must supply number indicating the best out of how many games '
+                    'for each round. Numbers should be space separated and quoted to be '
+                    'one argument. EG start "1 3 3 5".'}
 
     COMMAND_PREFIX = '!'
 
