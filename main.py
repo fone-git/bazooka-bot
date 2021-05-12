@@ -13,6 +13,11 @@ from log import log, setup_logging
 from tournament import Tournament
 
 try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
+
+try:
     from replit import db
 except ModuleNotFoundError:
     db = {}  # For working locally (Assume empty db)
@@ -23,8 +28,7 @@ def get_user_info(user):
 
 
 def save_tournament(data):
-    data = yaml.dump(data)
-    print(data)
+    data = yaml.dump(data, Dumper=Dumper)
     db[Conf.KEY.TOURNAMENT] = data
 
 
@@ -32,8 +36,7 @@ tournament = db.get(Conf.KEY.TOURNAMENT)
 if tournament is None:
     tournament = Tournament()
 else:
-    print(tournament)
-    tournament = yaml.load(tournament)
+    tournament = yaml.load(tournament, Loader=Loader)
 
 #######################################################################
 """ 
