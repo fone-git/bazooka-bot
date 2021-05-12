@@ -1,3 +1,5 @@
+from discord.ext import commands
+
 from player import Player
 from round import Round
 
@@ -14,10 +16,10 @@ class Tournament:
 
     def register(self, user_fq, user_display):
         if not self.is_reg_open:
-            raise Exception(f'Registration is closed')
+            raise commands.errors.UserInputError(f'Registration is closed')
 
         if user_fq in self:
-            raise Exception(f'{user_display} already exists')
+            raise commands.errors.UserInputError(f'{user_display} already exists')
         self.rounds_ = None
         player = Player(user_fq, user_display, self.get_id())
         self.players.append(player)

@@ -3,10 +3,12 @@ class Conf:
         REGISTER = {
             'name': 'reg',
             'help': 'registers you for the tournament'}
-        
         DISPLAY = {
             'name': 'display',
             'help': 'Shows current board state'}
+        NEW = {
+            'name': 'new',
+            'help': 'Starts a new tournament. WARNING: Old data is cleared'}
 
     COMMAND_PREFIX = '!'
 

@@ -34,26 +34,24 @@ def main():
     @bot.command(**Conf.COMMAND.REGISTER)
     async def register(ctx):
         user_fq, user_display = get_user_info(ctx.author)
-        try:
-            id_ = tournament.register(user_fq, user_display)
-        except Exception as e:
-            raise commands.errors.CommandError(str(e))
+        id_ = tournament.register(user_fq, user_display)
         await ctx.send(f'{user_display} registered with id: {id_}')
         save_tournament(tournament)
 
     @bot.command(**Conf.COMMAND.DISPLAY)
     async def register(ctx):
-        try:
-            await ctx.send(tournament)
-        except Exception as e:
-            raise commands.errors.CommandError(str(e))
+        await ctx.send(tournament)
+
+    @bot.command(**Conf.COMMAND.NEW)
+    async def register(ctx, confirm):
+        await ctx.send(tournament)
 
     @bot.event
     async def on_command_error(ctx, error):
         if isinstance(error, commands.errors.CommandNotFound):
             log(error, logging.DEBUG)
             await ctx.send('Command Not Found (Maybe you have a typo)')
-        elif isinstance(error, commands.errors.CommandError):
+        elif isinstance(error, commands.errors.UserInputError):
             log(error, logging.INFO)
             await ctx.send(error)
         else:
