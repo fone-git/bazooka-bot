@@ -1,10 +1,12 @@
 import logging
 import os
+from threading import Thread
 
 import discord
+import flask
 from discord.ext import commands
+from waitress import serve
 
-from board_display import display_start
 from conf import Conf
 from log import log, setup_logging
 from tournament import Tournament
@@ -27,6 +29,30 @@ tournament = db.get(Conf.KEY.TOURNAMENT)
 if tournament is None:
     tournament = Tournament()
 
+#######################################################################
+""" 
+    HTML Control Section
+    Had to put them in the same file to resolve issues with getting 
+    access to current tournament variable values
+    
+"""
+app = flask.Flask('Board')
+
+
+@app.route('/')
+def home():
+    return flask.render_template('board.html', content=tournament.as_html())
+
+
+def run():
+    serve(app, host="0.0.0.0", port=8080)
+
+
+def display_start():
+    Thread(target=run).start()
+
+
+#######################################################################
 
 def main():
     log('Main Started')

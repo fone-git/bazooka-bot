@@ -211,3 +211,6 @@ class Tournament:
             game.next_game.next_game[new_ind] = game.players[win_ind]
             self.players_map[user_fq] = game.next_game.next_game
         return f'{user_display} TAKES [{game}] and ADVANCES to [{game.next_game}]'
+
+    def as_html(self):
+        return str(self)
