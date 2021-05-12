@@ -39,11 +39,11 @@ def main():
         save_tournament(tournament)
 
     @bot.command(**Conf.COMMAND.DISPLAY)
-    async def register(ctx):
+    async def display(ctx):
         await ctx.send(tournament)
 
     @bot.command(**Conf.COMMAND.RESET)
-    async def register(ctx, confirm=None):
+    async def reset(ctx, confirm=None):
         if confirm != 'yes':
             await ctx.send('Are you sure you want to reset tournament (May cause data loss)? '
                            '(reset with argument of "yes" to confirm.')
