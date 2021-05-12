@@ -23,12 +23,13 @@ def save_tournament(data):
     db[Conf.KEY.TOURNAMENT] = data
 
 
+tournament = db.get(Conf.KEY.TOURNAMENT)
+if tournament is None:
+    tournament = Tournament()
+
+
 def main():
     log('Main Started')
-
-    tournament = db.get(Conf.KEY.TOURNAMENT)
-    if tournament is None:
-        tournament = Tournament()
 
     bot = commands.Bot(command_prefix=Conf.COMMAND_PREFIX)
 
@@ -51,7 +52,7 @@ def main():
             await ctx.send('Are you sure you want to reset tournament (May cause data loss)? '
                            '(reset with argument of "yes" to confirm.')
         else:
-            nonlocal tournament
+            global tournament
             tournament = Tournament()
             save_tournament(tournament)
             await ctx.send("Tournament reset")
