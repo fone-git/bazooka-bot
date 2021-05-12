@@ -82,6 +82,7 @@ def main():
         await ctx.send(tournament)
 
     @bot.command(**Conf.COMMAND.RESET)
+    @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
     async def reset(ctx, confirm=None):
         if confirm != 'yes':
             await ctx.send('Are you sure you want to reset tournament (May cause data loss)? '
@@ -100,6 +101,7 @@ def main():
         await ctx.send(f'{user_display} unregistered. ID was {id_}')
 
     @bot.command(**Conf.COMMAND.REGISTER_OTHER)
+    @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
     async def register_other(ctx, at_ref_for_other: discord.User):
         user_fq, user_display = get_user_info(at_ref_for_other)
         id_ = tournament.register(user_fq, user_display)
@@ -107,6 +109,7 @@ def main():
         await ctx.send(f'{user_display} registered with id: {id_}')
 
     @bot.command(**Conf.COMMAND.UNREGISTER_OTHER)
+    @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
     async def unregister_other(ctx, at_ref_for_other: discord.User):
         user_fq, user_display = get_user_info(at_ref_for_other)
         id_ = tournament.unregister(user_fq, user_display)
@@ -114,6 +117,7 @@ def main():
         await ctx.send(f'{user_display} unregistered. ID was {id_}')
 
     @bot.command(**Conf.COMMAND.SHUFFLE)
+    @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
     async def shuffle(ctx):
         tournament.shuffle()
         save_tournament(tournament)
@@ -128,16 +132,19 @@ def main():
         await ctx.send(tournament.status())
 
     @bot.command(**Conf.COMMAND.START)
+    @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
     async def start(ctx, rounds_best_out_of):
         tournament.start([int(x) for x in rounds_best_out_of.split()])
         await ctx.send(f'Tournament Started')
 
     @bot.command(**Conf.COMMAND.REOPEN_REGISTRATION)
+    @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
     async def reopen_registration(ctx):
         tournament.reopen_registration()
         await ctx.send(f'Registration has been reopened. All progress erased.')
 
     @bot.command(**Conf.COMMAND.WIN)
+    @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
     async def win(ctx, user: discord.User, qty: int = 1):
         user_fq, user_display = get_user_info(user)
         response = tournament.win(user_fq, user_display, qty)
@@ -148,10 +155,14 @@ def main():
     async def on_command_error(ctx, error):
         if isinstance(error, commands.errors.CommandNotFound):
             log(error, logging.DEBUG)
-            await ctx.send('Command Not Found (Maybe you have a typo)')
+            # No need for noisy fail message right now
+            # await ctx.send('Command Not Found (Maybe you have a typo)')
         elif isinstance(error, commands.errors.UserInputError):
             log(error, logging.INFO)
             await ctx.send(error)
+        elif isinstance(error, commands.errors.MissingAnyRole):
+            log(error, logging.INFO)
+            await ctx.send('Restricted Command')
         else:
             log(error, logging.WARNING)
             await ctx.send('Command Failed')
