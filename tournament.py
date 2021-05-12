@@ -1,3 +1,5 @@
+import random
+
 from discord.ext import commands
 
 from player import Player
@@ -20,7 +22,7 @@ class Tournament:
 
         if user_fq in self:
             raise commands.errors.UserInputError(f'{user_display} already exists')
-        self.rounds_ = None
+        self.invalidate_computed_values()
         player = Player(user_fq, user_display, self.get_id())
         self.players.append(player)
         return player.id_
@@ -31,12 +33,18 @@ class Tournament:
 
         if user_fq not in self:
             raise commands.errors.UserInputError(f'{user_display} was not registered')
-        self.rounds_ = None
+        self.invalidate_computed_values()
         for i, player in enumerate(self.players):
             if player.fq == user_fq:
                 self.players = self.players[:i] + self.players[i + 1:]
                 return player.id_
         raise Exception('Code should never reach here player should have been found to unregister')
+
+    def shuffle(self):
+        if not self.is_reg_open:
+            raise commands.errors.UserInputError(f'Registration is closed. Shuffle not allowed.')
+        self.invalidate_computed_values()
+        random.shuffle(self.players)
 
     def __contains__(self, fq):
         for player in self.players:
@@ -69,8 +77,10 @@ class Tournament:
             # put them into a game by themselves (auto win)
             if p1 is not None:
                 round_.add(p1)
-
         return self.rounds_
+
+    def invalidate_computed_values(self):
+        self.rounds_ = None
 
     def __str__(self):
         result = ""

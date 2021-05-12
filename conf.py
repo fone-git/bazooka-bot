@@ -18,6 +18,9 @@ class Conf:
         UNREGISTER_OTHER = {
             'name': 'unreg_other',
             'help': 'Unregisters someone else from the tournament'}
+        SHUFFLE = {
+            'name': 'shuffle',
+            'help': 'Shuffles the user order. NB: Only works during registration.'}
 
     COMMAND_PREFIX = '!'
 

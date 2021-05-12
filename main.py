@@ -75,6 +75,12 @@ def main():
         save_tournament(tournament)
         await ctx.send(f'{user_display} unregistered. ID was {id_}')
 
+    @bot.command(**Conf.COMMAND.SHUFFLE)
+    async def register_other(ctx):
+        tournament.shuffle()
+        save_tournament(tournament)
+        await ctx.send(f'Player order shuffled')
+
     @bot.event
     async def on_command_error(ctx, error):
         if isinstance(error, commands.errors.CommandNotFound):
