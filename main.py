@@ -4,12 +4,18 @@ from threading import Thread
 
 import discord
 import flask
+import yaml
 from discord.ext import commands
 from waitress import serve
 
 from conf import Conf
 from log import log, setup_logging
 from tournament import Tournament
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 try:
     from replit import db
@@ -22,12 +28,15 @@ def get_user_info(user):
 
 
 def save_tournament(data):
+    data = yaml.dump(data, Dumper=Dumper)
     db[Conf.KEY.TOURNAMENT] = data
 
 
 tournament = db.get(Conf.KEY.TOURNAMENT)
 if tournament is None:
     tournament = Tournament()
+else:
+    tournament = yaml.load(tournament, Loader=Loader)
 
 #######################################################################
 """ 
