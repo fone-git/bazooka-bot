@@ -213,4 +213,20 @@ class Tournament:
         return f'{user_display} TAKES [{game}] and ADVANCES to [{game.next_game}]'
 
     def as_html(self):
-        return str(self)
+        if len(self.players) == 0:
+            return '<h1> No one is registered yet </h1>'
+
+        result = ''
+        for i, round_ in enumerate(self.rounds):
+            result += f'<ul class="round round-{i + 1}">'
+
+            for game in round_:
+                result += f'<li class="spacer">&nbsp;</li>' \
+                          f'<li class="game game-top {game.is_p1_winner()}">{game.p1}' \
+                          f'<span>{game.p1_score}</span></li>' \
+                          f'<li class="game game-spacer">Game ID: {game.game_id}</li>' \
+                          f'<li class="game game-bottom {game.is_p2_winner()}">{game.p2}' \
+                          f'<span>{game.p2_score}</span></li>'
+
+            result += '<li class="spacer">&nbsp;</li> </ul>'
+        return result
