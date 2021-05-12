@@ -1,6 +1,7 @@
 import logging
 import os
 
+import discord
 from discord.ext import commands
 
 from board_display import display_start
@@ -35,8 +36,8 @@ def main():
     async def register(ctx):
         user_fq, user_display = get_user_info(ctx.author)
         id_ = tournament.register(user_fq, user_display)
-        await ctx.send(f'{user_display} registered with id: {id_}')
         save_tournament(tournament)
+        await ctx.send(f'{user_display} registered with id: {id_}')
 
     @bot.command(**Conf.COMMAND.DISPLAY)
     async def display(ctx):
@@ -57,8 +58,22 @@ def main():
     async def unregister(ctx):
         user_fq, user_display = get_user_info(ctx.author)
         id_ = tournament.unregister(user_fq, user_display)
-        await ctx.send(f'{user_display} unregistered. ID was {id_}')
         save_tournament(tournament)
+        await ctx.send(f'{user_display} unregistered. ID was {id_}')
+
+    @bot.command(**Conf.COMMAND.REGISTER_OTHER)
+    async def register_other(ctx, at_ref_for_other: discord.User):
+        user_fq, user_display = get_user_info(at_ref_for_other)
+        id_ = tournament.register(user_fq, user_display)
+        save_tournament(tournament)
+        await ctx.send(f'{user_display} registered with id: {id_}')
+
+    @bot.command(**Conf.COMMAND.UNREGISTER_OTHER)
+    async def register_other(ctx, at_ref_for_other: discord.User):
+        user_fq, user_display = get_user_info(at_ref_for_other)
+        id_ = tournament.unregister(user_fq, user_display)
+        save_tournament(tournament)
+        await ctx.send(f'{user_display} unregistered. ID was {id_}')
 
     @bot.event
     async def on_command_error(ctx, error):
