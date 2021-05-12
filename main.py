@@ -29,9 +29,9 @@ def main():
     if tournament is None:
         tournament = Tournament()
 
-    bot = commands.Bot(command_prefix='!')
+    bot = commands.Bot(command_prefix=Conf.COMMAND_PREFIX)
 
-    @bot.command(name='reg', help='registers you for the tournament')
+    @bot.command(**Conf.COMMAND.REGISTER)
     async def register(ctx):
         user_fq, user_display = get_user_info(ctx.author)
         try:
@@ -41,7 +41,7 @@ def main():
         await ctx.send(f'{user_display} registered with id: {id_}')
         save_tournament(tournament)
 
-    @bot.command(name='display', help='Shows current board state')
+    @bot.command(**Conf.COMMAND.DISPLAY)
     async def register(ctx):
         try:
             await ctx.send(tournament)
