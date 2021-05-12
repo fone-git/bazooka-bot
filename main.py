@@ -35,10 +35,10 @@ def main():
     async def register(ctx):
         user_fq, user_display = get_user_info(ctx.author)
         try:
-            tournament.register(user_fq, user_display)
+            id_ = tournament.register(user_fq, user_display)
         except Exception as e:
             raise commands.errors.CommandError(str(e))
-        await ctx.send(f'{user_display} registered')
+        await ctx.send(f'{user_display} registered with id: {id_}')
         save_tournament(tournament)
 
     @bot.command(name='display', help='Shows current board state')

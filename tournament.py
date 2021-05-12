@@ -19,7 +19,9 @@ class Tournament:
         if user_fq in self:
             raise Exception(f'{user_display} already exists')
         self.rounds_ = None
-        self.players.append(Player(user_fq, user_display, self.get_id()))
+        player = Player(user_fq, user_display, self.get_id())
+        self.players.append(player)
+        return player.id_
 
     def __contains__(self, fq):
         for player in self.players:
