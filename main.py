@@ -88,18 +88,25 @@ def main():
         await ctx.send(tournament.count_as_str())
 
     @bot.command(**Conf.COMMAND.STATUS)
-    async def count(ctx):
+    async def status(ctx):
         await ctx.send(tournament.status())
 
     @bot.command(**Conf.COMMAND.START)
-    async def count(ctx, rounds_best_out_of):
+    async def start(ctx, rounds_best_out_of):
         tournament.start([int(x) for x in rounds_best_out_of.split()])
         await ctx.send(f'Tournament Started')
 
     @bot.command(**Conf.COMMAND.REOPEN_REGISTRATION)
-    async def count(ctx):
+    async def reopen_registration(ctx):
         tournament.reopen_registration()
         await ctx.send(f'Registration has been reopened. All progress erased.')
+
+    @bot.command(**Conf.COMMAND.WIN)
+    async def win(ctx, user: discord.User, qty: int = 1):
+        user_fq, user_display = get_user_info(user)
+        response = tournament.win(user_fq, user_display, qty)
+        save_tournament(tournament)
+        await ctx.send(response)
 
     @bot.event
     async def on_command_error(ctx, error):

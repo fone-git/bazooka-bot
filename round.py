@@ -7,7 +7,7 @@ class Round:
         self.best_out_of = None
 
     def add(self, p1, p2=None):
-        self.game_sets.append(GameSet(p1, p2))
+        self.game_sets.append(GameSet(p1, p2, self))
 
     def __getitem__(self, key):
         return self.game_sets[key]
@@ -17,7 +17,7 @@ class Round:
         return len(self.game_sets)
 
     def __str__(self):
-        result = '' if self.best_out_of is None else f'Best Out of: {self.best_out_of}\n'
+        result = '' if self.best_out_of is None else f'Best out of: {self.best_out_of}\n'
         for game_set in self.game_sets:
             result += f'{game_set}\n'
 

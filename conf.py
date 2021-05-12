@@ -36,6 +36,9 @@ class Conf:
         REOPEN_REGISTRATION = {
             'name': 'reopen_reg',
             'help': 'Reopens registration but erases any current progress (all wins erased).'}
+        WIN = {
+            'name': 'win',
+            'help': 'Increases the specified players points by a qty or 1 if not specified'}
 
     COMMAND_PREFIX = 'bb'
 

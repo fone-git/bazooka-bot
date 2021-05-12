@@ -4,12 +4,35 @@ from player import Player
 class GameSet:
     next_id = 1  # Global counter for game IDs (Reset when rounds is invalidated
 
-    def __init__(self, p1, p2):
+    def __init__(self, p1, p2, round_):
+        self.round_ = round_  # Round that the game is in
         self.game_id = self.new_game_id()
-        self.p1 = p1
-        self.p2 = p2
-        self.p1_score = 0
-        self.p2_score = 0
+        self.players = [p1, p2]
+        self.scores = [0, 0]
+        self.next_game = None  # Stores the game that the winner of this game goes to
+        self.next_game_player_ind = None  # index of the winner of this game in the next game
+
+    def is_won(self):
+        for score in self.scores:
+            if score > self.round_.best_out_of // 2:
+                return True
+        return False
+
+    @property
+    def p1(self):
+        return self.players[0]
+
+    @property
+    def p2(self):
+        return self.players[1]
+
+    @property
+    def p1_score(self):
+        return self.scores[0]
+
+    @property
+    def p2_score(self):
+        return self.scores[1]
 
     def __str__(self):
         return f'g{self.game_id}: {self.p1} ({self.p1_score}) vs {self.p2} ({self.p2_score})'
