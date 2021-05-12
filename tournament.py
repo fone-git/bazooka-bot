@@ -60,5 +60,5 @@ class Tournament:
     def __str__(self):
         result = ""
         for i, round_ in enumerate(self.rounds):
-            result += f'--- Round {i} ---\n{round_}\n'
+            result += f'--- Round {i + 1} ---\n{round_}\n'
         return result
