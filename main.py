@@ -69,17 +69,22 @@ def main():
         await ctx.send(f'{user_display} registered with id: {id_}')
 
     @bot.command(**Conf.COMMAND.UNREGISTER_OTHER)
-    async def register_other(ctx, at_ref_for_other: discord.User):
+    async def unregister_other(ctx, at_ref_for_other: discord.User):
         user_fq, user_display = get_user_info(at_ref_for_other)
         id_ = tournament.unregister(user_fq, user_display)
         save_tournament(tournament)
         await ctx.send(f'{user_display} unregistered. ID was {id_}')
 
     @bot.command(**Conf.COMMAND.SHUFFLE)
-    async def register_other(ctx):
+    async def shuffle(ctx):
         tournament.shuffle()
         save_tournament(tournament)
         await ctx.send(f'Player order shuffled')
+
+    @bot.command(**Conf.COMMAND.COUNT)
+    async def count(ctx):
+        player_count, round_count = tournament.count()
+        await ctx.send(f'There are {player_count} players registered forming  {round_count} rounds')
 
     @bot.event
     async def on_command_error(ctx, error):

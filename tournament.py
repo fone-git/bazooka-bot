@@ -2,6 +2,7 @@ import random
 
 from discord.ext import commands
 
+from game_set import GameSet
 from player import Player
 from round import Round
 
@@ -79,11 +80,49 @@ class Tournament:
                 round_.add(p1)
         return self.rounds_
 
+    def count(self):
+        player_count = len(self.players)
+        if self.is_reg_open:
+            self.calc_all_rounds()
+        round_count = len(self.rounds)
+        return player_count, round_count
+
     def invalidate_computed_values(self):
         self.rounds_ = None
+        GameSet.reset_id_count()
 
     def __str__(self):
         result = ""
         for i, round_ in enumerate(self.rounds):
             result += f'--- Round {i + 1} ---\n{round_}\n'
         return result
+
+    def calc_all_rounds(self):
+        """
+        Repeatedly calculate next round until finals
+        - favoring byes on front when rounds count is even
+        - and byes at end when round count is odd
+        """
+        rounds = self.rounds
+        while rounds[-1].games_count > 1:
+            last_round = rounds[-1]
+            new_round = Round()
+            if last_round.games_count % 2 != 0 and len(rounds) % 2 == 0:
+                # Has bye and is round count is even put bye at the front
+                new_round.add(last_round[0].to_player())
+                start = 1  # start from next game
+            else:
+                start = 0  # start from first game bye will go at end
+            p1 = None
+            for i in range(start, last_round.games_count):
+                if p1 is None:
+                    p1 = last_round[i].to_player()
+                else:
+                    new_round.add(p1, last_round[i].to_player())
+                    p1 = None
+            if p1 is not None:
+                # Bye has to go at end
+                assert last_round.games_count % 2 != 0
+                assert len(rounds) % 2 != 0
+                new_round.add(p1)
+            rounds.append(new_round)

@@ -21,6 +21,9 @@ class Conf:
         SHUFFLE = {
             'name': 'shuffle',
             'help': 'Shuffles the user order. NB: Only works during registration.'}
+        COUNT = {
+            'name': 'count',
+            'help': 'Returns the number of registered players and rounds'}
 
     COMMAND_PREFIX = '!'
 
