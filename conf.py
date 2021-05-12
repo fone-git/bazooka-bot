@@ -1,4 +1,8 @@
 class Conf:
+    class PERMISSIONS:
+        PRIV_ROLES = {'officer', 'leader'}
+        ALLOWED_CHANNELS = {'tournament', 'bot-test-messages'}
+
     class COMMAND:
         REGISTER = {
             'name': 'reg',
