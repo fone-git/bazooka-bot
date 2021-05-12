@@ -22,14 +22,14 @@ def setup_logging(log_level=logging.INFO):
     # Set up standard output
     std_stream_handler = logging.StreamHandler(sys.stdout)
     std_stream_handler.setFormatter(
-        logging.Formatter('%(levelname)s: %(message)s'))
+        logging.Formatter('%(asctime)s %(levelname)s: %(message)s'))
     std_stream_handler.setLevel(logging.DEBUG)
     _logger.addHandler(std_stream_handler)
 
     # Set up error output
     err_stream_handler = logging.StreamHandler(sys.stderr)
     err_stream_handler.setFormatter(
-        logging.Formatter('%(levelname)s: %(message)s'))
+        logging.Formatter('%(asctime)s %(levelname)s: %(message)s'))
     err_stream_handler.setLevel(logging.ERROR)
     _logger.addHandler(err_stream_handler)
 
