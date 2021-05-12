@@ -4,7 +4,7 @@ import requests
 import json
 import random
 from replit import db
-from keep_alive import keep_alive
+from board_display import display_start
 
 
 def main():
@@ -94,7 +94,7 @@ def main():
                 db["responding"] = False
                 await message.channel.send("Responding is off.")
 
-    keep_alive()
+    display_start()
     client.run(os.getenv('TOKEN'))
 
 
