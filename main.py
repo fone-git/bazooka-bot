@@ -42,9 +42,16 @@ def main():
     async def register(ctx):
         await ctx.send(tournament)
 
-    @bot.command(**Conf.COMMAND.NEW)
-    async def register(ctx, confirm):
-        await ctx.send(tournament)
+    @bot.command(**Conf.COMMAND.RESET)
+    async def register(ctx, confirm=None):
+        if confirm != 'yes':
+            await ctx.send('Are you sure you want to reset tournament (May cause data loss)? '
+                           '(reset with argument of "yes" to confirm.')
+        else:
+            nonlocal tournament
+            tournament = Tournament()
+            save_tournament(tournament)
+            await ctx.send("Tournament reset")
 
     @bot.event
     async def on_command_error(ctx, error):

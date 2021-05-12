@@ -6,8 +6,8 @@ class Conf:
         DISPLAY = {
             'name': 'display',
             'help': 'Shows current board state'}
-        NEW = {
-            'name': 'new',
+        RESET = {
+            'name': 'reset',
             'help': 'Starts a new tournament. WARNING: Old data is cleared'}
 
     COMMAND_PREFIX = '!'
