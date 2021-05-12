@@ -68,8 +68,15 @@ class Tournament:
                 f'Number of rounds does not match count of number passed.\n'
                 f'Rounds {len(self.rounds)}. Count of numbers passed: {len(rounds_best_out_of)}')
 
-        for best_out_of, round in zip(rounds_best_out_of, self.rounds):
-            round.best_out_of = best_out_of
+        for best_out_of, round_ in zip(rounds_best_out_of, self.rounds):
+            round_.best_out_of = best_out_of
+        self.is_reg_open = False
+
+    def reopen_registration(self):
+        if self.is_reg_open:
+            raise commands.errors.UserInputError(f'Registration was already open!')
+        self.is_reg_open = True
+        self.invalidate_computed_values()
 
     @property
     def rounds(self):

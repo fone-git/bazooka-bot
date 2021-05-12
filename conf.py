@@ -33,6 +33,9 @@ class Conf:
                     'NB: Must supply number indicating the best out of how many games '
                     'for each round. Numbers should be space separated and quoted to be '
                     'one argument. EG start "1 3 3 5".'}
+        REOPEN_REGISTRATION = {
+            'name': 'reopen_reg',
+            'help': 'Reopens registration but erases any current progress (all wins erased).'}
 
     COMMAND_PREFIX = 'bb'
 

@@ -96,6 +96,11 @@ def main():
         tournament.start([int(x) for x in rounds_best_out_of.split()])
         await ctx.send(f'Tournament Started')
 
+    @bot.command(**Conf.COMMAND.REOPEN_REGISTRATION)
+    async def count(ctx):
+        tournament.reopen_registration()
+        await ctx.send(f'Registration has been reopened. All progress erased.')
+
     @bot.event
     async def on_command_error(ctx, error):
         if isinstance(error, commands.errors.CommandNotFound):
