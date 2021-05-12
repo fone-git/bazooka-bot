@@ -25,6 +25,19 @@ class Tournament:
         self.players.append(player)
         return player.id_
 
+    def unregister(self, user_fq, user_display):
+        if not self.is_reg_open:
+            raise commands.errors.UserInputError(f'Registration is closed')
+
+        if user_fq not in self:
+            raise commands.errors.UserInputError(f'{user_display} was not registered')
+        self.rounds_ = None
+        for i, player in enumerate(self.players):
+            if player.fq == user_fq:
+                self.players = self.players[:i] + self.players[i + 1:]
+                return player.id_
+        raise Exception('Code should never reach here player should have been found to unregister')
+
     def __contains__(self, fq):
         for player in self.players:
             if player.fq == fq:

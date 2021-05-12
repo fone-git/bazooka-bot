@@ -2,13 +2,16 @@ class Conf:
     class COMMAND:
         REGISTER = {
             'name': 'reg',
-            'help': 'registers you for the tournament'}
+            'help': 'Registers you for the tournament'}
         DISPLAY = {
             'name': 'display',
             'help': 'Shows current board state'}
         RESET = {
             'name': 'reset',
             'help': 'Starts a new tournament. WARNING: Old data is cleared'}
+        UNREGISTER = {
+            'name': 'unreg',
+            'help': 'Unregisters you for the tournament'}
 
     COMMAND_PREFIX = '!'
 

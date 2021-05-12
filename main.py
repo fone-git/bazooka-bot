@@ -53,6 +53,13 @@ def main():
             save_tournament(tournament)
             await ctx.send("Tournament reset")
 
+    @bot.command(**Conf.COMMAND.UNREGISTER)
+    async def unregister(ctx):
+        user_fq, user_display = get_user_info(ctx.author)
+        id_ = tournament.unregister(user_fq, user_display)
+        await ctx.send(f'{user_display} unregistered. ID was {id_}')
+        save_tournament(tournament)
+
     @bot.event
     async def on_command_error(ctx, error):
         if isinstance(error, commands.errors.CommandNotFound):
