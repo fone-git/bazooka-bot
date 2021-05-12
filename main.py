@@ -68,6 +68,10 @@ def main():
 
     bot = commands.Bot(command_prefix=Conf.COMMAND_PREFIX)
 
+    @bot.check
+    def check_channel(ctx):
+        return ctx.channel.name in Conf.PERMISSIONS.ALLOWED_CHANNELS
+
     @bot.command(**Conf.COMMAND.REGISTER)
     async def register(ctx):
         user_fq, user_display = get_user_info(ctx.author)
@@ -163,6 +167,8 @@ def main():
         elif isinstance(error, commands.errors.MissingAnyRole):
             log(error, logging.INFO)
             await ctx.send('Restricted Command')
+        elif isinstance(error, commands.errors.CheckFailure):
+            log(error, logging.DEBUG)  # Mostly expected to be wrong channel
         else:
             log(error, logging.WARNING)
             await ctx.send('Command Failed')
