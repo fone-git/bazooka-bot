@@ -4,6 +4,9 @@ class Conf:
         ALLOWED_CHANNELS = {'tournament', 'bot-test-messages'}
 
     class COMMAND:
+        PING = {
+            'name': 'ping',
+            'help': 'Tests if the bot is alive. If alive bot responds pong'}
         REGISTER = {
             'name': 'reg',
             'help': 'Registers you for the tournament'}

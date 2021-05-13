@@ -160,6 +160,10 @@ def main():
         save_tournament(tournament)
         await ctx.send(response)
 
+    @bot.command(**Conf.COMMAND.PING)
+    async def ping(ctx):
+        await ctx.send("pong")
+
     @bot.event
     async def on_command_error(ctx, error):
         if isinstance(error, commands.errors.CommandNotFound):
