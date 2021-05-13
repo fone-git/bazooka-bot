@@ -242,7 +242,7 @@ class Tournament:
                 result += f'<li class="spacer">&nbsp;</li>' \
                           f'<li class="game game-top">None<span>&nbsp;</span></li>' \
                           f'<li class="game game-spacer">&nbsp;</li>' \
-                          f'<li class="game game-bottom">None;<span>&nbsp;</span></li>'
+                          f'<li class="game game-bottom">None<span>&nbsp;</span></li>'
                 count_added += 1
 
             result += '<li class="spacer">&nbsp;</li> </ul>'
