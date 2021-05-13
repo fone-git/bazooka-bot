@@ -10,8 +10,8 @@ from waitress import serve
 
 from bot.bot import Bot
 from conf import Conf
-from log import log, setup_logging
 from tournament import Tournament
+from uitls.log import log, setup_logging
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -25,12 +25,6 @@ try:
 except ModuleNotFoundError:
     db = {}  # For working locally (Assume empty db)
     print("Using Local DB")
-
-
-def get_user_info(user):
-    ref_name = str(user)
-    display_name = user.name
-    return ref_name, display_name
 
 
 def save_tournament(data):
@@ -78,21 +72,14 @@ def main():
     def check_channel(ctx):
         return ctx.channel.name in Conf.PERMISSIONS.ALLOWED_CHANNELS
 
-    @bot.command(**Conf.COMMAND.REGISTER)
-    async def register(ctx):
-        user_fq, user_display = get_user_info(ctx.author)
-        id_ = tournament.register(user_fq, user_display)
-        save_tournament(tournament)
-        await ctx.send(f'{user_display} registered with id: {id_}')
-
     @bot.command(**Conf.COMMAND.DISPLAY)
     async def display(ctx, full=None):
         if full is not None:
             tournament.calc_all_rounds()
         await ctx.send(tournament)
 
-    @bot.command(**Conf.COMMAND.RESET)
-    @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
+    # @bot.command(**Conf.COMMAND.RESET)
+    # @commands.has_any_role(*Conf.PERMISSIONS.PRIV_ROLES)
     async def reset(ctx, confirm=None):
         if confirm != 'yes':
             await ctx.send('Are you sure you want to reset tournament (May cause data loss)? '
