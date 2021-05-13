@@ -214,6 +214,7 @@ class Tournament:
         return f'{user_display} TAKES [{game}] and ADVANCES to [{game.next_game}]'
 
     def as_html(self):
+        # TODO Find a way to include round number and best out of
         if len(self.players) == 0:
             return '<h1> No one is registered yet </h1>'
 
