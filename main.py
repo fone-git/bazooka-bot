@@ -19,12 +19,17 @@ except ImportError:
 
 try:
     from replit import db
+
+    print("Imported access to REPL DB")
 except ModuleNotFoundError:
     db = {}  # For working locally (Assume empty db)
+    print("Using Local DB")
 
 
 def get_user_info(user):
-    return str(user), user.name
+    ref_name = str(user)
+    display_name = user.name
+    return ref_name, display_name
 
 
 def save_tournament(data):
@@ -45,16 +50,16 @@ else:
     access to current tournament variable values
     
 """
-app = flask.Flask('Board')
+web_interface = flask.Flask('Board')
 
 
-@app.route('/')
+@web_interface.route('/')
 def home():
     return flask.render_template('board.html', content=tournament.as_html())
 
 
 def run():
-    serve(app, host="0.0.0.0", port=8080)
+    serve(web_interface, host="0.0.0.0", port=8080)
 
 
 def display_start():
