@@ -49,7 +49,7 @@ class GameSet:
         """
         Creates a player object to represent the unknown winner of this game
         """
-        return Player("", f'Winner Game {self.game_id}', "?")
+        return Player("", f'Winner of Game {self.game_id}', "?")
 
     @classmethod
     def reset_id_count(cls):
