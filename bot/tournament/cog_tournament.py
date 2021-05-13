@@ -39,7 +39,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     async def unregister(self, ctx):
         user_fq, user_display = get_user_info(ctx.author)
         id_ = self.data.unregister(user_fq, user_display)
-        self.save()
+        self.invalidate_data()
         await ctx.send(f'{user_display} unregistered. ID was {id_}')
 
     @commands.command(**conf.COMMAND.DISPLAY)
@@ -65,7 +65,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     async def win(self, ctx, user: discord.User, qty: int = 1):
         user_fq, user_display = get_user_info(user)
         response = self.data.win(user_fq, user_display, qty)
-        self.save()
+        self.invalidate_data()
         await ctx.send(response)
 
     @commands.command(**conf.COMMAND.RESET)
@@ -83,7 +83,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     async def register_other(self, ctx, at_ref_for_other: discord.User):
         user_fq, user_display = get_user_info(at_ref_for_other)
         id_ = self.data.register(user_fq, user_display)
-        self.save()
+        self.invalidate_data()
         await ctx.send(f'{user_display} registered with id: {id_}')
 
     @commands.command(**conf.COMMAND.UNREGISTER_OTHER)
@@ -91,7 +91,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     async def unregister_other(self, ctx, at_ref_for_other: discord.User):
         user_fq, user_display = get_user_info(at_ref_for_other)
         id_ = self.data.unregister(user_fq, user_display)
-        self.save()
+        self.invalidate_data()
         await ctx.send(f'{user_display} unregistered. ID was {id_}')
 
     @commands.command(**conf.COMMAND.START)
@@ -99,6 +99,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     async def start(self, ctx, rounds_best_out_of):
         try:
             self.data.start([int(x) for x in rounds_best_out_of.split()])
+            self.invalidate_data()
             await ctx.send(f'Tournament Started')
         except Exception:
             traceback.print_exc()
@@ -111,13 +112,14 @@ class CogTournament(commands.Cog, name='Tournament'):
             return
 
         self.data.reopen_registration()
+        self.invalidate_data()
         await ctx.send(f'Registration has been reopened. All progress erased.')
 
     @commands.command(**conf.COMMAND.SHUFFLE)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
     async def shuffle(self, ctx):
         self.data.shuffle()
-        self.save()
+        self.invalidate_data()
         await ctx.send(f'Player order shuffled')
 
     ##########################################################################
