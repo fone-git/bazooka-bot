@@ -1,3 +1,5 @@
+import traceback
+
 import discord
 import yaml
 from discord.ext import commands
@@ -53,6 +55,7 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     @commands.command(**conf.COMMAND.STATUS)
     async def status(self, ctx):
+        # TODO Add if data is pending save to output and make restricted
         await ctx.send(self.data.status())
 
     ##########################################################################
@@ -94,8 +97,12 @@ class CogTournament(commands.Cog, name='Tournament'):
     @commands.command(**conf.COMMAND.START)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
     async def start(self, ctx, rounds_best_out_of):
-        self.data.start([int(x) for x in rounds_best_out_of.split()])
-        await ctx.send(f'Tournament Started')
+        try:
+            self.data.start([int(x) for x in rounds_best_out_of.split()])
+            await ctx.send(f'Tournament Started')
+        except Exception:
+            traceback.print_exc()
+            raise
 
     @commands.command(**conf.COMMAND.REOPEN_REGISTRATION)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
@@ -117,6 +124,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     # HELPER FUNCTIONS
     def invalidate_data(self):
         # TODO: Add time delay to only save at most using once per period of time
+        # TODO Add command to force save now to allow for shutdown
         self.save()
 
     def load(self) -> Tournament:
