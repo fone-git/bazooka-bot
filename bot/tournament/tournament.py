@@ -3,9 +3,9 @@ from typing import List
 
 from discord.ext import commands
 
-from game_set import GameSet
-from player import Player
-from round import Round
+from bot.tournament.game_set import GameSet
+from bot.tournament.player import Player
+from bot.tournament.round import Round
 
 
 class Tournament:
