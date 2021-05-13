@@ -11,6 +11,7 @@ conf = Conf.TopLevel
 
 
 class Bot(commands.Bot):
+    # TODO investigate responding to at mention of the bot
     def __init__(self, **args):
         super().__init__(**args)
 

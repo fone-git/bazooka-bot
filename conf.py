@@ -67,7 +67,7 @@ class Conf:
                         'for each round. Numbers should be space separated and quoted to be '
                         'one argument. EG start "1 3 3 5".'}
             REOPEN_REGISTRATION = {
-                'name': 'reopen_reg',
+                'name': 'reopen',
                 'help': 'Reopens registration but erases any current progress (all wins erased).'}
             WIN = {
                 'name': 'win',

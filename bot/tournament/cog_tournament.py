@@ -67,15 +67,13 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     @commands.command(**conf.COMMAND.RESET)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
-    async def reset(self, ctx, confirm=None):
-        # TODO Change to any true
-        if confirm != 'yes':
-            await ctx.send('Are you sure you want to reset tournament (May cause data loss)? '
-                           '(reset with argument of "yes" to confirm.')
-        else:
-            self.data = Tournament()
-            self.invalidate_data()
-            await ctx.send("Tournament reset")
+    async def reset(self, ctx, confirm: bool = False):
+        if not await self.should_exec(ctx, confirm):
+            return
+
+        self.data = Tournament()
+        self.invalidate_data()
+        await ctx.send("Tournament reset")
 
     @commands.command(**conf.COMMAND.REGISTER_OTHER)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
@@ -101,8 +99,10 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     @commands.command(**conf.COMMAND.REOPEN_REGISTRATION)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
-    async def reopen_registration(self, ctx):
-        # TODO Require confirmation
+    async def reopen_registration(self, ctx, confirm: bool = False):
+        if not await self.should_exec(ctx, confirm):
+            return
+
         self.data.reopen_registration()
         await ctx.send(f'Registration has been reopened. All progress erased.')
 
@@ -131,6 +131,16 @@ class CogTournament(commands.Cog, name='Tournament'):
     def save(self):
         data = yaml.dump(self.data, Dumper=Dumper)
         self.db[DBKeys.TOURNAMENT] = data
+
+    @staticmethod
+    async def should_exec(ctx, confirm):
+        if confirm:
+            return True
+        else:
+            await ctx.send('Are you sure you want to execute this command?\n\n'
+                           '```diff\n-WARNING: May cause data loss```\n\n'
+                           'Resend command with argument of "yes" if you are sure.')
+            return False
 
     def as_html(self):
         return self.data.as_html()
