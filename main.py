@@ -8,7 +8,7 @@ import yaml
 from discord.ext import commands
 from waitress import serve
 
-from bot import Bot
+from bot.bot import Bot
 from conf import Conf
 from log import log, setup_logging
 from tournament import Tournament
