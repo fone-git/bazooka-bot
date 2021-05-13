@@ -194,7 +194,7 @@ class Tournament:
                 # Bye has to go at end
                 assert last_round.games_count % 2 != 0
                 assert len(rounds) % 2 != 0
-                new_round.add(g1)
+                new_round.add(g1.to_player())
                 g1.next_game = new_round[-1]
                 g1.next_game_player_ind = 0
             rounds.append(new_round)
