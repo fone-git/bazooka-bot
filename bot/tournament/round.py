@@ -1,4 +1,5 @@
 from bot.tournament.game_set import GameSet
+from bot.tournament.player import Player
 
 
 class Round:
@@ -6,7 +7,7 @@ class Round:
         self.game_sets = []
         self.best_out_of = None
 
-    def add(self, p1, p2=None):
+    def add(self, p1: Player, p2: Player = None):
         self.game_sets.append(GameSet(p1, p2, self))
 
     def __getitem__(self, key):
