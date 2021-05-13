@@ -6,6 +6,7 @@ from discord.ext import commands
 from bot.tournament.game_set import GameSet
 from bot.tournament.player import Player
 from bot.tournament.round import Round
+from utils.misc import is_power_of_2
 
 
 class Tournament:
@@ -178,7 +179,7 @@ class Tournament:
                 start = 1  # start from next game
             else:
                 start = 0  # start from first game bye will go at end
-            g1 = None
+            g1: GameSet = None
             for i in range(start, last_round.games_count):
                 if g1 is None:
                     g1 = last_round[i]
@@ -193,7 +194,7 @@ class Tournament:
                 # Bye has to go at end
                 assert last_round.games_count % 2 != 0
                 assert len(rounds) % 2 != 0
-                new_round.add(g1)
+                new_round.add(g1.to_player())
                 g1.next_game = new_round[-1]
                 g1.next_game_player_ind = 0
             rounds.append(new_round)
@@ -205,14 +206,19 @@ class Tournament:
         self.players_map[user_fq] = game.next_game
         other_ind = (win_ind + 1) % 2
 
-        # Check if the next game is a bye (expected max 1 bye before having to play  again
+        # Check if the next game is a bye
+        # ASSUMPTION: expected max 1 bye before having to play again. So doesn't check if next game is a bye
         if game.next_game.players[other_ind] is None:
             new_ind = game.next_game.next_game_player_ind
-            game.next_game.next_game[new_ind] = game.players[win_ind]
+            game.next_game.next_game.players[new_ind] = game.players[win_ind]
             self.players_map[user_fq] = game.next_game.next_game
         return f'{user_display} TAKES [{game}] and ADVANCES to [{game.next_game}]'
 
     def as_html(self):
+        # TODO Find a way to include round number and best out of
+
+        # TODO fix display of tournaments with rounds that do not have a number of players that is a power of 2
+
         if len(self.players) == 0:
             return '<h1> No one is registered yet </h1>'
 
@@ -220,13 +226,22 @@ class Tournament:
         for i, round_ in enumerate(self.rounds):
             result += f'<ul class="round round-{i + 1}">'
 
+            count_added = 0
             for game in round_:
                 result += f'<li class="spacer">&nbsp;</li>' \
                           f'<li class="game game-top {game.is_p1_winner()}">{game.p1}' \
                           f'<span>{game.p1_score}</span></li>' \
-                          f'<li class="game game-spacer">Game ID: {game.game_id}</li>' \
+                          f'<li class="game game-spacer">Game {game.game_id}</li>' \
                           f'<li class="game game-bottom {game.is_p2_winner()}">{game.p2}' \
                           f'<span>{game.p2_score}</span></li>'
+                count_added += 1
+            while not is_power_of_2(count_added):
+                result += f'<li class="spacer">&nbsp;</li>' \
+                          f'<li class="game game-top">None<span>&nbsp;</span></li>' \
+                          f'<li class="game game-spacer">&nbsp;</li>' \
+                          f'<li class="game game-bottom">None;<span>&nbsp;</span></li>'
+                count_added += 1
 
             result += '<li class="spacer">&nbsp;</li> </ul>'
+
         return result
