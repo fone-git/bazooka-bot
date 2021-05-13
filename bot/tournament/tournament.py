@@ -205,10 +205,11 @@ class Tournament:
         self.players_map[user_fq] = game.next_game
         other_ind = (win_ind + 1) % 2
 
-        # Check if the next game is a bye (expected max 1 bye before having to play  again
+        # Check if the next game is a bye
+        # ASSUMPTION: expected max 1 bye before having to play again. So doesn't check if next game is a bye
         if game.next_game.players[other_ind] is None:
             new_ind = game.next_game.next_game_player_ind
-            game.next_game.next_game[new_ind] = game.players[win_ind]
+            game.next_game.next_game.players[new_ind] = game.players[win_ind]
             self.players_map[user_fq] = game.next_game.next_game
         return f'{user_display} TAKES [{game}] and ADVANCES to [{game.next_game}]'
 
