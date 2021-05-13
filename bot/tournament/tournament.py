@@ -179,7 +179,7 @@ class Tournament:
                 start = 1  # start from next game
             else:
                 start = 0  # start from first game bye will go at end
-            g1 = None
+            g1: GameSet = None
             for i in range(start, last_round.games_count):
                 if g1 is None:
                     g1 = last_round[i]
@@ -231,7 +231,7 @@ class Tournament:
                 result += f'<li class="spacer">&nbsp;</li>' \
                           f'<li class="game game-top {game.is_p1_winner()}">{game.p1}' \
                           f'<span>{game.p1_score}</span></li>' \
-                          f'<li class="game game-spacer">Game ID: {game.game_id}</li>' \
+                          f'<li class="game game-spacer">Game {game.game_id}</li>' \
                           f'<li class="game game-bottom {game.is_p2_winner()}">{game.p2}' \
                           f'<span>{game.p2_score}</span></li>'
                 count_added += 1
