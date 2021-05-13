@@ -164,15 +164,17 @@ class Tournament:
     def calc_all_rounds(self):
         """
         Repeatedly calculate next round until finals
-        - favoring byes on front when rounds count is even
-        - and byes at end when round count is odd
+        - favoring byes on front on even rounds numbers
+        - and byes at end on odd round numbers
         """
         rounds = self.rounds
         while rounds[-1].games_count > 1:
             last_round = rounds[-1]
             new_round = Round()
-            if last_round.games_count % 2 != 0 and len(rounds) % 2 == 0:
-                # Has bye and is round count is even put bye at the front
+            if last_round.games_count % 2 != 0 \
+                    and (len(rounds) + 1) % 2 == 0:
+                # Plus 1 to get the number for this round
+                # Has bye and round number is even put bye at the front
                 new_round.add(last_round[0].to_player())
                 last_round[0].next_game = new_round[-1]
                 last_round[0].next_game_player_ind = 0
@@ -193,7 +195,8 @@ class Tournament:
             if g1 is not None:
                 # Bye has to go at end
                 assert last_round.games_count % 2 != 0
-                assert len(rounds) % 2 != 0
+                assert (len(rounds) + 1) % 2 != 0
+                # Plus 1 to get the number for this round
                 new_round.add(g1.to_player())
                 g1.next_game = new_round[-1]
                 g1.next_game_player_ind = 0
