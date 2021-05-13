@@ -19,7 +19,7 @@ except ImportError:
     from yaml import Loader, Dumper
 
 try:
-    db = {}  # from  import db
+    from replit import db
 
     print("Imported access to REPL DB")
 except ModuleNotFoundError:
