@@ -1,4 +1,4 @@
-from player import Player
+from bot.tournament.player import Player
 
 
 class GameSet:

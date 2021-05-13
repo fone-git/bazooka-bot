@@ -1,4 +1,4 @@
-from game_set import GameSet
+from bot.tournament.game_set import GameSet
 
 
 class Round:
