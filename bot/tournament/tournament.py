@@ -6,6 +6,7 @@ from discord.ext import commands
 from bot.tournament.game_set import GameSet
 from bot.tournament.player import Player
 from bot.tournament.round import Round
+from utils.misc import is_power_of_2
 
 
 class Tournament:
@@ -215,6 +216,9 @@ class Tournament:
 
     def as_html(self):
         # TODO Find a way to include round number and best out of
+
+        # TODO fix display of tournaments with rounds that do not have a number of players that is a power of 2
+
         if len(self.players) == 0:
             return '<h1> No one is registered yet </h1>'
 
@@ -222,6 +226,7 @@ class Tournament:
         for i, round_ in enumerate(self.rounds):
             result += f'<ul class="round round-{i + 1}">'
 
+            count_added = 0
             for game in round_:
                 result += f'<li class="spacer">&nbsp;</li>' \
                           f'<li class="game game-top {game.is_p1_winner()}">{game.p1}' \
@@ -229,6 +234,14 @@ class Tournament:
                           f'<li class="game game-spacer">Game ID: {game.game_id}</li>' \
                           f'<li class="game game-bottom {game.is_p2_winner()}">{game.p2}' \
                           f'<span>{game.p2_score}</span></li>'
+                count_added += 1
+            while not is_power_of_2(count_added):
+                result += f'<li class="spacer">&nbsp;</li>' \
+                          f'<li class="game game-top">None<span>&nbsp;</span></li>' \
+                          f'<li class="game game-spacer">&nbsp;</li>' \
+                          f'<li class="game game-bottom">None;<span>&nbsp;</span></li>'
+                count_added += 1
 
             result += '<li class="spacer">&nbsp;</li> </ul>'
+
         return result
