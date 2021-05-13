@@ -8,6 +8,7 @@ import yaml
 from discord.ext import commands
 from waitress import serve
 
+from bot import Bot
 from conf import Conf
 from log import log, setup_logging
 from tournament import Tournament
@@ -18,7 +19,7 @@ except ImportError:
     from yaml import Loader, Dumper
 
 try:
-    from replit import db
+    db = {}  # from  import db
 
     print("Imported access to REPL DB")
 except ModuleNotFoundError:
@@ -71,7 +72,7 @@ def display_start():
 def main():
     log('Main Started')
 
-    bot = commands.Bot(command_prefix=Conf.COMMAND_PREFIX)
+    bot = Bot(command_prefix=Conf.COMMAND_PREFIX)
 
     @bot.check
     def check_channel(ctx):
@@ -159,10 +160,6 @@ def main():
         response = tournament.win(user_fq, user_display, qty)
         save_tournament(tournament)
         await ctx.send(response)
-
-    @bot.command(**Conf.COMMAND.PING)
-    async def ping(ctx):
-        await ctx.send("pong")
 
     @bot.event
     async def on_command_error(ctx, error):
