@@ -30,6 +30,7 @@ class Bot(commands.Bot):
             :param ctx: The context
             :return: True if should proceed or false to stop command execution
             """
+            # isinstance(ctx.channel, discord.DMChannel) # would be used to check if msg was DM
             return ctx.channel.name in conf.PERMISSIONS.ALLOWED_CHANNELS
 
         # TOP Level Commands (No Category)
