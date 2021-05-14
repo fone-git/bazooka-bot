@@ -64,6 +64,10 @@ class Tournament:
         return self.next_id
 
     def start(self, rounds_best_out_of: List[int]):
+        player_count, _ = self.count()
+        if player_count == 0:
+            raise commands.errors.UserInputError(f'No players registered yet!')
+
         if not self.is_reg_open:
             raise commands.errors.UserInputError(f'Tournament already started!')
 

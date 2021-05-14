@@ -96,7 +96,7 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     @commands.command(**conf.COMMAND.START)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
-    async def start(self, ctx, rounds_best_out_of):
+    async def start(self, ctx, *, rounds_best_out_of: str):
         try:
             self.data.start([int(x) for x in rounds_best_out_of.split()])
             self.invalidate_data()
