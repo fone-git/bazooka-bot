@@ -7,9 +7,9 @@ from waitress import serve
 from bot.custom_bot import Bot
 from conf import Conf
 from utils.log import log, setup_logging
-#######################################################################
 from utils.repl_support import get_db
 
+#######################################################################
 """
 Global Variables
 """
