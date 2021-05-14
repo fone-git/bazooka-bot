@@ -1,6 +1,5 @@
 import logging
 
-import discord
 from discord.ext import commands
 
 from bot.tournament.cog_tournament import CogTournament
@@ -32,7 +31,7 @@ class Bot(commands.Bot):
             :return: True if should proceed or false to stop command execution
             """
             # isinstance(ctx.channel, discord.DMChannel) # would be used to check if msg was DM
-            return isinstance(ctx.channel, discord.DMChannel) or ctx.channel.name in conf.PERMISSIONS.ALLOWED_CHANNELS
+            return ctx.channel.name in conf.PERMISSIONS.ALLOWED_CHANNELS
 
         # TOP Level Commands (No Category)
         @self.command(**conf.COMMAND.PING)
@@ -41,7 +40,7 @@ class Bot(commands.Bot):
             Responds with pong if bot can talk here
             :param ctx: The Context
             """
-            await ctx.author.send("pong")
+            await ctx.send("pong")
 
         @self.event
         async def on_command_error(ctx, error):
