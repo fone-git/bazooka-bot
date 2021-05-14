@@ -62,10 +62,10 @@ class Conf:
                 'help': 'Returns the status of the system including the present state of registration'}
             START = {
                 'name': 'start',
-                'help': 'Starts the tournament. Stops registration and disables shuffle. '
-                        'NB: Must supply number indicating the best out of how many games '
-                        'for each round. Numbers should be space separated and quoted to be '
-                        'one argument. EG start "1 3 3 5".'}
+                'help': 'Starts the tournament. Stops registration and disables shuffle.\n'
+                        'NB: Must supply numbers indicating the best out of how many games for each round.\n'
+                        'Numbers should be space separated EG "start 1 3 5" means that there are 3 '
+                        'rounds the first is best of 1 the second is best of 3 and so on...'}
             REOPEN_REGISTRATION = {
                 'name': 'reopen',
                 'help': 'Reopens registration but erases any current progress (all wins erased).'}
