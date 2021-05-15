@@ -3,10 +3,17 @@ import logging
 
 # TODO Add option to chose to use qualifying round
 
-class AllowedChannels:
-    TOURNAMENT = {'tournament', 'bot-test-messages', 'bot-commands'}
-    TOP_ONLY = {'general', 'bazooka-supreme-eng'}
-    TOP = TOP_ONLY.union(TOURNAMENT)
+# TODO Add option to have 3rd place match
+
+class MasterPermissions:
+    class PRIV:
+        TOURNAMENT = {'officer', 'leader'}
+        TOP = TOURNAMENT
+
+    class Channels:
+        TOURNAMENT = {'tournament', 'bot-commands'}
+        TOP_ONLY = {'general', 'bazooka-supreme-eng'}
+        TOP = TOP_ONLY.union(TOURNAMENT)
 
 
 class DBKeys:  # Database key values
@@ -14,6 +21,9 @@ class DBKeys:  # Database key values
 
 
 class Conf:
+    BOT_DESCRIPTION = "Bazooka Alliance BOT"
+    VERSION = '1.5'
+    EXPORT_FILE_NAME = 'export.yaml'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
 
@@ -22,17 +32,27 @@ class Conf:
 
     class TopLevel:
         class PERMISSIONS:
-            ALLOWED_CHANNELS = AllowedChannels.TOP
+            ALLOWED_CHANNELS = MasterPermissions.Channels.TOP
+            PRIV_ROLES = MasterPermissions.PRIV.TOP
 
         class COMMAND:
             PING = {
                 'name': 'ping',
                 'help': 'Tests if the bot is alive. If alive bot responds pong'}
+            VERSION = {
+                'name': 'version',
+                'hidden': True}
+            SAVE = {
+                'name': 'save',
+                'hidden': True}
+            EXPORT = {
+                'name': 'export',
+                'hidden': True}
 
     class TOURNAMENT:
         class PERMISSIONS:
-            PRIV_ROLES = {'officer', 'leader'}
-            ALLOWED_CHANNELS = AllowedChannels.TOURNAMENT
+            PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
+            ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
 
         class COMMAND:
             REGISTER = {

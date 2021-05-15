@@ -7,6 +7,7 @@ def get_db() -> dict:
     :return:
     """
     try:
+        # noinspection PyUnresolvedReferences
         from replit import db
         log("Imported access to REPL DB")
     except ModuleNotFoundError:
