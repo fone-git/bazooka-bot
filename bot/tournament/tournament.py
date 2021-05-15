@@ -23,26 +23,26 @@ class Tournament:
         # only used after start of tournament (before liable to be overwritten at any time)
         self.players_map = {}
 
-    def register(self, user_fq, user_display):
+    def register(self, user_id, user_display):
         if not self.is_reg_open:
             raise commands.errors.UserInputError(f'Registration is closed')
 
-        if user_fq in self:
+        if user_id in self:
             raise commands.errors.UserInputError(f'{user_display} already exists')
         self.invalidate_computed_values()
-        player = Player(user_fq, user_display, self.get_id())
+        player = Player(user_id, user_display, self.get_id())
         self.players.append(player)
         return player.disp_id
 
-    def unregister(self, user_fq, user_display):
+    def unregister(self, user_id, user_display):
         if not self.is_reg_open:
             raise commands.errors.UserInputError(f'Registration is closed')
 
-        if user_fq not in self:
+        if user_id not in self:
             raise commands.errors.UserInputError(f'{user_display} was not registered')
         self.invalidate_computed_values()
         for i, player in enumerate(self.players):
-            if player.fq == user_fq:
+            if player.id == user_id:
                 self.players = self.players[:i] + self.players[i + 1:]
                 return player.disp_id
         raise Exception('Code should never reach here player should have been found to unregister')
@@ -53,9 +53,9 @@ class Tournament:
         self.invalidate_computed_values()
         random.shuffle(self.players)
 
-    def __contains__(self, fq):
+    def __contains__(self, id_):
         for player in self.players:
-            if player.fq == fq:
+            if player.id == id_:
                 return True
         return False
 
@@ -83,11 +83,11 @@ class Tournament:
         # Check for a bye to be advanced (Can only be on last game
         # because the first count is odd and rules says odd is at end)
         if self.rounds[0][-1].p2 is None:
-            user_fq = self.rounds[0][-1].p1.fq
+            user_id = self.rounds[0][-1].p1.id
             user_display = self.rounds[0][-1].p1.display
             ind = 0
             game = self.rounds[0][-1]
-            self.advance_player_ind(user_fq, user_display, game, ind)
+            self.advance_player_ind(user_id, user_display, game, ind)
         self.is_reg_open = False
 
     def reopen_registration(self):
@@ -101,21 +101,23 @@ class Tournament:
         if self.rounds_ is None:
             round_ = Round()
             self.rounds_ = [round_]
-            p1 = None
+            # noinspection PyTypeChecker
+            p1: Player = None
             for player in self.players:
                 if p1 is None:
                     p1 = player
                 else:
                     round_.add(p1, player)
-                    self.players_map[p1.fq] = round_[-1]
-                    self.players_map[player.fq] = round_[-1]
+                    self.players_map[p1.id] = round_[-1]
+                    self.players_map[player.id] = round_[-1]
+                    # noinspection PyTypeChecker
                     p1 = None
 
             # If there were an odd number of players and one is left over
             # put them into a game by themselves (auto win)
             if p1 is not None:
                 round_.add(p1)
-                self.players_map[p1.fq] = round_[-1]
+                self.players_map[p1.id] = round_[-1]
         return self.rounds_
 
     def count(self):
@@ -138,15 +140,15 @@ class Tournament:
         GameSet.reset_id_count()
         self.players_map = {}
 
-    def win(self, user_fq, user_display, qty):
-        game = self.players_map.get(user_fq)
+    def win(self, user_id, user_display, qty):
+        game = self.players_map.get(user_id)
         if game is None:
             raise commands.errors.UserInputError(f"Didn't find an active game for {user_display}")
 
-        if user_fq == game.p1.fq:
+        if user_id == game.p1.id:
             win_ind = 0
             lose_ind = 1
-        elif user_fq == game.p2.fq:
+        elif user_id == game.p2.id:
             win_ind = 1
             lose_ind = 0
         else:
@@ -155,8 +157,8 @@ class Tournament:
         game.scores[win_ind] += qty
         if game.is_won():
             # Remove loser from dict and advance winner
-            self.players_map.pop(game.players[lose_ind].fq)
-            return self.advance_player_ind(user_fq, user_display, game, win_ind)
+            self.players_map.pop(game.players[lose_ind].id)
+            return self.advance_player_ind(user_id, user_display, game, win_ind)
         return f'{qty} point(s) added to {user_display} for {game}'
 
     def __str__(self):
@@ -208,11 +210,11 @@ class Tournament:
                 g1.next_game_player_ind = 0
             rounds.append(new_round)
 
-    def advance_player_ind(self, user_fq, user_display, game, win_ind):
+    def advance_player_ind(self, user_id, user_display, game, win_ind):
         if game.next_game is None:
             return f'CONGRATULATIONS {user_display} has won the tournament!!!'
         game.next_game.players[game.next_game_player_ind] = game.players[win_ind]
-        self.players_map[user_fq] = game.next_game
+        self.players_map[user_id] = game.next_game
         other_ind = (win_ind + 1) % 2
 
         # Check if the next game is a bye
@@ -220,7 +222,7 @@ class Tournament:
         if game.next_game.players[other_ind] is None:
             new_ind = game.next_game.next_game_player_ind
             game.next_game.next_game.players[new_ind] = game.players[win_ind]
-            self.players_map[user_fq] = game.next_game.next_game
+            self.players_map[user_id] = game.next_game.next_game
         return f'{user_display} TAKES [{game}] and ADVANCES to [{game.next_game}]'
 
     def as_html(self):
