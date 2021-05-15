@@ -1,4 +1,5 @@
 import traceback
+from datetime import datetime
 
 import discord
 import yaml
@@ -7,6 +8,7 @@ from discord.ext import commands
 from bot.tournament.tournament import Tournament
 from conf import Conf, DBKeys
 from utils.misc import get_user_info
+from utils.timer_funcs import set_timeout
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -21,6 +23,9 @@ class CogTournament(commands.Cog, name='Tournament'):
     def __init__(self, db: dict):
         self.db = db
         self.data = self.load()
+
+        self.last_save_time = datetime.now()
+        self.save_timer = None
 
     # GLOBALLY APPLIED FUNCTIONS
     def cog_check(self, ctx):
@@ -125,9 +130,20 @@ class CogTournament(commands.Cog, name='Tournament'):
     ##########################################################################
     # HELPER FUNCTIONS
     def invalidate_data(self):
-        # TODO: Add time delay to only save at most using once per period of time
-        # TODO Add command to force save now to allow for shutdown
-        self.save()
+        if self.save_pending:
+            return
+
+        sec_before_save_allowed = \
+            Conf.TOURNAMENT.SAVE_CACHE_DELAY \
+            - (datetime.now() - self.last_save_time).total_seconds()
+        if sec_before_save_allowed < 0:
+            self.save()
+        else:
+            self.save_timer = set_timeout(sec_before_save_allowed, self.save)
+
+    @property
+    def save_pending(self):
+        return self.save_timer is not None
 
     def load(self) -> Tournament:
         db_data = self.db.get(DBKeys.TOURNAMENT)
@@ -141,6 +157,8 @@ class CogTournament(commands.Cog, name='Tournament'):
     def save(self):
         data = yaml.dump(self.data, Dumper=Dumper)
         self.db[DBKeys.TOURNAMENT] = data
+        self.last_save_time = datetime.now()
+        self.save_timer = None
 
     @staticmethod
     async def should_exec(ctx, confirm):

@@ -51,6 +51,8 @@ class Conf:
                 'hidden': True}
 
     class TOURNAMENT:
+        SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
+
         class PERMISSIONS:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
