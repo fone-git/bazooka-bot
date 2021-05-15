@@ -14,6 +14,7 @@ class DBKeys:  # Database key values
 
 
 class Conf:
+    BOT_DESCRIPTION = "Bazooka Alliance BOT"
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
 
