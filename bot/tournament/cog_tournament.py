@@ -149,7 +149,8 @@ class CogTournament(commands.Cog, name='Tournament'):
         else:
             await ctx.send('Are you sure you want to execute this command?\n\n'
                            '```diff\n-WARNING: May cause data loss```\n\n'
-                           'Resend command with argument of "yes" if you are sure.')
+                           'Resend command with argument of "yes" if you are '
+                           'sure.')
             return False
 
     def as_html(self):

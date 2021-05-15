@@ -27,11 +27,7 @@ class DictPersistent:
             self.data = {}
         else:
             with open(file_name, 'r') as f:
-                lines = f.readlines()
-                if len(lines) > 0:
-                    self.data = yaml.load(lines, Loader=Loader)
-                else:
-                    self.data = {}
+                self.data = yaml.load(f, Loader=Loader)
             if not isinstance(self.data, dict):
                 logging.log(logging.ERROR,
                             f'Data loaded from {file_name} was not a dict. '

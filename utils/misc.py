@@ -1,11 +1,9 @@
 def get_user_info(user):
-    # TODO Take nickname if they have one instead of the name
     ref_name = user.id
     display_name = user.display_name
     return ref_name, display_name
 
 
-# noinspection LongLine
 def is_power_of_2(value):
     """
     Checks if value is a power of the 2
@@ -14,7 +12,8 @@ def is_power_of_2(value):
     """
     return (value & (value - 1)) == 0
     # Taken from
-    # https://www.ritambhara.in/check-if-number-is-a-power-of-2/#:~:text=Method%2D2%3A%20Keep%20dividing%20by,is%20a%20power%20of%202.
+    # https://www.ritambhara.in/check-if-number-is-a-power-of-2/#:~:text
+    # =Method%2D2%3A%20Keep%20dividing%20by,is%20a%20power%20of%202.
     #
     # This uses two facts:
     # 1 - If the number is a power of two, then only 1 bit will be set in its
