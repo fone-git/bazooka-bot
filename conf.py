@@ -4,7 +4,7 @@ import logging
 # TODO Add option to chose to use qualifying round
 
 class AllowedChannels:
-    TOURNAMENT = {'tournament', 'bot-test-messages', 'bot-commands'}
+    TOURNAMENT = {'tournament', 'bot-commands'}
     TOP_ONLY = {'general', 'bazooka-supreme-eng'}
     TOP = TOP_ONLY.union(TOURNAMENT)
 
