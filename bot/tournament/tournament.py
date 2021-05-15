@@ -185,6 +185,7 @@ class Tournament:
                 start = 1  # start from next game
             else:
                 start = 0  # start from first game bye will go at end
+            # noinspection PyTypeChecker
             g1: GameSet = None
             for i in range(start, last_round.games_count):
                 if g1 is None:
@@ -195,6 +196,7 @@ class Tournament:
                     g1.next_game_player_ind = 0
                     last_round[i].next_game = new_round[-1]
                     last_round[i].next_game_player_ind = 1
+                    # noinspection PyTypeChecker
                     g1 = None
             if g1 is not None:
                 # Bye has to go at end

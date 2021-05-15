@@ -5,6 +5,7 @@ def get_user_info(user):
     return ref_name, display_name
 
 
+# noinspection LongLine
 def is_power_of_2(value):
     """
     Checks if value is a power of the 2
