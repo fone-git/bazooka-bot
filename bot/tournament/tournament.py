@@ -32,7 +32,7 @@ class Tournament:
         self.invalidate_computed_values()
         player = Player(user_fq, user_display, self.get_id())
         self.players.append(player)
-        return player.id_
+        return player.disp_id
 
     def unregister(self, user_fq, user_display):
         if not self.is_reg_open:
@@ -44,7 +44,7 @@ class Tournament:
         for i, player in enumerate(self.players):
             if player.fq == user_fq:
                 self.players = self.players[:i] + self.players[i + 1:]
-                return player.id_
+                return player.disp_id
         raise Exception('Code should never reach here player should have been found to unregister')
 
     def shuffle(self):
