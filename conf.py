@@ -38,7 +38,8 @@ class Conf:
         class COMMAND:
             PING = {
                 'name': 'ping',
-                'help': 'Tests if the bot is alive. If alive bot responds pong'}
+                'help': 'Tests if the bot is alive. If alive bot responds '
+                        'pong'}
             VERSION = {
                 'name': 'version',
                 'hidden': True}
@@ -50,6 +51,8 @@ class Conf:
                 'hidden': True}
 
     class TOURNAMENT:
+        SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
+
         class PERMISSIONS:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
@@ -63,10 +66,12 @@ class Conf:
                 'help': 'Unregisters you for the tournament'}
             DISPLAY = {
                 'name': 'display',
-                'help': 'Shows current board state. Add "full" argument to force full board generation'}
+                'help': 'Shows current board state. Add "full" argument to '
+                        'force full board generation'}
             RESET = {
                 'name': 'reset',
-                'help': 'Starts a new tournament. WARNING: Old data is cleared'}
+                'help': 'Starts a new tournament. WARNING: Old data is '
+                        'cleared'}
             REGISTER_OTHER = {
                 'name': 'reg_other',
                 'help': 'Registers someone else  for the tournament'}
@@ -75,22 +80,30 @@ class Conf:
                 'help': 'Unregisters someone else from the tournament'}
             SHUFFLE = {
                 'name': 'shuffle',
-                'help': 'Shuffles the user order. NB: Only works during registration.'}
+                'help': 'Shuffles the user order. NB: Only works during '
+                        'registration.'}
             COUNT = {
                 'name': 'count',
                 'help': 'Returns the number of registered players and rounds'}
             STATUS = {
                 'name': 'status',
-                'help': 'Returns the status of the system including the present state of registration'}
+                'help': 'Returns the status of the system including the '
+                        'present state of registration'}
             START = {
                 'name': 'start',
-                'help': 'Starts the tournament. Stops registration and disables shuffle.\n'
-                        'NB: Must supply numbers indicating the best out of how many games for each round.\n'
-                        'Numbers should be space separated EG "start 1 3 5" means that there are 3 '
-                        'rounds the first is best of 1 the second is best of 3 and so on...'}
+                'help': 'Starts the tournament. Stops registration and '
+                        'disables shuffle.\n'
+                        'NB: Must supply numbers indicating the best out of '
+                        'how many games for each round.\n'
+                        'Numbers should be space separated EG "start 1 3 5" '
+                        'means that there are 3 '
+                        'rounds the first is best of 1 the second is best of '
+                        '3 and so on...'}
             REOPEN_REGISTRATION = {
                 'name': 'reopen',
-                'help': 'Reopens registration but erases any current progress (all wins erased).'}
+                'help': 'Reopens registration but erases any current '
+                        'progress (all wins erased).'}
             WIN = {
                 'name': 'win',
-                'help': 'Increases the specified players points by a qty or 1 if not specified'}
+                'help': 'Increases the specified players points by a qty or '
+                        '1 if not specified'}

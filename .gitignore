@@ -5,3 +5,4 @@
 *.pyc
 *.pkl
 .idea/
+/dict_persistent.yaml
