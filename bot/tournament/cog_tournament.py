@@ -30,17 +30,17 @@ class CogTournament(commands.Cog, name='Tournament'):
     # NORMAL COMMANDS
     @commands.command(**conf.COMMAND.REGISTER)
     async def register(self, ctx):
-        user_fq, user_display = get_user_info(ctx.author)
-        id_ = self.data.register(user_fq, user_display)
+        user_id, user_display = get_user_info(ctx.author)
+        disp_id = self.data.register(user_id, user_display)
         self.invalidate_data()
-        await ctx.send(f'{user_display} registered with id: {id_}')
+        await ctx.send(f'{user_display} registered with id: {disp_id}')
 
     @commands.command(**conf.COMMAND.UNREGISTER)
     async def unregister(self, ctx):
-        user_fq, user_display = get_user_info(ctx.author)
-        id_ = self.data.unregister(user_fq, user_display)
+        user_id, user_display = get_user_info(ctx.author)
+        disp_id = self.data.unregister(user_id, user_display)
         self.invalidate_data()
-        await ctx.send(f'{user_display} unregistered. ID was {id_}')
+        await ctx.send(f'{user_display} unregistered. ID was {disp_id}')
 
     @commands.command(**conf.COMMAND.DISPLAY)
     async def display(self, ctx, full=None):
@@ -63,8 +63,8 @@ class CogTournament(commands.Cog, name='Tournament'):
     @commands.command(**conf.COMMAND.WIN)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
     async def win(self, ctx, user: discord.User, qty: int = 1):
-        user_fq, user_display = get_user_info(user)
-        response = self.data.win(user_fq, user_display, qty)
+        user_id, user_display = get_user_info(user)
+        response = self.data.win(user_id, user_display, qty)
         self.invalidate_data()
         await ctx.send(response)
 
@@ -81,18 +81,18 @@ class CogTournament(commands.Cog, name='Tournament'):
     @commands.command(**conf.COMMAND.REGISTER_OTHER)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
     async def register_other(self, ctx, at_ref_for_other: discord.User):
-        user_fq, user_display = get_user_info(at_ref_for_other)
-        id_ = self.data.register(user_fq, user_display)
+        user_id, user_display = get_user_info(at_ref_for_other)
+        disp_id = self.data.register(user_id, user_display)
         self.invalidate_data()
-        await ctx.send(f'{user_display} registered with id: {id_}')
+        await ctx.send(f'{user_display} registered with id: {disp_id}')
 
     @commands.command(**conf.COMMAND.UNREGISTER_OTHER)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
     async def unregister_other(self, ctx, at_ref_for_other: discord.User):
-        user_fq, user_display = get_user_info(at_ref_for_other)
-        id_ = self.data.unregister(user_fq, user_display)
+        user_id, user_display = get_user_info(at_ref_for_other)
+        disp_id = self.data.unregister(user_id, user_display)
         self.invalidate_data()
-        await ctx.send(f'{user_display} unregistered. ID was {id_}')
+        await ctx.send(f'{user_display} unregistered. ID was {disp_id}')
 
     @commands.command(**conf.COMMAND.START)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
@@ -154,3 +154,7 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     def as_html(self):
         return self.data.as_html()
+
+    def export(self):
+        with open(Conf.EXPORT_FILE_NAME, 'w') as f:
+            f.write(yaml.dump(self.data, Dumper=Dumper))

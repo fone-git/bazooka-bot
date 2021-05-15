@@ -2,6 +2,7 @@ import os
 from threading import Thread
 
 import flask
+from discord.ext import commands
 from waitress import serve
 
 from bot.custom_bot import Bot
@@ -49,7 +50,10 @@ def main():
 
     # Load DB (uses dict interface)
 
-    bot = Bot(db=get_db(), command_prefix=Conf.COMMAND_PREFIX)
+    bot = Bot(db=get_db(),
+              command_prefix=commands.when_mentioned_or(
+                  Conf.COMMAND_PREFIX),
+              description=Conf.BOT_DESCRIPTION)
 
     display_start()
     bot.run(os.getenv(Conf.ENV.TOKEN))
