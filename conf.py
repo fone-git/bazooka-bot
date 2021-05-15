@@ -22,7 +22,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.4'
+    VERSION = '1.5'
     EXPORT_FILE_NAME = 'export.yaml'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
