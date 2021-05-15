@@ -83,11 +83,10 @@ class Tournament:
         # Check for a bye to be advanced (Can only be on last game
         # because the first count is odd and rules says odd is at end)
         if self.rounds[0][-1].p2 is None:
-            user_id = self.rounds[0][-1].p1.id
-            user_display = self.rounds[0][-1].p1.display
+            player = self.rounds[0][-1].p1
             ind = 0
             game = self.rounds[0][-1]
-            self.advance_player_ind(user_id, user_display, game, ind)
+            self.advance_player_ind(player, game, ind)
         self.is_reg_open = False
 
     def reopen_registration(self):
@@ -148,9 +147,11 @@ class Tournament:
         if user_id == game.p1.id:
             win_ind = 0
             lose_ind = 1
+            player = game.p1
         elif user_id == game.p2.id:
             win_ind = 1
             lose_ind = 0
+            player = game.p2
         else:
             raise Exception(f"Player found from dict but didn't match either player in game {game.game_id}")
 
@@ -158,8 +159,8 @@ class Tournament:
         if game.is_won():
             # Remove loser from dict and advance winner
             self.players_map.pop(game.players[lose_ind].id)
-            return self.advance_player_ind(user_id, user_display, game, win_ind)
-        return f'{qty} point(s) added to {user_display} for {game}'
+            return self.advance_player_ind(player, game, win_ind)
+        return f'{qty} point(s) added to {player.display} for {game}'
 
     def __str__(self):
         result = ""
@@ -210,11 +211,11 @@ class Tournament:
                 g1.next_game_player_ind = 0
             rounds.append(new_round)
 
-    def advance_player_ind(self, user_id, user_display, game, win_ind):
+    def advance_player_ind(self, player: Player, game: GameSet, win_ind: int):
         if game.next_game is None:
-            return f'CONGRATULATIONS {user_display} has won the tournament!!!'
+            return f'CONGRATULATIONS {player.mention} has won the tournament!!!'
         game.next_game.players[game.next_game_player_ind] = game.players[win_ind]
-        self.players_map[user_id] = game.next_game
+        self.players_map[player.id] = game.next_game
         other_ind = (win_ind + 1) % 2
 
         # Check if the next game is a bye
@@ -222,9 +223,9 @@ class Tournament:
         if game.next_game.players[other_ind] is None:
             new_ind = game.next_game.next_game_player_ind
             game.next_game.next_game.players[new_ind] = game.players[win_ind]
-            self.players_map[user_id] = game.next_game.next_game
+            self.players_map[player.id] = game.next_game.next_game
             game = game.next_game
-        return f'{user_display} TAKES [{game}] and ADVANCES to [{game.next_game}]'
+        return f'{player.mention} TAKES [{game}] and ADVANCES to [{game.next_game}]'
 
     def as_html(self):
         # TODO Find a way to include round number and best out of

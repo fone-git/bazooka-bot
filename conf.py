@@ -3,6 +3,8 @@ import logging
 
 # TODO Add option to chose to use qualifying round
 
+# TODO Add option to have 3rd place match
+
 class AllowedChannels:
     TOURNAMENT = {'tournament', 'bot-commands'}
     TOP_ONLY = {'general', 'bazooka-supreme-eng'}
