@@ -154,3 +154,7 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     def as_html(self):
         return self.data.as_html()
+
+    def export(self):
+        with open(Conf.EXPORT_FILE_NAME, 'w') as f:
+            f.write(yaml.dump(self.data, Dumper=Dumper))

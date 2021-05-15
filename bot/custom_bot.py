@@ -40,7 +40,35 @@ class Bot(commands.Bot):
             Responds with pong if bot can talk here
             :param ctx: The Context
             """
-            await ctx.send("pong")
+            await ctx.send('pong')
+
+        @self.command(**conf.COMMAND.VERSION)
+        async def version(ctx):
+            """
+            Responds with the version of the bot
+            :param ctx: The Context
+            """
+            await ctx.send(f'Version: {Conf.VERSION}')
+
+        @self.command(**conf.COMMAND.SAVE)
+        @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
+        async def save(ctx):
+            """
+            Requests that the bot saves to secondary storage immediately
+            :param ctx: The Context
+            """
+            self.cog_tournament.save()
+            await ctx.author.send("Saved")
+
+        @self.command(**conf.COMMAND.EXPORT)
+        @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
+        async def export(ctx):
+            """
+            Requests that the bot saves to a file
+            :param ctx: The Context
+            """
+            self.cog_tournament.export()
+            await ctx.author.send("Exported")
 
         @self.event
         async def on_command_error(ctx, error):
