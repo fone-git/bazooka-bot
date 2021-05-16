@@ -30,7 +30,6 @@ class Bot(commands.Bot):
             :param ctx: The context
             :return: True if should proceed or false to stop command execution
             """
-            # isinstance(ctx.channel, discord.DMChannel) # would be used to check if msg was DM
             return ctx.channel.name in conf.PERMISSIONS.ALLOWED_CHANNELS
 
         # TOP Level Commands (No Category)
@@ -83,9 +82,12 @@ class Bot(commands.Bot):
                 log(error, logging.INFO)
                 await ctx.send('Restricted Command')
             elif isinstance(error, commands.errors.CheckFailure):
-                log(error, logging.DEBUG)  # Mostly expected to be because of wrong channel
+                log(error,
+                    logging.DEBUG)  # Mostly expected to be because of wrong
+                # channel
             else:
-                # Command failed for an unexpected reason. Usually this shouldn't happen
+                # Command failed for an unexpected reason. Usually this
+                # shouldn't happen
                 log(error, logging.WARNING)
                 await ctx.send('Command Failed!!!')
 
@@ -95,3 +97,7 @@ class Bot(commands.Bot):
 
     def get_tournament_as_html(self):
         return self.cog_tournament.as_html()
+
+    def export(self):
+        with open(Conf.EXPORT_FILE_NAME, 'w') as f:
+            f.write(yaml.dump(self.data, Dumper=Dumper))
