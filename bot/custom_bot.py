@@ -1,10 +1,16 @@
 import logging
 
+import yaml
 from discord.ext import commands
 
 from bot.tournament.cog_tournament import CogTournament
 from conf import Conf
 from utils.log import log
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 # Map class with setting for this cog to variable
 conf = Conf.TopLevel
@@ -20,6 +26,7 @@ class Bot(commands.Bot):
         else:
             log('db not specified using empty dict', logging.WARNING)
             db = {}
+        self.db = db
         self.cog_tournament = CogTournament(db)
         self.add_cog(self.cog_tournament)
 
@@ -66,7 +73,7 @@ class Bot(commands.Bot):
             Requests that the bot saves to a file
             :param ctx: The Context
             """
-            self.cog_tournament.export()
+            self.export()
             await ctx.author.send("Exported")
 
         @self.event
@@ -99,5 +106,8 @@ class Bot(commands.Bot):
         return self.cog_tournament.as_html()
 
     def export(self):
+        exp_dict = {}
+        for key in self.db.keys():
+            exp_dict[key] = self.db[key]
         with open(Conf.EXPORT_FILE_NAME, 'w') as f:
-            f.write(yaml.dump(self.data, Dumper=Dumper))
+            f.write(yaml.dump(exp_dict, Dumper=Dumper))

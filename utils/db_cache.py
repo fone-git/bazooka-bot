@@ -29,7 +29,7 @@ class DBCache:
         # values that need to be converted before submitting to db
         self.to_yaml = set()
 
-        self.timer_write = None
+        self._timer_write_out = None
         self.last_write_time = datetime.now()
 
     def __contains__(self, item):
@@ -59,8 +59,8 @@ class DBCache:
             if sec_before_save_allowed < 0:
                 self._write_to_backing()
             else:
-                self.save_timer = set_timeout(sec_before_save_allowed,
-                                              self._write_to_backing)
+                self._timer_write_out = set_timeout(sec_before_save_allowed,
+                                                    self._write_to_backing)
 
     def get(self, key, should_yaml=False):
         """
@@ -100,7 +100,7 @@ class DBCache:
         else:
             if key in self.db_backing:
                 # to make use of yaml code there
-                return self.db_backing.get(key, should_yaml)
+                return self.get(key, should_yaml=should_yaml)
             else:
                 return self.db_backing[key]  # To trigger correct exception
 
@@ -119,7 +119,7 @@ class DBCache:
 
         # Register save time and clear timer variable
         self.last_save_time = datetime.now()
-        self.save_timer = None
+        self._timer_write_out = None
 
         # reset cache and to_yaml
         self.cache = {}
@@ -127,4 +127,10 @@ class DBCache:
 
     @property
     def is_write_pending(self):
-        return self.timer_write is not None
+        return self._timer_write_out is not None
+
+    def keys(self):
+        if self.is_write_pending:
+            self._timer_write_out.cancel()
+            self._write_to_backing()
+        return self.db_backing.keys()
