@@ -126,6 +126,7 @@ class CogTournament(commands.Cog, name='Tournament'):
         self.db[DBKeys.TOURNAMENT, True] = self.data
 
     def load(self) -> Tournament:
+        # noinspection PyArgumentList
         result = self.db.get(DBKeys.TOURNAMENT, should_yaml=True)
         if result is None:
             # Create new empty tournament

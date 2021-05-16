@@ -20,7 +20,8 @@ class Tournament:
         self.rounds_ = None
 
         # Dict of first match with each player
-        # only used after start of tournament (before liable to be overwritten at any time)
+        # only used after start of tournament (before liable to be
+        # overwritten at any time)
         self.players_map = {}
 
     def register(self, user_id, user_display):
@@ -28,7 +29,8 @@ class Tournament:
             raise commands.errors.UserInputError(f'Registration is closed')
 
         if user_id in self:
-            raise commands.errors.UserInputError(f'{user_display} already exists')
+            raise commands.errors.UserInputError(
+                f'{user_display} already exists')
         self.invalidate_computed_values()
         player = Player(user_id, user_display, self.get_id())
         self.players.append(player)
@@ -39,17 +41,21 @@ class Tournament:
             raise commands.errors.UserInputError(f'Registration is closed')
 
         if user_id not in self:
-            raise commands.errors.UserInputError(f'{user_display} was not registered')
+            raise commands.errors.UserInputError(
+                f'{user_display} was not registered')
         self.invalidate_computed_values()
         for i, player in enumerate(self.players):
             if player.id == user_id:
                 self.players = self.players[:i] + self.players[i + 1:]
                 return player.disp_id
-        raise Exception('Code should never reach here player should have been found to unregister')
+        raise Exception(
+            'Code should never reach here player should have been found to '
+            'unregister')
 
     def shuffle(self):
         if not self.is_reg_open:
-            raise commands.errors.UserInputError(f'Registration is closed. Shuffle not allowed.')
+            raise commands.errors.UserInputError(
+                f'Registration is closed. Shuffle not allowed.')
         self.invalidate_computed_values()
         random.shuffle(self.players)
 
@@ -69,13 +75,15 @@ class Tournament:
             raise commands.errors.UserInputError(f'No players registered yet!')
 
         if not self.is_reg_open:
-            raise commands.errors.UserInputError(f'Tournament already started!')
+            raise commands.errors.UserInputError(
+                f'Tournament already started!')
 
         self.calc_all_rounds()
         if len(rounds_best_out_of) != len(self.rounds):
             raise commands.errors.UserInputError(
                 f'Number of rounds does not match count of number passed.\n'
-                f'Rounds {len(self.rounds)}. Count of numbers passed: {len(rounds_best_out_of)}')
+                f'Rounds {len(self.rounds)}. Count of numbers passed: '
+                f'{len(rounds_best_out_of)}')
 
         for best_out_of, round_ in zip(rounds_best_out_of, self.rounds):
             round_.best_out_of = best_out_of
@@ -91,7 +99,8 @@ class Tournament:
 
     def reopen_registration(self):
         if self.is_reg_open:
-            raise commands.errors.UserInputError(f'Registration was already open!')
+            raise commands.errors.UserInputError(
+                f'Registration was already open!')
         self.is_reg_open = True
         self.invalidate_computed_values()
 
@@ -128,10 +137,12 @@ class Tournament:
 
     def count_as_str(self):
         player_count, round_count = self.count()
-        return f'There are {player_count} players registered forming  {round_count} rounds'
+        return f'There are {player_count} players registered forming  ' \
+               f'{round_count} rounds'
 
     def status(self):
-        return f'**Status Report**:\nRegistration: {"open" if self.is_reg_open else "closed"}\n' \
+        return f'**Status Report**:\n' \
+               f'Registration: {"open" if self.is_reg_open else "closed"}\n' \
                f'{self.count_as_str()}'
 
     def invalidate_computed_values(self):
@@ -142,7 +153,8 @@ class Tournament:
     def win(self, user_id, user_display, qty):
         game = self.players_map.get(user_id)
         if game is None:
-            raise commands.errors.UserInputError(f"Didn't find an active game for {user_display}")
+            raise commands.errors.UserInputError(
+                f"Didn't find an active game for {user_display}")
 
         if user_id == game.p1.id:
             win_ind = 0
@@ -153,7 +165,9 @@ class Tournament:
             lose_ind = 0
             player = game.p2
         else:
-            raise Exception(f"Player found from dict but didn't match either player in game {game.game_id}")
+            raise Exception(
+                f"Player found from dict but didn't match either player i"
+                f"n game {game.game_id}")
 
         game.scores[win_ind] += qty
         if game.is_won():
@@ -178,8 +192,7 @@ class Tournament:
         while rounds[-1].games_count > 1:
             last_round = rounds[-1]
             new_round = Round()
-            if last_round.games_count % 2 != 0 \
-                    and (len(rounds) + 1) % 2 == 0:
+            if last_round.games_count % 2 != 0 and (len(rounds) + 1) % 2 == 0:
                 # Plus 1 to get the number for this round
                 # Has bye and round number is even put bye at the front
                 new_round.add(last_round[0].to_player())
@@ -213,24 +226,29 @@ class Tournament:
 
     def advance_player_ind(self, player: Player, game: GameSet, win_ind: int):
         if game.next_game is None:
-            return f'CONGRATULATIONS {player.mention} has won the tournament!!!'
-        game.next_game.players[game.next_game_player_ind] = game.players[win_ind]
+            return f'CONGRATULATIONS {player.mention} has won the ' \
+                   f'tournament!!!'
+        game.next_game.players[game.next_game_player_ind] = game.players[
+            win_ind]
         self.players_map[player.id] = game.next_game
         other_ind = (win_ind + 1) % 2
 
         # Check if the next game is a bye
-        # ASSUMPTION: expected max 1 bye before having to play again. So doesn't check if next game is a bye
+        # ASSUMPTION: expected max 1 bye before having to play again. So
+        # doesn't check if next game is a bye
         if game.next_game.players[other_ind] is None:
             new_ind = game.next_game.next_game_player_ind
             game.next_game.next_game.players[new_ind] = game.players[win_ind]
             self.players_map[player.id] = game.next_game.next_game
             game = game.next_game
-        return f'{player.mention} TAKES [{game}] and ADVANCES to [{game.next_game}]'
+        return f'{player.mention} TAKES [{game}] and ADVANCES to [' \
+               f'{game.next_game}]'
 
     def as_html(self):
         # TODO Find a way to include round number and best out of
 
-        # TODO fix display of tournaments with rounds that do not have a number of players that is a power of 2
+        # TODO fix display of tournaments with rounds that do not have a
+        # number of players that is a power of 2
 
         if len(self.players) == 0:
             return '<h1> No one is registered yet </h1>'
@@ -242,17 +260,22 @@ class Tournament:
             count_added = 0
             for game in round_:
                 result += f'<li class="spacer">&nbsp;</li>' \
-                          f'<li class="game game-top {game.is_p1_winner()}">{game.p1}' \
+                          f'<li class="game game-top ' \
+                          f'{game.is_p1_winner()}">{game.p1}' \
                           f'<span>{game.p1_score}</span></li>' \
-                          f'<li class="game game-spacer">Game {game.game_id}</li>' \
-                          f'<li class="game game-bottom {game.is_p2_winner()}">{game.p2}' \
+                          f'<li class="game game-spacer">Game ' \
+                          f'{game.game_id}</li>' \
+                          f'<li class="game game-bottom ' \
+                          f'{game.is_p2_winner()}">{game.p2}' \
                           f'<span>{game.p2_score}</span></li>'
                 count_added += 1
             while not is_power_of_2(count_added):
                 result += f'<li class="spacer">&nbsp;</li>' \
-                          f'<li class="game game-top">None<span>&nbsp;</span></li>' \
+                          f'<li class="game ' \
+                          f'game-top">None<span>&nbsp;</span></li>' \
                           f'<li class="game game-spacer">&nbsp;</li>' \
-                          f'<li class="game game-bottom">None<span>&nbsp;</span></li>'
+                          f'<li class="game game-bottom">None' \
+                          f'<span>&nbsp;</span></li>'
                 count_added += 1
 
             result += '<li class="spacer">&nbsp;</li> </ul>'
