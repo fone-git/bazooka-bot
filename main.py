@@ -7,6 +7,7 @@ from waitress import serve
 
 from bot.custom_bot import Bot
 from conf import Conf
+from utils.db_cache import DBCache
 from utils.log import log, setup_logging
 from utils.repl_support import get_db
 
@@ -50,7 +51,7 @@ def main():
 
     # Load DB (uses dict interface)
 
-    bot = Bot(db=get_db(),
+    bot = Bot(db=DBCache(get_db()),
               command_prefix=commands.when_mentioned_or(
                   Conf.COMMAND_PREFIX),
               description=Conf.BOT_DESCRIPTION)
