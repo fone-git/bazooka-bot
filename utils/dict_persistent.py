@@ -47,3 +47,6 @@ class DictPersistent:
 
     def get(self, key):
         return self.data.get(key)
+
+    def keys(self):
+        return self.data.keys()

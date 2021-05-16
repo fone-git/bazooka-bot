@@ -22,10 +22,11 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.6'
-    EXPORT_FILE_NAME = 'export.yaml'
+    VERSION = '1.7'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
+    SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
+    EXPORT_FILE_NAME = 'export.yaml'
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
@@ -51,8 +52,6 @@ class Conf:
                 'hidden': True}
 
     class TOURNAMENT:
-        SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
-
         class PERMISSIONS:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT

@@ -1,10 +1,16 @@
 import logging
 
+import yaml
 from discord.ext import commands
 
 from bot.tournament.cog_tournament import CogTournament
 from conf import Conf
 from utils.log import log
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 # Map class with setting for this cog to variable
 conf = Conf.TopLevel
@@ -20,6 +26,7 @@ class Bot(commands.Bot):
         else:
             log('db not specified using empty dict', logging.WARNING)
             db = {}
+        self.db = db
         self.cog_tournament = CogTournament(db)
         self.add_cog(self.cog_tournament)
 
@@ -30,7 +37,6 @@ class Bot(commands.Bot):
             :param ctx: The context
             :return: True if should proceed or false to stop command execution
             """
-            # isinstance(ctx.channel, discord.DMChannel) # would be used to check if msg was DM
             return ctx.channel.name in conf.PERMISSIONS.ALLOWED_CHANNELS
 
         # TOP Level Commands (No Category)
@@ -67,7 +73,7 @@ class Bot(commands.Bot):
             Requests that the bot saves to a file
             :param ctx: The Context
             """
-            self.cog_tournament.export()
+            self.export()
             await ctx.author.send("Exported")
 
         @self.event
@@ -83,9 +89,12 @@ class Bot(commands.Bot):
                 log(error, logging.INFO)
                 await ctx.send('Restricted Command')
             elif isinstance(error, commands.errors.CheckFailure):
-                log(error, logging.DEBUG)  # Mostly expected to be because of wrong channel
+                log(error,
+                    logging.DEBUG)  # Mostly expected to be because of wrong
+                # channel
             else:
-                # Command failed for an unexpected reason. Usually this shouldn't happen
+                # Command failed for an unexpected reason. Usually this
+                # shouldn't happen
                 log(error, logging.WARNING)
                 await ctx.send('Command Failed!!!')
 
@@ -95,3 +104,10 @@ class Bot(commands.Bot):
 
     def get_tournament_as_html(self):
         return self.cog_tournament.as_html()
+
+    def export(self):
+        exp_dict = {}
+        for key in self.db.keys():
+            exp_dict[key] = self.db[key]
+        with open(Conf.EXPORT_FILE_NAME, 'w') as f:
+            f.write(yaml.dump(exp_dict, Dumper=Dumper))
