@@ -44,7 +44,8 @@ class CogTournament(commands.Cog, name='Tournament'):
     async def display(self, ctx, full=None):
         # TODO Change to any true
         if full is not None:
-            self.data.calc_all_rounds()
+            if self.data.calc_all_rounds():
+                self.save()
         await ctx.send(self.data)
 
     @commands.command(**conf.COMMAND.COUNT)
