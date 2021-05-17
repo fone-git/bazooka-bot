@@ -1,7 +1,7 @@
 import threading
 
 
-def set_timeout(timeout: int, function: callable, args: list = None,
+def set_timeout(timeout: float, function: callable, args: list = None,
                 kwargs: dict = None) -> threading.Timer:
     """
     Wrapper for library thread timer. Easy to find for future reference and
@@ -26,7 +26,7 @@ def set_timeout(timeout: int, function: callable, args: list = None,
     return timer
 
 
-def set_interval(interval: int, function: callable, args: list = None,
+def set_interval(interval: float, function: callable, args: list = None,
                  kwargs: dict = None) -> threading.Event:
     """
     Repeated timer every interval seconds.

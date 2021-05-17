@@ -14,4 +14,5 @@ def get_db() -> dict:
     except ModuleNotFoundError:
         db = DictPersistent()
         log("Unable to get REPL DB Using Local dict")
+    # noinspection PyTypeChecker
     return db

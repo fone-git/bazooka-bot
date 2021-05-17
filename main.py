@@ -49,11 +49,8 @@ def main():
     global bot
     log('Main Started')
 
-    # Load DB (uses dict interface)
-
     bot = Bot(db=DBCache(get_db()),
-              command_prefix=commands.when_mentioned_or(
-                  Conf.COMMAND_PREFIX),
+              command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
               description=Conf.BOT_DESCRIPTION)
 
     display_start()

@@ -18,7 +18,8 @@ class Round:
         return len(self.game_sets)
 
     def __str__(self):
-        result = '' if self.best_out_of is None else f'Best out of: {self.best_out_of}\n'
+        result = '' if self.best_out_of is None \
+            else f'Best out of: {self.best_out_of}\n'
         for game_set in self.game_sets:
             result += f'{game_set}\n'
 

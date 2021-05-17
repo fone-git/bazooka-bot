@@ -22,7 +22,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.7'
+    VERSION = '1.8'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
@@ -52,6 +52,9 @@ class Conf:
                 'hidden': True}
 
     class TOURNAMENT:
+        # Number of seconds before automatically calculating all bracket
+        AUTO_CALC_BRACKET_DELAY = 10
+
         class PERMISSIONS:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
