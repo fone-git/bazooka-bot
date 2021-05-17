@@ -6,7 +6,9 @@ from discord.ext import commands
 from bot.tournament.game_set import GameSet
 from bot.tournament.player import Player
 from bot.tournament.round import Round
+from conf import Conf
 from utils.misc import is_power_of_2
+from utils.rate_limited_execution import RateLimitedExecution
 
 
 class Tournament:
@@ -15,13 +17,13 @@ class Tournament:
         self.is_reg_open = True
         self.players = []
 
-        # Stores the rounds
-        # NB: Used for display purposes only during registration
+        # Stores the computed rounds for display purposes to prevent
+        # redundant recalculation
         self.rounds_ = None
 
-        # Dict of first match with each player
-        # only used after start of tournament (before liable to be
-        # overwritten at any time)
+        # Dict of next match player is carded to play if any
+        # NB: maybe be overwritten repeatedly during registration as
+        #   match ups can be changed at that point
         self.players_map = {}
 
     def register(self, user_id, user_display):
@@ -150,6 +152,10 @@ class Tournament:
         GameSet.reset_id_count()
         self.players_map = {}
 
+        # Set timer to auto calculate
+        RateLimitedExecution.get_instance().register(
+            Conf.TOURNAMENT.AUTO_CALC_BRACKET_DELAY, self.calc_all_rounds)
+
     def win(self, user_id, user_display, qty):
         game = self.players_map.get(user_id)
         if game is None:
@@ -188,6 +194,9 @@ class Tournament:
         - favoring byes on front on even rounds numbers
         - and byes at end on odd round numbers
         """
+        # Stop timer (may be running)
+        RateLimitedExecution.get_instance().cancel(self.calc_all_rounds)
+
         rounds = self.rounds
         while rounds[-1].games_count > 1:
             last_round = rounds[-1]
