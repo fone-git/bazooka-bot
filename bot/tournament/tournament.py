@@ -193,12 +193,15 @@ class Tournament:
         Repeatedly calculate next round until finals
         - favoring byes on front on even rounds numbers
         - and byes at end on odd round numbers
+        :return: True if changes were made else False
         """
         # Stop timer (may be running)
         RateLimitedExecution.get_instance().cancel(self.calc_all_rounds)
 
+        changes_made = False
         rounds = self.rounds
         while rounds[-1].games_count > 1:
+            changes_made = True  # Register that changes were made
             last_round = rounds[-1]
             new_round = Round()
             if last_round.games_count % 2 != 0 and (len(rounds) + 1) % 2 == 0:
@@ -232,6 +235,7 @@ class Tournament:
                 g1.next_game = new_round[-1]
                 g1.next_game_player_ind = 0
             rounds.append(new_round)
+        return changes_made
 
     def advance_player_ind(self, player: Player, game: GameSet, win_ind: int):
         if game.next_game is None:
