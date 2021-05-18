@@ -22,8 +22,7 @@ class CogTournament(commands.Cog, name='Tournament'):
 
         self.last_save_time = datetime.now()
         self.save_timer = None
-        self.fix_recreate_players()  # TODO Temp Code to apply change to
-        # players
+        # self.fix_recreate_players() # Use to update objects to match new code
 
     # GLOBALLY APPLIED FUNCTIONS
     def cog_check(self, ctx):
