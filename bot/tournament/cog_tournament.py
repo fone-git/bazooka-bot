@@ -5,6 +5,7 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 
+from bot.tournament.player import Player
 from bot.tournament.tournament import Tournament
 from conf import Conf, DBKeys
 from utils.log import log

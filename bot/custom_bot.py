@@ -1,11 +1,13 @@
 import logging
 
+import discord
 import yaml
 from discord.ext import commands
 
 from bot.tournament.cog_tournament import CogTournament
 from conf import Conf
 from utils.log import log
+from utils.rate_limited_execution import RateLimitedExecution
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -37,7 +39,10 @@ class Bot(commands.Bot):
             :param ctx: The context
             :return: True if should proceed or false to stop command execution
             """
-            return ctx.channel.name in conf.PERMISSIONS.ALLOWED_CHANNELS
+            if isinstance(ctx.message.channel, discord.DMChannel):
+                return ctx.command.name in conf.PERMISSIONS.ALLOWED_DM_COMMANDS
+            else:
+                return ctx.channel.name in conf.PERMISSIONS.ALLOWED_CHANNELS
 
         # TOP Level Commands (No Category)
         @self.command(**conf.COMMAND.PING)
@@ -75,15 +80,24 @@ class Bot(commands.Bot):
             self.cog_tournament.save()
             await ctx.author.send("Saved")
 
+        def is_dm_or_priv_role(ctx):
+            if isinstance(ctx.message.channel, discord.DMChannel):
+                return True
+            else:
+                return any(
+                    role.name in conf.PERMISSIONS.PRIV_ROLES for role in
+                    ctx.author.roles)
+
         @self.command(**conf.COMMAND.EXPORT)
-        @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
+        @commands.check(is_dm_or_priv_role)
         async def export(ctx):
             """
             Requests that the bot saves to a file
             :param ctx: The Context
             """
-            self.export()
-            await ctx.author.send("Exported")
+            RateLimitedExecution.get_instance().register(Conf.EXPORT_DELAY,
+                                                         self.export)
+            await ctx.author.send("Export Request Acknowledged")
 
         @self.event
         async def on_command_error(ctx, error):

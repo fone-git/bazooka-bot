@@ -27,12 +27,18 @@ class Conf:
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
+    EXPORT_DELAY = 15
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
 
     class TopLevel:
         class PERMISSIONS:
+            ALLOWED_DM_COMMANDS = {  # Hard coded to allow for debugging
+                'export',
+                'version',
+                'ping',
+            }
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOP
             PRIV_ROLES = MasterPermissions.PRIV.TOP
 
