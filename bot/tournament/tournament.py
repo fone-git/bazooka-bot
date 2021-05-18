@@ -219,8 +219,8 @@ class Tournament:
                 # Plus 1 to get the number for this round
                 # Has bye and round number is even put bye at the front
                 new_round.add(last_round[0].to_player())
-                last_round[0].next_game = new_round[-1]
-                last_round[0].next_game_player_ind = 0
+                last_round[0].win_next_game = new_round[-1]
+                last_round[0].win_next_game_player_ind = 0
                 start = 1  # start from next game
             else:
                 start = 0  # start from first game bye will go at end
@@ -231,10 +231,10 @@ class Tournament:
                     g1 = last_round[i]
                 else:
                     new_round.add(g1.to_player(), last_round[i].to_player())
-                    g1.next_game = new_round[-1]
-                    g1.next_game_player_ind = 0
-                    last_round[i].next_game = new_round[-1]
-                    last_round[i].next_game_player_ind = 1
+                    g1.win_next_game = new_round[-1]
+                    g1.win_next_game_player_ind = 0
+                    last_round[i].win_next_game = new_round[-1]
+                    last_round[i].win_next_game_player_ind = 1
                     # noinspection PyTypeChecker
                     g1 = None
             if g1 is not None:
@@ -243,30 +243,32 @@ class Tournament:
                 assert (len(rounds) + 1) % 2 != 0
                 # Plus 1 to get the number for this round
                 new_round.add(g1.to_player())
-                g1.next_game = new_round[-1]
-                g1.next_game_player_ind = 0
+                g1.win_next_game = new_round[-1]
+                g1.win_next_game_player_ind = 0
             rounds.append(new_round)
         return changes_made
 
     def advance_player_ind(self, player: Player, game: GameSet, win_ind: int):
-        if game.next_game is None:
+        if game.win_next_game is None:
             return f'CONGRATULATIONS {player.mention} has won the ' \
                    f'tournament!!!'
-        game.next_game.players[game.next_game_player_ind] = game.players[
+        game.win_next_game.players[game.win_next_game_player_ind] = \
+        game.players[
             win_ind]
-        self.players_map[player.id] = game.next_game
+        self.players_map[player.id] = game.win_next_game
         other_ind = (win_ind + 1) % 2
 
         # Check if the next game is a bye
         # ASSUMPTION: expected max 1 bye before having to play again. So
         # doesn't check if next game is a bye
-        if game.next_game.players[other_ind] is None:
-            new_ind = game.next_game.next_game_player_ind
-            game.next_game.next_game.players[new_ind] = game.players[win_ind]
-            self.players_map[player.id] = game.next_game.next_game
-            game = game.next_game
+        if game.win_next_game.players[other_ind] is None:
+            new_ind = game.win_next_game.win_next_game_player_ind
+            game.win_next_game.win_next_game.players[new_ind] = game.players[
+                win_ind]
+            self.players_map[player.id] = game.win_next_game.win_next_game
+            game = game.win_next_game
         return f'{player.mention} TAKES [{game}] and ADVANCES to [' \
-               f'{game.next_game}]'
+               f'{game.win_next_game}]'
 
     def as_html(self):
         # TODO Find a way to include round number and best out of

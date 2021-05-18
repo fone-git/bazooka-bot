@@ -11,11 +11,13 @@ class GameSet:
         self.players = [p1, p2]
         self.scores = [0, 0]
 
-        # Stores the game that the winner of this game goes to
-        self.next_game = None
+        # Stores the game that the winner/loser of this game goes to
+        self.win_next_game = None
+        self.lose_next_game = None
 
-        # index of the winner of this game in the next game
-        self.next_game_player_ind = None
+        # index of the winner/loser of this game in the next game
+        self.win_next_game_player_ind = None
+        self.lose_next_game_player_ind = None
 
     def is_won(self):
         for score in self.scores:
