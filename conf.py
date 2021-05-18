@@ -110,5 +110,9 @@ class Conf:
                         'progress (all wins erased).'}
             WIN = {
                 'name': 'win',
+                'help': 'Allows a player to self report a win'}
+
+            WIN_OTHER = {
+                'name': 'win_other',
                 'help': 'Increases the specified players points by a qty or '
                         '1 if not specified'}

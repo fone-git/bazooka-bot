@@ -58,11 +58,18 @@ class CogTournament(commands.Cog, name='Tournament'):
         # TODO Add if data is pending save to output and make restricted
         await ctx.send(self.data.status())
 
+    @commands.command(**conf.COMMAND.WIN)
+    async def win(self, ctx):
+        user_id, user_display = get_user_info(ctx.author)
+        response = self.data.win(user_id, user_display, 1)
+        self.save()
+        await ctx.send(response)
+
     ##########################################################################
     # PRIVILEGED COMMANDS
-    @commands.command(**conf.COMMAND.WIN)
+    @commands.command(**conf.COMMAND.WIN_OTHER)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
-    async def win(self, ctx, user: discord.User, qty: int = 1):
+    async def win_other(self, ctx, user: discord.User, qty: int = 1):
         user_id, user_display = get_user_info(user)
         response = self.data.win(user_id, user_display, qty)
         self.save()
