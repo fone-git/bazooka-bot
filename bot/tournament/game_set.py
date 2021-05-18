@@ -55,8 +55,13 @@ class GameSet:
         return self.scores[1]
 
     def __str__(self):
-        return f'g{self.game_id}: {self.p1} ({self.p1_score}) ' \
-               f'vs {self.p2} ({self.p2_score})'
+        p1 = f'{self.p1} ({self.p1_score})'
+        if self.is_p1_winner():
+            p1 = f'**{p1}**'
+        p2 = f'{self.p2} ({self.p2_score})'
+        if self.is_p2_winner():
+            p2 = f'**{p2}**'
+        return f'g{self.game_id}: {p1} vs {p2}'
 
     def _to_player(self, type_: str) -> Player:
         """
