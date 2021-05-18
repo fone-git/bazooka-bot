@@ -194,6 +194,12 @@ class Tournament:
         result = ""
         for i, round_ in enumerate(self.rounds):
             result += f'--- Round {i + 1} ---\n{round_}\n'
+
+        # Check for 3rd place match
+        if len(self.rounds) >= 2:
+            third_place_match = self.rounds[-2][0].lose_next_game
+            if third_place_match is not None:
+                result += f'\nThird Place Match:\n{third_place_match}\n'
         return result
 
     def calc_all_rounds(self):
@@ -218,7 +224,7 @@ class Tournament:
             if last_round.games_count % 2 != 0 and (len(rounds) + 1) % 2 == 0:
                 # Plus 1 to get the number for this round
                 # Has bye and round number is even put bye at the front
-                new_round.add(last_round[0].to_player())
+                new_round.add(last_round[0].winner_player())
                 last_round[0].win_next_game = new_round[-1]
                 last_round[0].win_next_game_player_ind = 0
                 start = 1  # start from next game
@@ -230,7 +236,8 @@ class Tournament:
                 if g1 is None:
                     g1 = last_round[i]
                 else:
-                    new_round.add(g1.to_player(), last_round[i].to_player())
+                    new_round.add(g1.winner_player(),
+                                  last_round[i].winner_player())
                     g1.win_next_game = new_round[-1]
                     g1.win_next_game_player_ind = 0
                     last_round[i].win_next_game = new_round[-1]
@@ -242,26 +249,45 @@ class Tournament:
                 assert last_round.games_count % 2 != 0
                 assert (len(rounds) + 1) % 2 != 0
                 # Plus 1 to get the number for this round
-                new_round.add(g1.to_player())
+                new_round.add(g1.winner_player())
                 g1.win_next_game = new_round[-1]
                 g1.win_next_game_player_ind = 0
             rounds.append(new_round)
+        # TODO Add setting to control if 3rd place match should be held
+        self.add_third_place_match()
         return changes_made
+
+    def add_third_place_match(self):
+        if len(self.rounds) < 2:
+            return  # Not enough rounds do nothing
+
+        assert self.rounds[-2].games_count == 2
+        g1: GameSet = self.rounds[-2][0]
+        g2: GameSet = self.rounds[-2][1]
+        third_place_match = GameSet(g1.loser_player(), g2.loser_player(), None)
+        g1.lose_next_game = third_place_match
+        g1.lose_next_game_player_ind = 0
+        g2.lose_next_game = third_place_match
+        g2.lose_next_game_player_ind = 1
 
     def advance_player_ind(self, player: Player, game: GameSet, win_ind: int):
         if game.win_next_game is None:
             return f'CONGRATULATIONS {player.mention} has won the ' \
                    f'tournament!!!'
         game.win_next_game.players[game.win_next_game_player_ind] = \
-        game.players[
-            win_ind]
+            game.players[win_ind]
         self.players_map[player.id] = game.win_next_game
-        other_ind = (win_ind + 1) % 2
+
+        lose_ind = (win_ind + 1) % 2
+        if game.lose_next_game is not None:
+            game.lose_next_game.players[game.lose_next_game_player_ind] = \
+                game.players[lose_ind]
+            self.players_map[game.players[lose_ind].id] = game.lose_next_game
 
         # Check if the next game is a bye
         # ASSUMPTION: expected max 1 bye before having to play again. So
         # doesn't check if next game is a bye
-        if game.win_next_game.players[other_ind] is None:
+        if game.win_next_game.players[lose_ind] is None:
             new_ind = game.win_next_game.win_next_game_player_ind
             game.win_next_game.win_next_game.players[new_ind] = game.players[
                 win_ind]

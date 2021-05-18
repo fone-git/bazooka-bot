@@ -58,11 +58,19 @@ class GameSet:
         return f'g{self.game_id}: {self.p1} ({self.p1_score}) ' \
                f'vs {self.p2} ({self.p2_score})'
 
-    def to_player(self) -> Player:
+    def _to_player(self, type_: str) -> Player:
         """
-        Creates a player object to represent the unknown winner of this game
+        Creates a player object to represent the unknown <winner/loser> of
+        this game
         """
-        return Player(-1, f'Winner of Game {self.game_id}', "?", is_dummy=True)
+        return Player(-1, f'{type_} of Game {self.game_id}', "?",
+                      is_dummy=True)
+
+    def winner_player(self) -> Player:
+        return self._to_player('Winner')
+
+    def loser_player(self) -> Player:
+        return self._to_player('Loser')
 
     @classmethod
     def reset_id_count(cls):
