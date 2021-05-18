@@ -1,3 +1,4 @@
+import logging
 import traceback
 from datetime import datetime
 
@@ -6,6 +7,7 @@ from discord.ext import commands
 
 from bot.tournament.tournament import Tournament
 from conf import Conf, DBKeys
+from utils.log import log
 from utils.misc import get_user_info
 
 # Map class with setting for this cog to variable
@@ -123,6 +125,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     ##########################################################################
     # HELPER FUNCTIONS
     def save(self):
+        log('[CogTournament] Call to save Tournament', logging.DEBUG)
         self.db[DBKeys.TOURNAMENT, True] = self.data
 
     def load(self) -> Tournament:

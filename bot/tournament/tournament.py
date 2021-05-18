@@ -1,3 +1,4 @@
+import logging
 import random
 from typing import List
 
@@ -7,6 +8,7 @@ from bot.tournament.game_set import GameSet
 from bot.tournament.player import Player
 from bot.tournament.round import Round
 from conf import Conf
+from utils.log import log
 from utils.misc import is_power_of_2
 from utils.rate_limited_execution import RateLimitedExecution
 
@@ -151,6 +153,7 @@ class Tournament:
         self.rounds_ = None
         GameSet.reset_id_count()
         self.players_map = {}
+        log('[Tournament] Computed Values Invalidated', logging.DEBUG)
 
         # Set timer to auto calculate
         RateLimitedExecution.get_instance().register(
@@ -195,6 +198,7 @@ class Tournament:
         - and byes at end on odd round numbers
         :return: True if changes were made else False
         """
+        log('[Tournament] Call to compute Rounds', logging.DEBUG)
         # Stop timer (may be running)
         RateLimitedExecution.get_instance().cancel(self.calc_all_rounds)
 
@@ -202,6 +206,8 @@ class Tournament:
         rounds = self.rounds
         while rounds[-1].games_count > 1:
             changes_made = True  # Register that changes were made
+            log(f'[Tournament] Calculating Round {len(rounds) + 1}',
+                logging.DEBUG)
             last_round = rounds[-1]
             new_round = Round()
             if last_round.games_count % 2 != 0 and (len(rounds) + 1) % 2 == 0:

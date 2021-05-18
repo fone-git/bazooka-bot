@@ -1,8 +1,10 @@
+import logging
 from datetime import datetime
 
 import yaml
 
 from conf import Conf
+from utils.log import log
 from utils.timer_funcs import set_timeout
 
 try:
@@ -44,6 +46,7 @@ class DBCache:
         :param key: The key to set or tuple of form (key, should_yaml)
         :param value: The value to set
         """
+        log(f'[DB Cache] received request to set {key}', logging.DEBUG)
         if isinstance(key, tuple):
             key, should_yaml = key
         else:
@@ -111,6 +114,7 @@ class DBCache:
         ASSUMPTION: Function completes in its entirety without any other
             thread calling any of the other functions
         """
+        log('[DB Cache] Purging', logging.DEBUG)
         for key in self.cache.keys():
             value = self.cache[key]
             if key in self.to_yaml:
