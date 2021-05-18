@@ -42,7 +42,6 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     @commands.command(**conf.COMMAND.DISPLAY)
     async def display(self, ctx, full=None):
-        # TODO Change to any true
         if full is not None:
             if self.data.calc_all_rounds():
                 self.save()

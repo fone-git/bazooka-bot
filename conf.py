@@ -37,6 +37,9 @@ class Conf:
             PRIV_ROLES = MasterPermissions.PRIV.TOP
 
         class COMMAND:
+            DM = {
+                'name': 'dm',
+                'help': 'Sends a DM to the user'}
             PING = {
                 'name': 'ping',
                 'help': 'Tests if the bot is alive. If alive bot responds '

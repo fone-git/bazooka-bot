@@ -48,6 +48,15 @@ class Bot(commands.Bot):
             """
             await ctx.send('pong')
 
+        @self.command(**conf.COMMAND.DM)
+        async def dm(ctx):
+            """
+            Causes the bot to send a DM to the user
+            :param ctx: The Context
+            """
+            await ctx.send('ok let me try one sec')
+            await ctx.author.send("Here's the DM you requested.")
+
         @self.command(**conf.COMMAND.VERSION)
         async def version(ctx):
             """
