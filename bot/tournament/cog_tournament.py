@@ -22,6 +22,8 @@ class CogTournament(commands.Cog, name='Tournament'):
 
         self.last_save_time = datetime.now()
         self.save_timer = None
+        self.fix_recreate_players()  # TODO Temp Code to apply change to
+        # players
 
     # GLOBALLY APPLIED FUNCTIONS
     def cog_check(self, ctx):
@@ -142,14 +144,6 @@ class CogTournament(commands.Cog, name='Tournament'):
         if result is None:
             # Create new empty tournament
             result = Tournament()
-
-        # Temp Code to add is_dummy to existing players
-        # TODO Remove temp code
-        replacement = []
-        for x in result.players:
-            replacement.append(Player(x.id, x.display, x.disp_id))
-        result.players = replacement
-        result.invalidate_computed_values()
         return result
 
     @staticmethod
@@ -165,3 +159,20 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     def as_html(self):
         return self.data.as_html()
+
+    def fix_recreate_players(self):
+        """
+        Utility method used when updated happen to player fields during a
+        active tournament to apply the change.
+        NOTE: Only works during registration.
+        """
+        if not self.data.is_reg_open:
+            log('[CogTournament]  Registration closed. Fix not applied to '
+                'recreate players.',
+                logging.WARNING)
+            return
+        replacement = []
+        for x in self.data.players:
+            replacement.append(Player(x.id, x.display, x.disp_id))
+        self.data.players = replacement
+        self.data.invalidate_computed_values()
