@@ -142,6 +142,14 @@ class CogTournament(commands.Cog, name='Tournament'):
         if result is None:
             # Create new empty tournament
             result = Tournament()
+
+        # Temp Code to add is_dummy to existing players
+        # TODO Remove temp code
+        replacement = []
+        for x in result.players:
+            replacement.append(Player(x.id, x.display, x.disp_id))
+        result.players = replacement
+        result.invalidate_computed_values()
         return result
 
     @staticmethod
