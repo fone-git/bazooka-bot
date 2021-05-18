@@ -264,7 +264,8 @@ class Tournament:
         assert self.rounds[-2].games_count == 2
         g1: GameSet = self.rounds[-2][0]
         g2: GameSet = self.rounds[-2][1]
-        third_place_match = GameSet(g1.loser_player(), g2.loser_player(), None)
+        third_place_match = GameSet(g1.loser_player(), g2.loser_player(),
+                                    self.rounds[-1])
         g1.lose_next_game = third_place_match
         g1.lose_next_game_player_ind = 0
         g2.lose_next_game = third_place_match
