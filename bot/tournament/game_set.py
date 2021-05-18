@@ -10,6 +10,7 @@ class GameSet:
         self.game_id = self.new_game_id()
         self.players = [p1, p2]
         self.scores = [0, 0]
+        self.is_finals = False
 
         # Stores the game that the winner/loser of this game goes to
         self.win_next_game = None

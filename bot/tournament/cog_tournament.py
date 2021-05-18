@@ -169,7 +169,7 @@ class CogTournament(commands.Cog, name='Tournament'):
         if not self.data.is_reg_open:
             log('[CogTournament]  Registration closed. Fix not applied to '
                 'recreate players.',
-                logging.WARNING)
+                logging.ERROR)
             return
         replacement = []
         for x in self.data.players:

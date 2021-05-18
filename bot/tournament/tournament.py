@@ -109,7 +109,7 @@ class Tournament:
         self.invalidate_computed_values()
 
     @property
-    def rounds(self):
+    def rounds(self) -> List[Round]:
         if self.rounds_ is None:
             round_ = Round()
             self.rounds_ = [round_]
@@ -254,7 +254,13 @@ class Tournament:
                 g1.win_next_game_player_ind = 0
             rounds.append(new_round)
         # TODO Add setting to control if 3rd place match should be held
-        self.add_third_place_match()
+        if changes_made:
+            # Set Finals
+            assert rounds[-1].games_count == 1
+            rounds[-1][0].is_finals = True
+
+            # Create 3rd place match
+            self.add_third_place_match()
         return changes_made
 
     def add_third_place_match(self):
@@ -262,8 +268,17 @@ class Tournament:
             return  # Not enough rounds do nothing
 
         assert self.rounds[-2].games_count == 2
+
+        # Get games that feed into the match
         g1: GameSet = self.rounds[-2][0]
         g2: GameSet = self.rounds[-2][1]
+
+        if g1.lose_next_game is not None:
+            log('[Tournament] Seems there is already a match for losers of '
+                'semi finals ABORTING creating 3rd place match',
+                logging.WARNING)
+            return
+
         third_place_match = GameSet(g1.loser_player(), g2.loser_player(),
                                     self.rounds[-1])
         g1.lose_next_game = third_place_match
@@ -271,19 +286,33 @@ class Tournament:
         g2.lose_next_game = third_place_match
         g2.lose_next_game_player_ind = 1
 
-    def advance_player_ind(self, player: Player, game: GameSet, win_ind: int):
+    def advance_player_ind(self, player_win: Player, game: GameSet,
+                           win_ind: int):
+        result = ''
         if game.win_next_game is None:
-            return f'CONGRATULATIONS {player.mention} has won the ' \
-                   f'tournament!!!'
+
+            # if winner does not advance expected that loser does not advance
+            assert game.lose_next_game is None
+
+            if game.is_finals:
+                return f'CONGRATULATIONS {player_win.mention} has won the ' \
+                       f'tournament!!!'
+            else:
+                # Example use case is 3rd place match
+                return f'{player_win.mention} TAKES [{game}]'
         game.win_next_game.players[game.win_next_game_player_ind] = \
             game.players[win_ind]
-        self.players_map[player.id] = game.win_next_game
+        self.players_map[player_win.id] = game.win_next_game
 
         lose_ind = (win_ind + 1) % 2
         if game.lose_next_game is not None:
-            game.lose_next_game.players[game.lose_next_game_player_ind] = \
-                game.players[lose_ind]
-            self.players_map[game.players[lose_ind].id] = game.lose_next_game
+            player_lose = game.players[lose_ind]
+            if player_lose is not None:
+                game.lose_next_game.players[game.lose_next_game_player_ind] = \
+                    player_lose
+                self.players_map[player_lose.id] = game.lose_next_game
+                result = f'\n\n-- AND --\n\n{player_lose.mention} moves to [' \
+                         f'{game.lose_next_game}]'
 
         # Check if the next game is a bye
         # ASSUMPTION: expected max 1 bye before having to play again. So
@@ -292,10 +321,11 @@ class Tournament:
             new_ind = game.win_next_game.win_next_game_player_ind
             game.win_next_game.win_next_game.players[new_ind] = game.players[
                 win_ind]
-            self.players_map[player.id] = game.win_next_game.win_next_game
+            self.players_map[player_win.id] = game.win_next_game.win_next_game
             game = game.win_next_game
-        return f'{player.mention} TAKES [{game}] and ADVANCES to [' \
-               f'{game.win_next_game}]'
+        result = f'{player_win.mention} TAKES [{game}] and ADVANCES to [' \
+                 f'{game.win_next_game}]{result}'
+        return result
 
     def as_html(self):
         # TODO Find a way to include round number and best out of
