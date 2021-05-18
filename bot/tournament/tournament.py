@@ -160,10 +160,15 @@ class Tournament:
             Conf.TOURNAMENT.AUTO_CALC_BRACKET_DELAY, self.calc_all_rounds)
 
     def win(self, user_id, user_display, qty):
-        game = self.players_map.get(user_id)
+        game: GameSet = self.players_map.get(user_id)
+
         if game is None:
             raise commands.errors.UserInputError(
                 f"Didn't find an active game for {user_display}")
+
+        if game.has_dummy_player():
+            raise commands.errors.UserInputError(
+                f"This game doesn't appear to have two players - {game}")
 
         if user_id == game.p1.id:
             win_ind = 0

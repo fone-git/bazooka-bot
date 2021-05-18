@@ -60,7 +60,7 @@ class GameSet:
         """
         Creates a player object to represent the unknown winner of this game
         """
-        return Player("", f'Winner of Game {self.game_id}', "?")
+        return Player(-1, f'Winner of Game {self.game_id}', "?", is_dummy=True)
 
     @classmethod
     def reset_id_count(cls):
@@ -71,3 +71,6 @@ class GameSet:
         result = cls.next_id
         cls.next_id += 1
         return result
+
+    def has_dummy_player(self):
+        return any([player.is_dummy for player in self.players])
