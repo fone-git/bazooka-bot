@@ -1,3 +1,6 @@
+import logging
+
+from utils.log import log
 from utils.timer_funcs import set_timeout
 
 
@@ -40,10 +43,14 @@ class RateLimitedExecution:
         :return: True if was not already pending otherwise False
         """
         if self.is_pending(function):
+            log(f'[RateLimit] Request to register ignored. Already pending '
+                f'{function}', logging.DEBUG)
             return False
         else:
             self.pending[function] = \
                 set_timeout(timeout, self._execute, [function, args, kwargs])
+            log(f'[RateLimit] Registered {function} with {timeout} second '
+                f'timeout', logging.DEBUG)
             return True
 
     def is_pending(self, function: callable):
@@ -58,5 +65,9 @@ class RateLimitedExecution:
         if self.is_pending(function):
             self.pending[function].cancel()
             self.pending.pop(function)
+            log(f'[RateLimit] Canceled {function}', logging.DEBUG)
+            return True
         else:
+            log(f'[RateLimit] Not Pending. Did NOT cancel {function}',
+                logging.DEBUG)
             return False

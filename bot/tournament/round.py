@@ -10,7 +10,7 @@ class Round:
     def add(self, p1: Player, p2: Player = None):
         self.game_sets.append(GameSet(p1, p2, self))
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> GameSet:
         return self.game_sets[key]
 
     @property

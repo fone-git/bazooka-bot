@@ -10,12 +10,15 @@ class GameSet:
         self.game_id = self.new_game_id()
         self.players = [p1, p2]
         self.scores = [0, 0]
+        self.is_finals = False
 
-        # Stores the game that the winner of this game goes to
-        self.next_game = None
+        # Stores the game that the winner/loser of this game goes to
+        self.win_next_game = None
+        self.lose_next_game = None
 
-        # index of the winner of this game in the next game
-        self.next_game_player_ind = None
+        # index of the winner/loser of this game in the next game
+        self.win_next_game_player_ind = None
+        self.lose_next_game_player_ind = None
 
     def is_won(self):
         for score in self.scores:
@@ -53,14 +56,27 @@ class GameSet:
         return self.scores[1]
 
     def __str__(self):
-        return f'g{self.game_id}: {self.p1} ({self.p1_score}) ' \
-               f'vs {self.p2} ({self.p2_score})'
+        p1 = f'{self.p1} ({self.p1_score})'
+        if self.is_p1_winner():
+            p1 = f'**{p1}**'
+        p2 = f'{self.p2} ({self.p2_score})'
+        if self.is_p2_winner():
+            p2 = f'**{p2}**'
+        return f'g{self.game_id}: {p1} vs {p2}'
 
-    def to_player(self) -> Player:
+    def _to_player(self, type_: str) -> Player:
         """
-        Creates a player object to represent the unknown winner of this game
+        Creates a player object to represent the unknown <winner/loser> of
+        this game
         """
-        return Player("", f'Winner of Game {self.game_id}', "?")
+        return Player(-1, f'{type_} of Game {self.game_id}', "?",
+                      is_dummy=True)
+
+    def winner_player(self) -> Player:
+        return self._to_player('Winner')
+
+    def loser_player(self) -> Player:
+        return self._to_player('Loser')
 
     @classmethod
     def reset_id_count(cls):
@@ -71,3 +87,6 @@ class GameSet:
         result = cls.next_id
         cls.next_id += 1
         return result
+
+    def has_dummy_player(self):
+        return any([player.is_dummy for player in self.players])
