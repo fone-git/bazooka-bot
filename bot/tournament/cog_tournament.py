@@ -1,11 +1,14 @@
+import logging
 import traceback
 from datetime import datetime
 
 import discord
 from discord.ext import commands
 
+from bot.tournament.player import Player
 from bot.tournament.tournament import Tournament
 from conf import Conf, DBKeys
+from utils.log import log
 from utils.misc import get_user_info
 
 # Map class with setting for this cog to variable
@@ -19,6 +22,8 @@ class CogTournament(commands.Cog, name='Tournament'):
 
         self.last_save_time = datetime.now()
         self.save_timer = None
+        self.fix_recreate_players()  # TODO Temp Code to apply change to
+        # players
 
     # GLOBALLY APPLIED FUNCTIONS
     def cog_check(self, ctx):
@@ -42,7 +47,6 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     @commands.command(**conf.COMMAND.DISPLAY)
     async def display(self, ctx, full=None):
-        # TODO Change to any true
         if full is not None:
             if self.data.calc_all_rounds():
                 self.save()
@@ -57,11 +61,18 @@ class CogTournament(commands.Cog, name='Tournament'):
         # TODO Add if data is pending save to output and make restricted
         await ctx.send(self.data.status())
 
+    @commands.command(**conf.COMMAND.WIN)
+    async def win(self, ctx):
+        user_id, user_display = get_user_info(ctx.author)
+        response = self.data.win(user_id, user_display, 1)
+        self.save()
+        await ctx.send(response)
+
     ##########################################################################
     # PRIVILEGED COMMANDS
-    @commands.command(**conf.COMMAND.WIN)
+    @commands.command(**conf.COMMAND.WIN_OTHER)
     @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
-    async def win(self, ctx, user: discord.User, qty: int = 1):
+    async def win_other(self, ctx, user: discord.User, qty: int = 1):
         user_id, user_display = get_user_info(user)
         response = self.data.win(user_id, user_display, qty)
         self.save()
@@ -124,6 +135,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     ##########################################################################
     # HELPER FUNCTIONS
     def save(self):
+        log('[CogTournament] Call to save Tournament', logging.DEBUG)
         self.db[DBKeys.TOURNAMENT, True] = self.data
 
     def load(self) -> Tournament:
@@ -147,3 +159,20 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     def as_html(self):
         return self.data.as_html()
+
+    def fix_recreate_players(self):
+        """
+        Utility method used when updated happen to player fields during a
+        active tournament to apply the change.
+        NOTE: Only works during registration.
+        """
+        if not self.data.is_reg_open:
+            log('[CogTournament]  Registration closed. Fix not applied to '
+                'recreate players.',
+                logging.ERROR)
+            return
+        replacement = []
+        for x in self.data.players:
+            replacement.append(Player(x.id, x.display, x.disp_id))
+        self.data.players = replacement
+        self.data.invalidate_computed_values()
