@@ -7,7 +7,7 @@ import logging
 
 class MasterPermissions:
     class PRIV:
-        TOURNAMENT = {'officer', 'leader'}
+        TOURNAMENT = {'@officer', '@leader'}
         TOP = TOURNAMENT
 
     class Channels:
