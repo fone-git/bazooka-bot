@@ -89,4 +89,5 @@ class GameSet:
         return result
 
     def has_dummy_player(self):
-        return any([player.is_dummy for player in self.players])
+        return any([True if player is None else player.is_dummy for player in
+                    self.players])
