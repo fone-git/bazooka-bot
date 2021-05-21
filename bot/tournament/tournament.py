@@ -317,12 +317,13 @@ class Tournament:
         # Check if the next game is a bye
         # ASSUMPTION: expected max 1 bye before having to play again. So
         # doesn't check if next game is a bye
-        if game.win_next_game.players[lose_ind] is None:
+        opponent_ind = (game.win_next_game_player_ind + 1) % 2
+        if game.win_next_game.players[opponent_ind] is None:
             new_ind = game.win_next_game.win_next_game_player_ind
             game.win_next_game.win_next_game.players[new_ind] = game.players[
                 win_ind]
             self.players_map[player_win.id] = game.win_next_game.win_next_game
-            game = game.win_next_game
+            game = game.win_next_game  # Advance pointer for print out
         result = f'{player_win.mention} TAKES [{game}] and ADVANCES to [' \
                  f'{game.win_next_game}]{result}'
         return result

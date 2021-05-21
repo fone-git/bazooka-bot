@@ -134,7 +134,7 @@ class CogTournament(commands.Cog, name='Tournament'):
     ##########################################################################
     # HELPER FUNCTIONS
     def save(self):
-        log('[CogTournament] Call to save Tournament', logging.DEBUG)
+        log('[CogTournament] Call to save Tournament')
         self.db[DBKeys.TOURNAMENT, True] = self.data
 
     def load(self) -> Tournament:
