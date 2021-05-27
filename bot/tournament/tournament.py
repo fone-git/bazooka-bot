@@ -1,7 +1,8 @@
 import logging
 import random
-from typing import List
+from typing import Iterable, List, Union
 
+from discord import Embed
 from discord.ext import commands
 
 from bot.tournament.game_set import GameSet
@@ -21,7 +22,7 @@ class Tournament:
 
         # Stores the computed rounds for display purposes to prevent
         # redundant recalculation
-        self.rounds_ = None
+        self.rounds_: Union[None, Iterable[Round]] = None
 
         # Dict of next match player is carded to play if any
         # NB: maybe be overwritten repeatedly during registration as
@@ -113,8 +114,7 @@ class Tournament:
         if self.rounds_ is None:
             round_ = Round()
             self.rounds_ = [round_]
-            # noinspection PyTypeChecker
-            p1: Player = None
+            p1: Union[Player, None] = None
             for player in self.players:
                 if p1 is None:
                     p1 = player
@@ -122,7 +122,6 @@ class Tournament:
                     round_.add(p1, player)
                     self.players_map[p1.id] = round_[-1]
                     self.players_map[player.id] = round_[-1]
-                    # noinspection PyTypeChecker
                     p1 = None
 
             # If there were an odd number of players and one is left over
@@ -196,10 +195,9 @@ class Tournament:
             result += f'--- Round {i + 1} ---\n{round_}\n'
 
         # Check for 3rd place match
-        if len(self.rounds) >= 2:
-            third_place_match = self.rounds[-2][0].lose_next_game
-            if third_place_match is not None:
-                result += f'\nThird Place Match:\n{third_place_match}\n'
+        third_place_match = self.get_third_place_match()
+        if third_place_match is not None:
+            result += f'\nThird Place Match:\n{third_place_match}\n'
         return result
 
     def calc_all_rounds(self):
@@ -230,8 +228,7 @@ class Tournament:
                 start = 1  # start from next game
             else:
                 start = 0  # start from first game bye will go at end
-            # noinspection PyTypeChecker
-            g1: GameSet = None
+            g1: Union[None, GameSet] = None
             for i in range(start, last_round.games_count):
                 if g1 is None:
                     g1 = last_round[i]
@@ -242,7 +239,6 @@ class Tournament:
                     g1.win_next_game_player_ind = 0
                     last_round[i].win_next_game = new_round[-1]
                     last_round[i].win_next_game_player_ind = 1
-                    # noinspection PyTypeChecker
                     g1 = None
             if g1 is not None:
                 # Bye has to go at end
@@ -365,3 +361,81 @@ class Tournament:
             result += '<li class="spacer">&nbsp;</li> </ul>'
 
         return result
+
+    def as_embed(self) -> Embed:
+        result = Embed(title='CURRENT STANDINGS', color=Conf.EMBED_COLOR)
+        for i, round_ in enumerate(self.rounds):
+            result.add_field(name=f'--- Round {i + 1} ---', value=f'{round_}',
+                             inline=False)
+
+        # Check for 3rd place match
+        third_place_match = self.get_third_place_match()
+        if third_place_match is not None:
+            result.add_field(name=f'Third Place Match',
+                             value=f'{third_place_match}',
+                             inline=False)
+        return result
+
+    def override_set(self, user_id, user_display, game_id: int,
+                     player_pos: int):
+        if self.is_reg_open:
+            raise commands.errors.UserInputError(
+                f'Override Set only available if tournament has started!')
+
+        if user_id not in self:
+            raise commands.errors.UserInputError(
+                f'{user_display} not found in tournament')
+
+        player = self.players_map.get(user_id)
+        if player is None:
+            player = self.get_player(user_id)
+
+            # Player should not be None passed contains
+            assert player is not None
+
+        if 1 > player_pos or 2 < player_pos:
+            raise commands.errors.UserInputError(
+                f'Player pos expected in range 1-2 but got: {player_pos}')
+        player_pos -= 1  # Convert to 0 based value
+
+        game = self.get_game(game_id)
+        if game is None:
+            raise commands.errors.UserInputError(
+                f'Unable to find game with ID: {game_id}')
+
+        # Reset scores
+        game.scores[0] = 0
+        game.scores[1] = 0
+
+        # Set Player
+        game.players[player_pos] = player
+
+        # Update Map
+        self.players_map[user_id] = game
+
+        return f'{game}'
+
+    def get_game(self, game_id: int) -> Union[GameSet, None]:
+        for round_ in self.rounds:
+            for game in round_.game_sets:
+                if game.game_id == game_id:
+                    return game
+
+        # Last possible value is 3rd place match
+        game = self.get_third_place_match()
+        if game is not None and game.game_id == game_id:
+            return game
+        return None
+
+    def get_player(self, user_id) -> Union[Player, None]:
+        for player in self.players:
+            if player.id == user_id:
+                return player
+        return None
+
+    def get_third_place_match(self) -> Union[None, GameSet]:
+        if len(self.rounds) >= 2:
+            # Could be taken from either game. Taking from 1st game of round
+            return self.rounds[-2][0].lose_next_game
+        else:
+            return None

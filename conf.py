@@ -3,8 +3,6 @@ import logging
 
 # TODO Add option to chose to use qualifying round
 
-# TODO Add option to have 3rd place match
-
 class MasterPermissions:
     class PRIV:
         TOURNAMENT = {'@officer', '@leader'}
@@ -28,12 +26,13 @@ class Conf:
     SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
     EXPORT_DELAY = 15
+    EMBED_COLOR = 0x373977
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
 
     class TopLevel:
-        class PERMISSIONS:
+        class Permissions:
             ALLOWED_DM_COMMANDS = {  # Hard coded to allow for debugging
                 'export',
                 'version',
@@ -42,7 +41,7 @@ class Conf:
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOP
             PRIV_ROLES = MasterPermissions.PRIV.TOP
 
-        class COMMAND:
+        class Command:
             DM = {
                 'name': 'dm',
                 'help': 'Sends a DM to the user'}
@@ -64,11 +63,11 @@ class Conf:
         # Number of seconds before automatically calculating all bracket
         AUTO_CALC_BRACKET_DELAY = 10
 
-        class PERMISSIONS:
+        class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
 
-        class COMMAND:
+        class Command:
             REGISTER = {
                 'name': 'reg',
                 'help': 'Registers you for the tournament'}
@@ -122,3 +121,14 @@ class Conf:
                 'name': 'win_other',
                 'help': 'Increases the specified players points by a qty or '
                         '1 if not specified'}
+
+            class Override:
+                BASE = {
+                    'name': 'override',
+                    'hidden': True}
+                SET = {
+                    'name': 'set',
+                    'help': 'Sets the specified player to play in the '
+                            'specified position scores for the target game '
+                            'are cleared.',
+                    'hidden': True}
