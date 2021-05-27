@@ -26,6 +26,7 @@ class Conf:
     SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
     EXPORT_DELAY = 15
+    URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
 
     class ENV:  # Environment variable names
