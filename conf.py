@@ -59,7 +59,7 @@ class Conf:
                 'name': 'export',
                 'hidden': True}
 
-    class TOURNAMENT:
+    class Tournament:
         # Number of seconds before automatically calculating all bracket
         AUTO_CALC_BRACKET_DELAY = 10
 
