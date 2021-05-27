@@ -20,12 +20,13 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.10.1'
+    VERSION = '1.10.2'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
     EXPORT_DELAY = 15
+    URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
 
     class ENV:  # Environment variable names
@@ -59,7 +60,7 @@ class Conf:
                 'name': 'export',
                 'hidden': True}
 
-    class TOURNAMENT:
+    class Tournament:
         # Number of seconds before automatically calculating all bracket
         AUTO_CALC_BRACKET_DELAY = 10
 
