@@ -136,6 +136,17 @@ class CogTournament(commands.Cog, name='Tournament'):
     async def override(self, ctx):
         await ctx.send(f'Unrecognized subcommand')
 
+    @override.command(**conf.Command.Override.SET)
+    @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
+    async def set(self, ctx, who: discord.User, game_id: int, player_pos: int):
+        user_id, user_display = get_user_info(who)
+        round_display = self.data.override_set(user_id, user_display, game_id,
+                                               player_pos)
+        self.save()
+        await ctx.send(
+            f'Scores reset for game: {game_id} and match up is now:\n'
+            f'{round_display}')
+
     ##########################################################################
     # HELPER FUNCTIONS
     def save(self):
