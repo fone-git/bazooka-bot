@@ -34,7 +34,7 @@ class Conf:
         TOKEN = 'TOKEN'
 
     class TopLevel:
-        class PERMISSIONS:
+        class Permissions:
             ALLOWED_DM_COMMANDS = {  # Hard coded to allow for debugging
                 'export',
                 'version',
@@ -43,7 +43,7 @@ class Conf:
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOP
             PRIV_ROLES = MasterPermissions.PRIV.TOP
 
-        class COMMAND:
+        class Command:
             DM = {
                 'name': 'dm',
                 'help': 'Sends a DM to the user'}
@@ -65,11 +65,11 @@ class Conf:
         # Number of seconds before automatically calculating all bracket
         AUTO_CALC_BRACKET_DELAY = 10
 
-        class PERMISSIONS:
+        class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
 
-        class COMMAND:
+        class Command:
             REGISTER = {
                 'name': 'reg',
                 'help': 'Registers you for the tournament'}
@@ -124,6 +124,7 @@ class Conf:
                 'help': 'Increases the specified players points by a qty or '
                         '1 if not specified'}
 
-            OVERRIDE = {
-                'name': 'override',
-                'hidden': True}
+            class Override:
+                BASE = {
+                    'name': 'override',
+                    'hidden': True}

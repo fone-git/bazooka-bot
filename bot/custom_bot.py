@@ -40,12 +40,12 @@ class Bot(commands.Bot):
             :return: True if should proceed or false to stop command execution
             """
             if isinstance(ctx.message.channel, discord.DMChannel):
-                return ctx.command.name in conf.PERMISSIONS.ALLOWED_DM_COMMANDS
+                return ctx.command.name in conf.Permissions.ALLOWED_DM_COMMANDS
             else:
-                return ctx.channel.name in conf.PERMISSIONS.ALLOWED_CHANNELS
+                return ctx.channel.name in conf.Permissions.ALLOWED_CHANNELS
 
         # TOP Level Commands (No Category)
-        @self.command(**conf.COMMAND.PING)
+        @self.command(**conf.Command.PING)
         async def ping(ctx):
             """
             Responds with pong if bot can talk here
@@ -53,7 +53,7 @@ class Bot(commands.Bot):
             """
             await ctx.send('pong')
 
-        @self.command(**conf.COMMAND.DM)
+        @self.command(**conf.Command.DM)
         async def dm(ctx):
             """
             Causes the bot to send a DM to the user
@@ -62,7 +62,7 @@ class Bot(commands.Bot):
             await ctx.send('ok let me try one sec')
             await ctx.author.send("Here's the DM you requested.")
 
-        @self.command(**conf.COMMAND.VERSION)
+        @self.command(**conf.Command.VERSION)
         async def version(ctx):
             """
             Responds with the version of the bot
@@ -70,8 +70,8 @@ class Bot(commands.Bot):
             """
             await ctx.send(f'Version: {Conf.VERSION}')
 
-        @self.command(**conf.COMMAND.SAVE)
-        @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
+        @self.command(**conf.Command.SAVE)
+        @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
         async def save(ctx):
             """
             Requests that the bot saves to secondary storage immediately
@@ -85,10 +85,10 @@ class Bot(commands.Bot):
                 return True
             else:
                 return any(
-                    role.name in conf.PERMISSIONS.PRIV_ROLES for role in
+                    role.name in conf.Permissions.PRIV_ROLES for role in
                     ctx.author.roles)
 
-        @self.command(**conf.COMMAND.EXPORT)
+        @self.command(**conf.Command.EXPORT)
         @commands.check(is_dm_or_priv_role)
         async def export(ctx):
             """
