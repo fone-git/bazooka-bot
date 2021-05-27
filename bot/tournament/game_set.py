@@ -1,3 +1,5 @@
+from typing import List, Union
+
 from bot.tournament.player import Player
 
 
@@ -8,7 +10,7 @@ class GameSet:
     def __init__(self, p1: Player, p2: Player, round_):
         self.round_ = round_  # Round that the game is in
         self.game_id = self.new_game_id()
-        self.players = [p1, p2]
+        self.players: List[Union[None, Player]] = [p1, p2]
         self.scores = [0, 0]
         self.is_finals = False
 
@@ -26,17 +28,17 @@ class GameSet:
                 return True
         return False
 
-    def _is_p_winner(self, score_index: int):
+    def _is_p_winner(self, score_index: int) -> bool:
         return ('winner'
                 if
                 self.round_.best_out_of is not None
                 and self.scores[score_index] > self.round_.best_out_of // 2
                 else '')
 
-    def is_p1_winner(self):
+    def is_p1_winner(self) -> bool:
         return self._is_p_winner(0)
 
-    def is_p2_winner(self):
+    def is_p2_winner(self) -> bool:
         return self._is_p_winner(1)
 
     @property
@@ -58,10 +60,10 @@ class GameSet:
     def __str__(self):
         p1 = f'{self.p1} ({self.p1_score})'
         if self.is_p1_winner():
-            p1 = f'**{p1}**'
+            p1 = f'**__{p1}__**'
         p2 = f'{self.p2} ({self.p2_score})'
         if self.is_p2_winner():
-            p2 = f'**{p2}**'
+            p2 = f'**__{p2}__**'
         return f'g{self.game_id}: {p1} vs {p2}'
 
     def _to_player(self, type_: str) -> Player:

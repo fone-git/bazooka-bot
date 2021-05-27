@@ -1,10 +1,12 @@
+from typing import List
+
 from bot.tournament.game_set import GameSet
 from bot.tournament.player import Player
 
 
 class Round:
     def __init__(self):
-        self.game_sets = []
+        self.game_sets: List[GameSet] = []
         self.best_out_of = None
 
     def add(self, p1: Player, p2: Player = None):
