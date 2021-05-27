@@ -2,6 +2,7 @@ import logging
 import random
 from typing import List
 
+from discord import Embed
 from discord.ext import commands
 
 from bot.tournament.game_set import GameSet
@@ -364,4 +365,19 @@ class Tournament:
 
             result += '<li class="spacer">&nbsp;</li> </ul>'
 
+        return result
+
+    def as_embed(self) -> Embed:
+        result = Embed(title='CURRENT STANDINGS', color=0x373977)
+        for i, round_ in enumerate(self.rounds):
+            result.add_field(name=f'--- Round {i + 1} ---', value=f'{round_}',
+                             inline=False)
+
+        # Check for 3rd place match
+        if len(self.rounds) >= 2:
+            third_place_match = self.rounds[-2][0].lose_next_game
+            if third_place_match is not None:
+                result.add_field(name=f'Third Place Match',
+                                 value=f'{third_place_match}',
+                                 inline=False)
         return result

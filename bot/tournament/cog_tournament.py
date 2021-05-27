@@ -50,7 +50,7 @@ class CogTournament(commands.Cog, name='Tournament'):
         if full is not None:
             if self.data.calc_all_rounds():
                 self.save()
-        await ctx.send(self.data)
+        await ctx.send(embed=self.data.as_embed())
 
     @commands.command(**conf.COMMAND.COUNT)
     async def count(self, ctx):
