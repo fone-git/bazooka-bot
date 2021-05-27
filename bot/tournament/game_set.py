@@ -28,17 +28,17 @@ class GameSet:
                 return True
         return False
 
-    def _is_p_winner(self, score_index: int) -> bool:
+    def _is_p_winner(self, score_index: int) -> str:
         return ('winner'
                 if
                 self.round_.best_out_of is not None
                 and self.scores[score_index] > self.round_.best_out_of // 2
                 else '')
 
-    def is_p1_winner(self) -> bool:
+    def is_p1_winner(self) -> str:
         return self._is_p_winner(0)
 
-    def is_p2_winner(self) -> bool:
+    def is_p2_winner(self) -> str:
         return self._is_p_winner(1)
 
     @property
