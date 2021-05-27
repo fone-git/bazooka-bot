@@ -1,8 +1,10 @@
+from typing import Union
+
 from utils.dict_persistent import DictPersistent
 from utils.log import log
 
 
-def get_db() -> dict:
+def get_db() -> Union[dict, DictPersistent]:
     """
     Access to REPL DB
     :return:
@@ -14,5 +16,4 @@ def get_db() -> dict:
     except ModuleNotFoundError:
         db = DictPersistent()
         log("Unable to get REPL DB Using Local dict")
-    # noinspection PyTypeChecker
     return db

@@ -2,3 +2,4 @@ flask~=1.1.2
 pyyaml~=5.4.1
 waitress~=1.4.4
 discord>=1.0.1
+yaml~=0.2.5
