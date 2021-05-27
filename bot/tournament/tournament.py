@@ -156,7 +156,7 @@ class Tournament:
 
         # Set timer to auto calculate
         RateLimitedExecution.get_instance().register(
-            Conf.TOURNAMENT.AUTO_CALC_BRACKET_DELAY, self.calc_all_rounds)
+            Conf.Tournament.AUTO_CALC_BRACKET_DELAY, self.calc_all_rounds)
 
     def win(self, user_id, user_display, qty):
         game: GameSet = self.players_map.get(user_id)
@@ -363,7 +363,8 @@ class Tournament:
         return result
 
     def as_embed(self) -> Embed:
-        result = Embed(title='CURRENT STANDINGS', color=Conf.EMBED_COLOR)
+        result = Embed(title='HTML Display', color=Conf.EMBED_COLOR,
+                       url=Conf.URL)
         for i, round_ in enumerate(self.rounds):
             result.add_field(name=f'--- Round {i + 1} ---', value=f'{round_}',
                              inline=False)

@@ -12,7 +12,7 @@ from utils.log import log
 from utils.misc import get_user_info
 
 # Map class with setting for this cog to variable
-conf = Conf.TOURNAMENT
+conf = Conf.Tournament
 
 
 class CogTournament(commands.Cog, name='Tournament'):
