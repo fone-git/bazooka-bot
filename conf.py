@@ -3,8 +3,6 @@ import logging
 
 # TODO Add option to chose to use qualifying round
 
-# TODO Add option to have 3rd place match
-
 class MasterPermissions:
     class PRIV:
         TOURNAMENT = {'@officer', '@leader'}
@@ -127,4 +125,10 @@ class Conf:
             class Override:
                 BASE = {
                     'name': 'override',
+                    'hidden': True}
+                SET = {
+                    'name': 'set',
+                    'help': 'Sets the specified player to play in the '
+                            'specified position scores for the target game '
+                            'are cleared.',
                     'hidden': True}

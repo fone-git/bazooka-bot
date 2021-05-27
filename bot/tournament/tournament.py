@@ -1,6 +1,6 @@
 import logging
 import random
-from typing import List
+from typing import Iterable, List, Union
 
 from discord import Embed
 from discord.ext import commands
@@ -22,7 +22,7 @@ class Tournament:
 
         # Stores the computed rounds for display purposes to prevent
         # redundant recalculation
-        self.rounds_ = None
+        self.rounds_: Union[None, Iterable[Round]] = None
 
         # Dict of next match player is carded to play if any
         # NB: maybe be overwritten repeatedly during registration as
@@ -114,8 +114,7 @@ class Tournament:
         if self.rounds_ is None:
             round_ = Round()
             self.rounds_ = [round_]
-            # noinspection PyTypeChecker
-            p1: Player = None
+            p1: Union[Player, None] = None
             for player in self.players:
                 if p1 is None:
                     p1 = player
@@ -123,7 +122,6 @@ class Tournament:
                     round_.add(p1, player)
                     self.players_map[p1.id] = round_[-1]
                     self.players_map[player.id] = round_[-1]
-                    # noinspection PyTypeChecker
                     p1 = None
 
             # If there were an odd number of players and one is left over
@@ -231,8 +229,7 @@ class Tournament:
                 start = 1  # start from next game
             else:
                 start = 0  # start from first game bye will go at end
-            # noinspection PyTypeChecker
-            g1: GameSet = None
+            g1: Union[None, GameSet] = None
             for i in range(start, last_round.games_count):
                 if g1 is None:
                     g1 = last_round[i]
@@ -243,7 +240,6 @@ class Tournament:
                     g1.win_next_game_player_ind = 0
                     last_round[i].win_next_game = new_round[-1]
                     last_round[i].win_next_game_player_ind = 1
-                    # noinspection PyTypeChecker
                     g1 = None
             if g1 is not None:
                 # Bye has to go at end

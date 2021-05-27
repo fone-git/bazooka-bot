@@ -4,7 +4,6 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands
-from discord.ext.commands import Group
 
 from bot.tournament.player import Player
 from bot.tournament.tournament import Tournament
