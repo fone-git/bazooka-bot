@@ -4,6 +4,7 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands
+from discord.ext.commands import Group
 
 from bot.tournament.player import Player
 from bot.tournament.tournament import Tournament
@@ -130,6 +131,61 @@ class CogTournament(commands.Cog, name='Tournament'):
         self.data.shuffle()
         self.save()
         await ctx.send(f'Player order shuffled')
+
+    @commands.command(**conf.COMMAND.OVERRIDE)
+    @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
+    async def shuffle(self, ctx):
+        self.data.shuffle()
+        self.save()
+        await ctx.send(f'Player order shuffled')
+
+    @commands.has_any_role(*conf.PERMISSIONS.PRIV_ROLES)
+    @commands.group(pass_context=False, invoke_without_command=True)
+    async def first(self, ctx):
+        await ctx.send("Ping 1")
+        command = self.first
+        if isinstance(command, Group):  # check if it has subcommands
+            embed = discord.Embed(title=f"{str(command).upper()} Help!",
+                                  description='test', color=0xf8f8ff)
+            resp = ""  # make an empty string to add the subcommands on
+            for subcommand in command.walk_commands():  # iterate through
+                # all of the command's parents/subcommands
+
+                if subcommand.parents[0] == command:
+                    # check if the latest parent of the
+                    # subcommand is the command itself
+                    resp += "**•  {0.name}**\n".format(
+                        subcommand)  # then add it in the string if it is.
+                else:  # the else statement is optional.
+                    continue
+
+            embed.add_field(name='Subcommands', value=resp, inline=False)
+            embed.set_footer(text='<> - required | [] - optional')
+            await ctx.send("test msg", embed=embed)
+
+    @first.group(pass_context=False, invoke_without_command=True)
+    async def second(self, ctx):
+        await ctx.send("Ping 2")
+
+    @first.group(pass_context=False, invoke_without_command=True)
+    async def second2(self, ctx):
+        await ctx.send("Ping 2")
+
+    @second.command(pass_context=False)
+    async def third(self, ctx):
+        await ctx.send("Ping 3")
+
+    @second.command(pass_context=False)
+    async def third2(self, ctx):
+        await ctx.send("Ping 32")
+
+    @second.command(pass_context=False)
+    async def four(self, ctx):
+        await ctx.send("Ping 41")
+
+    @second.command(pass_context=False)
+    async def four2(self, ctx):
+        await ctx.send("Ping 42")
 
     ##########################################################################
     # HELPER FUNCTIONS

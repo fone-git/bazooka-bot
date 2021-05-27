@@ -122,3 +122,7 @@ class Conf:
                 'name': 'win_other',
                 'help': 'Increases the specified players points by a qty or '
                         '1 if not specified'}
+
+            OVERRIDE = {
+                'name': 'override',
+                'hidden': True}
