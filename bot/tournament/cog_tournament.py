@@ -54,7 +54,6 @@ class CogTournament(commands.Cog, name='Tournament'):
 
     @commands.command(**conf.Command.STATUS)
     async def status(self, ctx):
-        # TODO Add if data is pending save to output and make restricted
         await ctx.send(self.data.status())
 
     @commands.command(**conf.Command.WIN)

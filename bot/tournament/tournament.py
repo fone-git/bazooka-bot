@@ -16,6 +16,7 @@ from utils.rate_limited_execution import RateLimitedExecution
 
 class Tournament:
     def __init__(self):
+        # TODO Add a setting to control type of tournament
         self.next_id = 0
         self.is_reg_open = True
         self.players = []
@@ -326,9 +327,6 @@ class Tournament:
 
     def as_html(self):
         # TODO Find a way to include round number and best out of
-
-        # TODO fix display of tournaments with rounds that do not have a
-        # number of players that is a power of 2
 
         if len(self.players) == 0:
             return '<h1> No one is registered yet </h1>'

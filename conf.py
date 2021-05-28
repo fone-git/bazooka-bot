@@ -1,7 +1,7 @@
 import logging
 
 
-# TODO Add option to chose to use qualifying round
+# TODO Add option to chose to use qualifying round instead of alternating byes
 
 class MasterPermissions:
     class PRIV:
