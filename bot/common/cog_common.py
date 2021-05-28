@@ -2,9 +2,11 @@ from abc import abstractmethod
 
 from discord.ext import commands
 
+from utils import db_cache
+
 
 class CogCommon(commands.Cog):
-    def __init__(self, db: dict, *, conf):
+    def __init__(self, db: db_cache, *, conf):
         self.db = db
         self.conf = conf
         self.data = self.load()

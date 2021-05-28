@@ -24,15 +24,10 @@ class Bot(commands.Bot):
     def __init__(self, **args):
         super().__init__(**args)
 
-        if args.get('db') is not None:
-            db = args['db']
-        else:
-            log('db not specified using empty dict', logging.WARNING)
-            db = {}
-        self.db = db
-        self.cog_settings = CogSettings(db)
-        self.cog_tournament = CogTournament(db)
-        self.cog_unranked = CogUnranked(db)
+        self.db = args['db']
+        self.cog_settings = CogSettings(self.db)
+        self.cog_tournament = CogTournament(self.db)
+        self.cog_unranked = CogUnranked(self.db)
         self.add_cog(self.cog_settings)
         self.add_cog(self.cog_tournament)
         self.add_cog(self.cog_unranked)

@@ -8,15 +8,16 @@ from bot.common.cog_common import CogCommon
 from bot.common.player import Player
 from bot.tournament.tournament import Tournament
 from conf import Conf, DBKeys
+from utils import db_cache
 from utils.log import log
 from utils.misc import get_user_info
 
-# Map class with setting for this cog to variable
 conf = Conf.Tournament
+"""Map class with setting for this cog to variable"""
 
 
 class CogTournament(CogCommon, name='Tournament'):
-    def __init__(self, db: dict):
+    def __init__(self, db: db_cache):
         super().__init__(db, conf=conf)
 
         # self.fix_recreate_players() # Use to update objects to match new code
@@ -146,7 +147,6 @@ class CogTournament(CogCommon, name='Tournament'):
         self.db[DBKeys.TOURNAMENT, True] = self.data
 
     def load(self) -> Tournament:
-        # noinspection PyArgumentList
         result = self.db.get(DBKeys.TOURNAMENT, should_yaml=True)
         if result is None:
             # Create new empty tournament
