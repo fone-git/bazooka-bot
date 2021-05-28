@@ -14,4 +14,6 @@ class Player:
         return f'<@{self.id}>'
 
     def __str__(self):
-        return f'{self.disp_id} - {self.display}'
+        result = '' if self.id is None else f'{self.disp_id} - '
+        result += f'{self.display}'
+        return result
