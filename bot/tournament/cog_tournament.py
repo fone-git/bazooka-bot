@@ -1,6 +1,5 @@
 import logging
 import traceback
-from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -20,8 +19,6 @@ class CogTournament(commands.Cog, name='Tournament'):
         self.db = db
         self.data = self.load()
 
-        self.last_save_time = datetime.now()
-        self.save_timer = None
         # self.fix_recreate_players() # Use to update objects to match new code
 
     # GLOBALLY APPLIED FUNCTIONS
