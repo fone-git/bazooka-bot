@@ -29,8 +29,12 @@ class Bot(commands.Bot):
             log('db not specified using empty dict', logging.WARNING)
             db = {}
         self.db = db
+        self.cog_settings = CogSettings(db)
         self.cog_tournament = CogTournament(db)
+        self.cog_unranked = CogUnranked(db)
+        self.add_cog(self.cog_settings)
         self.add_cog(self.cog_tournament)
+        self.add_cog(self.cog_unranked)
 
         @self.check
         def check_channel(ctx):
