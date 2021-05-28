@@ -114,7 +114,7 @@ class DBCache:
         ASSUMPTION: Function completes in its entirety without any other
             thread calling any of the other functions
         """
-        log('[DB Cache] Purging', logging.DEBUG)
+        log('[DB Cache] Purging')
         for key in self.cache.keys():
             value = self.cache[key]
             if key in self.to_yaml:
