@@ -6,12 +6,16 @@ import logging
 class MasterPermissions:
     class PRIV:
         TOURNAMENT = {'@officer', '@leader'}
+        SETTINGS = TOURNAMENT  # Set to equal for now nothing more needed
+        UNRANKED = TOURNAMENT  # Set to equal for now nothing more needed
         TOP = TOURNAMENT
 
     class Channels:
-        TOURNAMENT = {'tournament', 'bot-commands'}
+        TOURNAMENT = {'tournament'}
+        UNRANKED = {'unranked-challenge'}
         TOP_ONLY = {'general', 'bazooka-supreme-eng'}
-        TOP = TOP_ONLY.union(TOURNAMENT)
+        TOP = TOP_ONLY.union(TOURNAMENT).union(UNRANKED)
+        SETTINGS = TOP
 
 
 class DBKeys:  # Database key values
@@ -133,3 +137,13 @@ class Conf:
                             'specified position scores for the target game '
                             'are cleared.',
                     'hidden': True}
+
+    class Settings:
+        class Permissions:
+            PRIV_ROLES = MasterPermissions.PRIV.SETTINGS
+            ALLOWED_CHANNELS = MasterPermissions.Channels.SETTINGS
+
+    class Unranked:
+        class Permissions:
+            PRIV_ROLES = MasterPermissions.PRIV.UNRANKED
+            ALLOWED_CHANNELS = MasterPermissions.Channels.UNRANKED
