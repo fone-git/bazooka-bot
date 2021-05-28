@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from bot.tournament.player import Player
+from bot.common.player import Player
 
 
 class GameSet:

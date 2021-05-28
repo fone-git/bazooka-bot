@@ -4,7 +4,9 @@ import discord
 import yaml
 from discord.ext import commands
 
+from bot.settings.cog_settings import CogSettings
 from bot.tournament.cog_tournament import CogTournament
+from bot.unranked.cog_unranked import CogUnranked
 from conf import Conf
 from utils.log import log
 from utils.rate_limited_execution import RateLimitedExecution

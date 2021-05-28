@@ -1,19 +1,16 @@
-from discord.ext import commands
-
+from bot.common.cog_common import CogCommon
 from conf import Conf
 
 # Map class with setting for this cog to variable
 conf = Conf.Settings
 
 
-class CogSettings(commands.Cog, name='Settings'):
+class CogSettings(CogCommon, name='Settings'):
     def __init__(self, db: dict):
-        self.db = db
-        self.data = self.load()
-
-    # GLOBALLY APPLIED FUNCTIONS
-    def cog_check(self, ctx):
-        return ctx.channel.name in conf.Permissions.ALLOWED_CHANNELS
+        super().__init__(db, conf=conf)
 
     def load(self):
+        pass
+
+    def save(self):
         pass

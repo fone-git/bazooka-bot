@@ -4,7 +4,8 @@ import traceback
 import discord
 from discord.ext import commands
 
-from bot.tournament.player import Player
+from bot.common.cog_common import CogCommon
+from bot.common.player import Player
 from bot.tournament.tournament import Tournament
 from conf import Conf, DBKeys
 from utils.log import log
@@ -14,16 +15,11 @@ from utils.misc import get_user_info
 conf = Conf.Tournament
 
 
-class CogTournament(commands.Cog, name='Tournament'):
+class CogTournament(CogCommon, name='Tournament'):
     def __init__(self, db: dict):
-        self.db = db
-        self.data = self.load()
+        super().__init__(db, conf=conf)
 
         # self.fix_recreate_players() # Use to update objects to match new code
-
-    # GLOBALLY APPLIED FUNCTIONS
-    def cog_check(self, ctx):
-        return ctx.channel.name in conf.Permissions.ALLOWED_CHANNELS
 
     ##########################################################################
     # NORMAL COMMANDS
@@ -156,17 +152,6 @@ class CogTournament(commands.Cog, name='Tournament'):
             # Create new empty tournament
             result = Tournament()
         return result
-
-    @staticmethod
-    async def should_exec(ctx, confirm):
-        if confirm:
-            return True
-        else:
-            await ctx.send('Are you sure you want to execute this command?\n\n'
-                           '```diff\n-WARNING: May cause data loss```\n\n'
-                           'Resend command with argument of "yes" if you are '
-                           'sure.')
-            return False
 
     def as_html(self):
         return self.data.as_html()
