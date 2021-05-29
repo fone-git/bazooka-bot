@@ -42,11 +42,19 @@ class DictPersistent:
 
     def __setitem__(self, key, value):
         self.data[key] = value
-        with open(self.filename, 'w') as f:
-            f.write(yaml.dump(self.data, Dumper=Dumper))
+        self.save()
 
     def get(self, key):
         return self.data.get(key)
 
     def keys(self):
         return self.data.keys()
+
+    def pop(self, key):
+        result = self.data.pop(key)
+        self.save()
+        return result
+
+    def save(self):
+        with open(self.filename, 'w') as f:
+            f.write(yaml.dump(self.data, Dumper=Dumper))
