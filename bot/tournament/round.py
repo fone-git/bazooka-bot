@@ -1,7 +1,7 @@
 from typing import List
 
+from bot.common.player import Player
 from bot.tournament.game_set import GameSet
-from bot.tournament.player import Player
 
 
 class Round:

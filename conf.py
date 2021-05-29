@@ -1,21 +1,26 @@
 import logging
 
 
-# TODO Add option to chose to use qualifying round
+# TODO Add option to chose to use qualifying round instead of alternating byes
 
 class MasterPermissions:
     class PRIV:
         TOURNAMENT = {'@officer', '@leader'}
+        SETTINGS = TOURNAMENT  # Set to equal for now nothing more needed
+        UNRANKED = TOURNAMENT  # Set to equal for now nothing more needed
         TOP = TOURNAMENT
 
     class Channels:
-        TOURNAMENT = {'tournament', 'bot-commands'}
+        TOURNAMENT = {'tournament'}
+        UNRANKED = {'unranked-challenge'}
         TOP_ONLY = {'general', 'bazooka-supreme-eng'}
-        TOP = TOP_ONLY.union(TOURNAMENT)
+        TOP = TOP_ONLY.union(TOURNAMENT).union(UNRANKED)
+        SETTINGS = TOP
 
 
 class DBKeys:  # Database key values
     TOURNAMENT = 'tournament'
+    UNRANKED = 'unranked'
 
 
 class Conf:
@@ -61,9 +66,6 @@ class Conf:
                 'hidden': True}
 
     class Tournament:
-        # Number of seconds before automatically calculating all bracket
-        AUTO_CALC_BRACKET_DELAY = 10
-
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
@@ -77,10 +79,9 @@ class Conf:
                 'help': 'Unregisters you for the tournament'}
             DISPLAY = {
                 'name': 'display',
-                'help': 'Shows current board state. Add "full" argument to '
-                        'force full board generation'}
-            RESET = {
-                'name': 'reset',
+                'help': 'Shows all fixtures'}
+            NEW = {
+                'name': 'new',
                 'help': 'Starts a new tournament. WARNING: Old data is '
                         'cleared'}
             REGISTER_OTHER = {
@@ -133,3 +134,43 @@ class Conf:
                             'specified position scores for the target game '
                             'are cleared.',
                     'hidden': True}
+
+    class Settings:
+        class Permissions:
+            PRIV_ROLES = MasterPermissions.PRIV.SETTINGS
+            ALLOWED_CHANNELS = MasterPermissions.Channels.SETTINGS
+
+    class Unranked:
+        MAX_SCORE = 10
+
+        class Command:
+            SCORE = {
+                'name': 'ur',
+                'help': 'Registers or Overwrites your score'}
+
+            DISPLAY = {
+                'name': 'ur_disp',
+                'help': 'Shows the player ranking'}
+
+            RESET = {
+                'name': 'reset',
+                'help': 'Clears all data. Resets to a new unranked challenge.'}
+
+            SCORE_OTHER = {
+                'name': 'ur_other',
+                'help': 'Registers or Overwrites the score of another player '
+                        'score'}
+
+            REMOVE_PLAYER = {
+                'name': 'rem',
+                'help': 'Removes a player from the rankings'}
+
+            SET_MESSAGE = {
+                'name': 'msg',
+                'help': 'Sets the message that is displayed along with the '
+                        'rankings. Can be used to display what deck to use '
+                        'or other special instructions'}
+
+        class Permissions:
+            PRIV_ROLES = MasterPermissions.PRIV.UNRANKED
+            ALLOWED_CHANNELS = MasterPermissions.Channels.UNRANKED

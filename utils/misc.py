@@ -1,7 +1,22 @@
-def get_user_info(user):
-    ref_name = user.id
-    display_name = user.display_name
-    return ref_name, display_name
+import yaml
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
+
+
+def export(fn: str, data):
+    """
+    Saves the key value pairs from data to a yaml file with name fn
+    :param fn: Name of the file to export the values to
+    :param data: They dict like object to get the keys from
+    """
+    exp_dict = {}
+    for key in data.keys():
+        exp_dict[key] = data[key]
+    with open(fn, 'w') as f:
+        f.write(yaml.dump(exp_dict, Dumper=Dumper))
 
 
 def is_power_of_2(value):

@@ -1,36 +1,31 @@
 import logging
 
 import discord
-import yaml
 from discord.ext import commands
 
+from bot.settings.cog_settings import CogSettings
 from bot.tournament.cog_tournament import CogTournament
+from bot.unranked.cog_unranked import CogUnranked
 from conf import Conf
 from utils.log import log
+from utils.misc import export
 from utils.rate_limited_execution import RateLimitedExecution
 
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader, Dumper
-
-# Map class with setting for this cog to variable
 conf = Conf.TopLevel
+"""Map class with setting for this cog to variable"""
 
 
 class Bot(commands.Bot):
-    # TODO investigate responding to at mention of the bot
     def __init__(self, **args):
         super().__init__(**args)
 
-        if args.get('db') is not None:
-            db = args['db']
-        else:
-            log('db not specified using empty dict', logging.WARNING)
-            db = {}
-        self.db = db
-        self.cog_tournament = CogTournament(db)
+        self.db = args['db']
+        self.cog_settings = CogSettings(self.db)
+        self.cog_tournament = CogTournament(self.db)
+        self.cog_unranked = CogUnranked(self.db)
+        self.add_cog(self.cog_settings)
         self.add_cog(self.cog_tournament)
+        self.add_cog(self.cog_unranked)
 
         @self.check
         def check_channel(ctx):
@@ -90,7 +85,7 @@ class Bot(commands.Bot):
 
         @self.command(**conf.Command.EXPORT)
         @commands.check(is_dm_or_priv_role)
-        async def export(ctx):
+        async def export_cmd(ctx):
             """
             Requests that the bot saves to a file
             :param ctx: The Context
@@ -129,8 +124,4 @@ class Bot(commands.Bot):
         return self.cog_tournament.as_html()
 
     def export(self):
-        exp_dict = {}
-        for key in self.db.keys():
-            exp_dict[key] = self.db[key]
-        with open(Conf.EXPORT_FILE_NAME, 'w') as f:
-            f.write(yaml.dump(exp_dict, Dumper=Dumper))
+        export(Conf.EXPORT_FILE_NAME, self.db)
