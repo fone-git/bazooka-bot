@@ -83,7 +83,7 @@ class CogTournament(CogCommon, name='Tournament'):
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def register_other(self, ctx, at_ref_for_other: discord.User):
         player = Player.get_player_from_user(at_ref_for_other)
-        disp_id = self.data.register(player)
+        self.data.register(player)
         self.save()
         await ctx.send(f'{player} registered.')
 
