@@ -65,9 +65,6 @@ class Conf:
                 'hidden': True}
 
     class Tournament:
-        # Number of seconds before automatically calculating all bracket
-        AUTO_CALC_BRACKET_DELAY = 10
-
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
@@ -81,8 +78,7 @@ class Conf:
                 'help': 'Unregisters you for the tournament'}
             DISPLAY = {
                 'name': 'display',
-                'help': 'Shows current board state. Add "full" argument to '
-                        'force full board generation'}
+                'help': 'Shows all fixtures'}
             RESET = {
                 'name': 'reset',
                 'help': 'Starts a new tournament. WARNING: Old data is '

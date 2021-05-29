@@ -11,7 +11,6 @@ from bot.tournament.round import Round
 from conf import Conf
 from utils.log import log
 from utils.misc import is_power_of_2
-from utils.rate_limited_execution import RateLimitedExecution
 
 
 class Tournament:
@@ -20,7 +19,6 @@ class Tournament:
         self.next_id = 0
         self.is_reg_open = True
         self.players = []
-        self.on_state_change = None
 
         # Stores the computed rounds for display purposes to prevent
         # redundant recalculation
@@ -38,9 +36,9 @@ class Tournament:
         if user_id in self:
             raise commands.errors.UserInputError(
                 f'{user_display} already exists')
-        self.invalidate_computed_values()
         player = Player(user_id, user_display, self.get_id())
         self.players.append(player)
+        self.invalidate_computed_values()
         return player.disp_id
 
     def unregister(self, user_id, user_display):
@@ -50,10 +48,10 @@ class Tournament:
         if user_id not in self:
             raise commands.errors.UserInputError(
                 f'{user_display} was not registered')
-        self.invalidate_computed_values()
         for i, player in enumerate(self.players):
             if player.id == user_id:
                 self.players = self.players[:i] + self.players[i + 1:]
+                self.invalidate_computed_values()
                 return player.disp_id
         raise Exception(
             'Code should never reach here player should have been found to '
@@ -63,8 +61,8 @@ class Tournament:
         if not self.is_reg_open:
             raise commands.errors.UserInputError(
                 f'Registration is closed. Shuffle not allowed.')
-        self.invalidate_computed_values()
         random.shuffle(self.players)
+        self.invalidate_computed_values()
 
     def __contains__(self, id_):
         for player in self.players:
@@ -155,10 +153,7 @@ class Tournament:
         GameSet.reset_id_count()
         self.players_map = {}
         log('[Tournament] Computed Values Invalidated', logging.DEBUG)
-
-        # Set timer to auto calculate
-        RateLimitedExecution.get_instance().register(
-            Conf.Tournament.AUTO_CALC_BRACKET_DELAY, self.calc_all_rounds)
+        self.calc_all_rounds()
 
     def win(self, user_id, user_display, qty):
         game: GameSet = self.players_map.get(user_id)
@@ -209,10 +204,6 @@ class Tournament:
         - and byes at end on odd round numbers
         :return: True if changes were made else False
         """
-        log('[Tournament] Call to compute Rounds', logging.DEBUG)
-        # Stop timer (may be running)
-        RateLimitedExecution.get_instance().cancel(self.calc_all_rounds)
-
         changes_made = False
         rounds = self.rounds
         while rounds[-1].games_count > 1:

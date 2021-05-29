@@ -20,7 +20,6 @@ class CogTournament(CogCommon, name='Tournament'):
     def __init__(self, db: db_cache):
         super().__init__(db, conf=conf, db_key=DBKeys.TOURNAMENT,
                          data_def_constructor=Tournament)
-        self.data.on_state_change
 
         # self.fix_recreate_players() # Use to update objects to match new code
 
@@ -41,10 +40,7 @@ class CogTournament(CogCommon, name='Tournament'):
         await ctx.send(f'{user_display} unregistered. ID was {disp_id}')
 
     @commands.command(**conf.Command.DISPLAY)
-    async def display(self, ctx, full=None):
-        if full is not None:
-            if self.data.calc_all_rounds():
-                self.save()
+    async def display(self, ctx):
         await ctx.send(embed=self.data.as_embed())
 
     @commands.command(**conf.Command.COUNT)
