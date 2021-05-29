@@ -36,7 +36,7 @@ class ScoreSet:
 
     def __str__(self):
         if self._str_disp is None:
-            self._str_disp = f'{self.score} - {self.players_as_str()}'
+            self._str_disp = f'{self.score} WINS - {self.players_as_str()}'
         return self._str_disp
 
     def players_as_str(self):
