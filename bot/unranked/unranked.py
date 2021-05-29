@@ -57,9 +57,9 @@ class Unranked:
         self.message = msg
 
     def __str__(self):
-        result = f'UNRANKED CHALLENGE\n{self.message}\n\nRankings:'
+        result = f'UNRANKED CHALLENGE\n{self.message}\n\nRankings:\n'
         for i in range(Conf.Unranked.MAX_SCORE + 1):
             game_set = self.score_lookup[i]
             if game_set.has_players():
-                result += f'{game_set}'
+                result += f'{game_set}\n'
         return result
