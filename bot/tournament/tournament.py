@@ -259,9 +259,6 @@ class Tournament:
 
             # Create 3rd place match
             self.add_third_place_match()
-
-            # Trigger event handler
-            self.do_state_changed()
         return changes_made
 
     def add_third_place_match(self):
@@ -446,12 +443,3 @@ class Tournament:
             return self.rounds[-2][0].lose_next_game
         else:
             return None
-
-    def do_state_changed(self):
-        """
-        Runs when the state of the model has changed.
-        - Can be used to trigger a event handler to save the state.
-        """
-        log(f'[Tournament] do_state_changed fired', logging.DEBUG)
-        if self.on_state_change is not None:
-            self.on_state_change(self)
