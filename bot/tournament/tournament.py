@@ -364,16 +364,20 @@ class Tournament:
     def as_embed(self) -> Embed:
         result = Embed(title='HTML Display', color=Conf.EMBED_COLOR,
                        url=Conf.URL)
-        for i, round_ in enumerate(self.rounds):
-            result.add_field(name=f'--- Round {i + 1} ---', value=f'{round_}',
-                             inline=False)
+        if len(self.players) > 0:
+            for i, round_ in enumerate(self.rounds):
+                result.add_field(name=f'--- Round {i + 1} ---',
+                                 value=f'{round_}',
+                                 inline=False)
 
-        # Check for 3rd place match
-        third_place_match = self.get_third_place_match()
-        if third_place_match is not None:
-            result.add_field(name=f'Third Place Match',
-                             value=f'{third_place_match}',
-                             inline=False)
+            # Check for 3rd place match
+            third_place_match = self.get_third_place_match()
+            if third_place_match is not None:
+                result.add_field(name=f'Third Place Match',
+                                 value=f'{third_place_match}',
+                                 inline=False)
+        else:
+            result.add_field(name='No Rounds', value='No players registered ')
         return result
 
     def override_set(self, user_id, user_display, game_id: int,
