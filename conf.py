@@ -20,6 +20,7 @@ class MasterPermissions:
 
 class DBKeys:  # Database key values
     TOURNAMENT = 'tournament'
+    UNRANKED = 'unranked'
 
 
 class Conf:
@@ -140,6 +141,32 @@ class Conf:
             ALLOWED_CHANNELS = MasterPermissions.Channels.SETTINGS
 
     class Unranked:
+        MAX_SCORE = 10
+
+        class Command:
+            SCORE = {
+                'name': 'ur',
+                'help': 'Registers or Overwrites your score'}
+            
+            DISPLAY = {
+                'name': 'ur_disp',
+                'help': 'Shows the player ranking'}
+
+            SCORE_OTHER = {
+                'name': 'ur_other',
+                'help': 'Registers or Overwrites the score of another player '
+                        'score'}
+
+            REMOVE_PLAYER = {
+                'name': 'rem',
+                'help': 'Removes a player from the rankings'}
+
+            SET_MESSAGE = {
+                'name': 'msg',
+                'help': 'Sets the message that is displayed along with the '
+                        'rankings. Can be used to display what deck to use '
+                        'or other special instructions'}
+
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.UNRANKED
             ALLOWED_CHANNELS = MasterPermissions.Channels.UNRANKED

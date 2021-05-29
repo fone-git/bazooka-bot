@@ -25,4 +25,5 @@ class Player:
 
     @staticmethod
     def get_player_from_user(user: discord.User):
+        # TODO Add a converter to use this function to auto convert to player
         return Player(user.id, user.display_name, None)
