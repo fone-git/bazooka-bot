@@ -29,30 +29,30 @@ class Tournament:
         #   match ups can be changed at that point
         self.players_map = {}
 
-    def register(self, user_id, user_display):
+    def register(self, player: Player):
         if not self.is_reg_open:
             raise commands.errors.UserInputError(f'Registration is closed')
 
-        if user_id in self:
+        if player.id in self:
             raise commands.errors.UserInputError(
-                f'{user_display} already exists')
-        player = Player(user_id, user_display, self.get_id())
+                f'{player} already exists')
+        assert player.disp_id is None
+        player.disp_id = self.get_id()
         self.players.append(player)
         self.invalidate_computed_values()
-        return player.disp_id
 
-    def unregister(self, user_id, user_display):
+    def unregister(self, player: Player):
         if not self.is_reg_open:
             raise commands.errors.UserInputError(f'Registration is closed')
 
-        if user_id not in self:
+        if player.id not in self:
             raise commands.errors.UserInputError(
-                f'{user_display} was not registered')
-        for i, player in enumerate(self.players):
-            if player.id == user_id:
+                f'{player} was not registered')
+        for i, p in enumerate(self.players):
+            if player.id == p.id:
                 self.players = self.players[:i] + self.players[i + 1:]
                 self.invalidate_computed_values()
-                return player.disp_id
+                return p.disp_id
         raise Exception(
             'Code should never reach here player should have been found to '
             'unregister')
@@ -155,36 +155,36 @@ class Tournament:
         log('[Tournament] Computed Values Invalidated', logging.DEBUG)
         self.calc_all_rounds()
 
-    def win(self, user_id, user_display, qty):
-        game: GameSet = self.players_map.get(user_id)
+    def win(self, player: Player, qty):
+        game: GameSet = self.players_map.get(player.id)
 
         if game is None:
             raise commands.errors.UserInputError(
-                f"Didn't find an active game for {user_display}")
+                f"Didn't find an active game for {player}")
 
         if game.has_dummy_player():
             raise commands.errors.UserInputError(
                 f"This game doesn't appear to have two players - {game}")
 
-        if user_id == game.p1.id:
+        if player.id == game.p1.id:
             win_ind = 0
             lose_ind = 1
             player = game.p1
-        elif user_id == game.p2.id:
+        elif player.id == game.p2.id:
             win_ind = 1
             lose_ind = 0
             player = game.p2
         else:
             raise Exception(
-                f"Player found from dict but didn't match either player i"
-                f"n game {game.game_id}")
+                f"Player found from dict but didn't match either player in "
+                f"game {game.game_id}")
 
         game.scores[win_ind] += qty
         if game.is_won():
             # Remove loser from dict and advance winner
             self.players_map.pop(game.players[lose_ind].id)
             return self.advance_player_ind(player, game, win_ind)
-        return f'{qty} point(s) added to {player.display} for {game}'
+        return f'{qty} point(s) added to {player} for {game}'
 
     def __str__(self):
         result = ""
@@ -371,22 +371,19 @@ class Tournament:
             result.add_field(name='No Rounds', value='No players registered ')
         return result
 
-    def override_set(self, user_id, user_display, game_id: int,
+    def override_set(self, player: Player, game_id: int,
                      player_pos: int):
         if self.is_reg_open:
             raise commands.errors.UserInputError(
-                f'Override Set only available if tournament has started!')
+                f'Override-Set only available after tournament has started!')
 
-        if user_id not in self:
+        if player.id not in self:
             raise commands.errors.UserInputError(
-                f'{user_display} not found in tournament')
+                f'{player} not found in tournament')
 
-        player = self.players_map.get(user_id)
-        if player is None:
-            player = self.get_player(user_id)
-
-            # Player should not be None passed contains
-            assert player is not None
+        player = self.get_player(player.id)
+        assert player is not None
+        # player should not be non because it passed the contains test
 
         if 1 > player_pos or 2 < player_pos:
             raise commands.errors.UserInputError(
@@ -406,7 +403,7 @@ class Tournament:
         game.players[player_pos] = player
 
         # Update Map
-        self.players_map[user_id] = game
+        self.players_map[player.id] = game
 
         return f'{game}'
 
@@ -416,7 +413,7 @@ class Tournament:
                 if game.game_id == game_id:
                     return game
 
-        # Last possible value is 3rd place match
+        # Last possible place game could be is 3rd place match
         game = self.get_third_place_match()
         if game is not None and game.game_id == game_id:
             return game

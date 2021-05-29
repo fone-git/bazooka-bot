@@ -85,7 +85,7 @@ class Bot(commands.Bot):
 
         @self.command(**conf.Command.EXPORT)
         @commands.check(is_dm_or_priv_role)
-        async def export(ctx):
+        async def export_cmd(ctx):
             """
             Requests that the bot saves to a file
             :param ctx: The Context

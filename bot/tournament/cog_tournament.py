@@ -10,13 +10,14 @@ from bot.tournament.tournament import Tournament
 from conf import Conf, DBKeys
 from utils import db_cache
 from utils.log import log
-from utils.misc import get_user_info
 
 conf = Conf.Tournament
 """Map class with setting for this cog to variable"""
 
 
 class CogTournament(CogCommon, name='Tournament'):
+    data: Tournament  # Specify type of attribute for linting
+
     def __init__(self, db: db_cache):
         super().__init__(db, conf=conf, db_key=DBKeys.TOURNAMENT,
                          data_def_constructor=Tournament)
@@ -27,17 +28,17 @@ class CogTournament(CogCommon, name='Tournament'):
     # NORMAL COMMANDS
     @commands.command(**conf.Command.REGISTER)
     async def register(self, ctx):
-        user_id, user_display = get_user_info(ctx.author)
-        disp_id = self.data.register(user_id, user_display)
+        player = Player.get_player_from_user(ctx.author)
+        self.data.register(player)
         self.save()
-        await ctx.send(f'{user_display} registered with id: {disp_id}')
+        await ctx.send(f'{player} registered')
 
     @commands.command(**conf.Command.UNREGISTER)
     async def unregister(self, ctx):
-        user_id, user_display = get_user_info(ctx.author)
-        disp_id = self.data.unregister(user_id, user_display)
+        player = Player.get_player_from_user(ctx.author)
+        disp_id = self.data.unregister(player)
         self.save()
-        await ctx.send(f'{user_display} unregistered. ID was {disp_id}')
+        await ctx.send(f'{player} unregistered. ID was {disp_id}')
 
     @commands.command(**conf.Command.DISPLAY)
     async def display(self, ctx):
@@ -53,8 +54,8 @@ class CogTournament(CogCommon, name='Tournament'):
 
     @commands.command(**conf.Command.WIN)
     async def win(self, ctx):
-        user_id, user_display = get_user_info(ctx.author)
-        response = self.data.win(user_id, user_display, 1)
+        player = Player.get_player_from_user(ctx.author)
+        response = self.data.win(player, 1)
         self.save()
         await ctx.send(response)
 
@@ -63,8 +64,8 @@ class CogTournament(CogCommon, name='Tournament'):
     @commands.command(**conf.Command.WIN_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def win_other(self, ctx, user: discord.User, qty: int = 1):
-        user_id, user_display = get_user_info(user)
-        response = self.data.win(user_id, user_display, qty)
+        player = Player.get_player_from_user(user)
+        response = self.data.win(player, qty)
         self.save()
         await ctx.send(response)
 
@@ -81,18 +82,18 @@ class CogTournament(CogCommon, name='Tournament'):
     @commands.command(**conf.Command.REGISTER_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def register_other(self, ctx, at_ref_for_other: discord.User):
-        user_id, user_display = get_user_info(at_ref_for_other)
-        disp_id = self.data.register(user_id, user_display)
+        player = Player.get_player_from_user(at_ref_for_other)
+        disp_id = self.data.register(player)
         self.save()
-        await ctx.send(f'{user_display} registered with id: {disp_id}')
+        await ctx.send(f'{player} registered.')
 
     @commands.command(**conf.Command.UNREGISTER_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def unregister_other(self, ctx, at_ref_for_other: discord.User):
-        user_id, user_display = get_user_info(at_ref_for_other)
-        disp_id = self.data.unregister(user_id, user_display)
+        player = Player.get_player_from_user(at_ref_for_other)
+        disp_id = self.data.unregister(player)
         self.save()
-        await ctx.send(f'{user_display} unregistered. ID was {disp_id}')
+        await ctx.send(f'{player} unregistered. ID was {disp_id}')
 
     @commands.command(**conf.Command.START)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
@@ -130,13 +131,12 @@ class CogTournament(CogCommon, name='Tournament'):
     @override.command(**conf.Command.Override.SET)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def set(self, ctx, who: discord.User, game_id: int, player_pos: int):
-        user_id, user_display = get_user_info(who)
-        round_display = self.data.override_set(user_id, user_display, game_id,
-                                               player_pos)
+        player = Player.get_player_from_user(who)
+        round_display = self.data.override_set(player, game_id, player_pos)
         self.save()
         await ctx.send(
-            f'Scores reset for game: {game_id} and match up is now:\n'
-            f'{round_display}')
+            f'Scores reset for game: {game_id}.\n'
+            f'Match up is now:{round_display}')
 
     ##########################################################################
     # HELPER FUNCTIONS

@@ -6,12 +6,6 @@ except ImportError:
     from yaml import Loader, Dumper
 
 
-def get_user_info(user):
-    ref_name = user.id
-    display_name = user.display_name
-    return ref_name, display_name
-
-
 def export(fn: str, data):
     """
     Saves the key value pairs from data to a yaml file with name fn
