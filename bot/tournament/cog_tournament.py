@@ -69,9 +69,9 @@ class CogTournament(CogCommon, name='Tournament'):
         self.save()
         await ctx.send(response)
 
-    @commands.command(**conf.Command.RESET)
+    @commands.command(**conf.Command.NEW)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
-    async def reset(self, ctx, confirm: bool = False):
+    async def new(self, ctx, confirm: bool = False):
         if not await self.should_exec(ctx, confirm):
             return
 

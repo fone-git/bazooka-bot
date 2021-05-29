@@ -80,8 +80,8 @@ class Conf:
             DISPLAY = {
                 'name': 'display',
                 'help': 'Shows all fixtures'}
-            RESET = {
-                'name': 'reset',
+            NEW = {
+                'name': 'new',
                 'help': 'Starts a new tournament. WARNING: Old data is '
                         'cleared'}
             REGISTER_OTHER = {
@@ -147,10 +147,14 @@ class Conf:
             SCORE = {
                 'name': 'ur',
                 'help': 'Registers or Overwrites your score'}
-            
+
             DISPLAY = {
                 'name': 'ur_disp',
                 'help': 'Shows the player ranking'}
+
+            RESET = {
+                'name': 'reset',
+                'help': 'Clears all data. Resets to a new unranked challenge.'}
 
             SCORE_OTHER = {
                 'name': 'ur_other',

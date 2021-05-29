@@ -22,7 +22,6 @@ class CogUnranked(CogCommon, name='Unranked'):
     # NORMAL COMMANDS
     @commands.command(**conf.Command.SCORE)
     async def score(self, ctx, score: int):
-        await ctx.send('Base')
         player = Player.get_player_from_user(ctx.author)
         self.data.score(player, score)
         self.save()
@@ -34,6 +33,16 @@ class CogUnranked(CogCommon, name='Unranked'):
 
     ##########################################################################
     # PRIVILEGED COMMANDS
+    @commands.command(**conf.Command.RESET)
+    @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
+    async def reset(self, ctx, confirm: bool = False):
+        if not await self.should_exec(ctx, confirm):
+            return
+
+        self.data = self.data_def_constructor()
+        self.save()
+        await ctx.send("Unranked Reset")
+
     @commands.command(**conf.Command.SCORE_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def score_other(self, ctx, user: discord.User, score: int):
