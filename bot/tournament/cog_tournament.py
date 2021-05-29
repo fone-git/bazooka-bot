@@ -19,8 +19,7 @@ conf = Conf.Tournament
 class CogTournament(CogCommon, name='Tournament'):
     def __init__(self, db: db_cache):
         super().__init__(db, conf=conf, db_key=DBKeys.TOURNAMENT,
-                         data_def_constructor=Tournament)
-        self.data.on_state_change
+                         data_def_constructor=self.create_new_tournament)
 
         # self.fix_recreate_players() # Use to update objects to match new code
 
@@ -163,3 +162,8 @@ class CogTournament(CogCommon, name='Tournament'):
             replacement.append(Player(x.id, x.display, x.disp_id))
         self.data.players = replacement
         self.data.invalidate_computed_values()
+
+    def create_new_tournament(self):
+        result = Tournament()
+        result.on_state_change = self.save
+        return result
