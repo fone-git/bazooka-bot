@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Set, Union
+from typing import List, Union
 
 from bot.common.player import Player
 
@@ -7,7 +7,7 @@ from bot.common.player import Player
 @dataclass
 class ScoreSet:
     score: int
-    players: Set[Player] = field(default_factory=set)
+    players: List[Player] = field(default_factory=list)
     _str_disp: Union[str, None] = None
 
     def add(self, player: Player):
@@ -15,16 +15,18 @@ class ScoreSet:
         Adds the player if there were not already there otherwise does nothing
         :param player: The player to be added
         """
-        self.players.add(player)
-        self.invalidate_calculated()
+        if player not in self.players:
+            self.players.append(player)
+            self.invalidate_calculated()
 
     def remove(self, player: Player):
         """
         Removes the player passed (or does nothing)
         :param player: Player to be removed
         """
-        self.players.remove(player)
-        self.invalidate_calculated()
+        if player not in self.players:
+            self.players.remove(player)
+            self.invalidate_calculated()
 
     def has_players(self):
         return len(self.players) > 0
