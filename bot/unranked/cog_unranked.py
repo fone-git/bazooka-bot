@@ -10,9 +10,3 @@ conf = Conf.Unranked
 class CogUnranked(CogCommon, name='Unranked'):
     def __init__(self, db: db_cache):
         super().__init__(db, conf=conf)
-
-    def load(self):
-        pass
-
-    def save(self):
-        pass

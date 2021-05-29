@@ -20,6 +20,7 @@ class Tournament:
         self.next_id = 0
         self.is_reg_open = True
         self.players = []
+        self.on_state_change = None
 
         # Stores the computed rounds for display purposes to prevent
         # redundant recalculation

@@ -18,7 +18,9 @@ conf = Conf.Tournament
 
 class CogTournament(CogCommon, name='Tournament'):
     def __init__(self, db: db_cache):
-        super().__init__(db, conf=conf)
+        super().__init__(db, conf=conf, db_key=DBKeys.TOURNAMENT,
+                         data_def_constructor=Tournament)
+        self.data.on_state_change
 
         # self.fix_recreate_players() # Use to update objects to match new code
 
@@ -76,7 +78,7 @@ class CogTournament(CogCommon, name='Tournament'):
         if not await self.should_exec(ctx, confirm):
             return
 
-        self.data = Tournament()
+        self.data = self.data_def_constructor()
         self.save()
         await ctx.send("Tournament reset")
 
@@ -142,17 +144,6 @@ class CogTournament(CogCommon, name='Tournament'):
 
     ##########################################################################
     # HELPER FUNCTIONS
-    def save(self):
-        log('[CogTournament] Call to save Tournament', logging.DEBUG)
-        self.db[DBKeys.TOURNAMENT, True] = self.data
-
-    def load(self) -> Tournament:
-        result = self.db.get(DBKeys.TOURNAMENT, should_yaml=True)
-        if result is None:
-            # Create new empty tournament
-            result = Tournament()
-        return result
-
     def as_html(self):
         return self.data.as_html()
 

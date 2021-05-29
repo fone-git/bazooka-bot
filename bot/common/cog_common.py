@@ -1,12 +1,16 @@
-from abc import abstractmethod
+import logging
 
 from discord.ext import commands
 
 from utils import db_cache
+from utils.log import log
 
 
 class CogCommon(commands.Cog):
-    def __init__(self, db: db_cache, *, conf):
+    def __init__(self, db: db_cache, *, conf, db_key=None,
+                 data_def_constructor=None):
+        self.data_def_constructor = data_def_constructor
+        self.db_key = db_key
         self.db = db
         self.conf = conf
         self.data = self.load()
@@ -15,13 +19,22 @@ class CogCommon(commands.Cog):
     def cog_check(self, ctx):
         return ctx.channel.name in self.conf.Permissions.ALLOWED_CHANNELS
 
-    @abstractmethod
-    def load(self):
-        pass
-
-    @abstractmethod
+    # HELPER FUNCTIONS
     def save(self):
-        pass
+        if self.db_key is not None:
+            log(f'[{self.__class__.__name__}] Call to save',
+                logging.DEBUG)
+            self.db[self.db_key, True] = self.data
+
+    def load(self):
+        if self.db_key is not None and self.data_def_constructor is not None:
+            result = self.db.get(self.db_key, should_yaml=True)
+            if result is None:
+                # Create new empty instance of data
+                result = self.data_def_constructor()
+            return result
+        else:
+            return None
 
     @staticmethod
     async def should_exec(ctx, confirm):
