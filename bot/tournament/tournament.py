@@ -263,7 +263,7 @@ class Tournament:
 
     def add_third_place_match(self):
         if len(self.rounds) < 2:
-            return  # Not enough rounds do nothing
+            return  # Not enough rounds do anything
 
         assert self.rounds[-2].games_count == 2
 
