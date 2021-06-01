@@ -32,7 +32,7 @@ class Unranked:
                 f'{score}')
 
         # Check if the player is already in data
-        score_set: ScoreSet = self.player_lookup.get(player)
+        score_set: ScoreSet = self.player_lookup.get(player.id)
 
         if score_set is not None:
             if score_set.score == score:
@@ -45,13 +45,16 @@ class Unranked:
         # different score) or did not already exist.
         #
         # So now simply add the player
-        self.score_lookup[score].add(player)
+        score_set = self.score_lookup[score]
+        score_set.add(player)
+        self.player_lookup[player.id] = score_set
 
     def remove_player(self, player):
-        score_set: ScoreSet = self.player_lookup.get(player)
+        score_set: ScoreSet = self.player_lookup.get(player.id)
         if score_set is None:
             raise commands.errors.UserInputError(f'{player} not found!')
         score_set.remove(player)
+        self.player_lookup.pop(player.id)
 
     def set_msg(self, msg):
         self.message = msg
