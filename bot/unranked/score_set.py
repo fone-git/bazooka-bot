@@ -24,7 +24,7 @@ class ScoreSet:
         Removes the player passed (or does nothing)
         :param player: Player to be removed
         """
-        if player not in self.players:
+        if player in self.players:
             self.players.remove(player)
             self.invalidate_calculated()
 
