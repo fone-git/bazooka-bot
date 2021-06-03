@@ -28,10 +28,7 @@ class CogUnranked(CogCommon, name='Unranked'):
     # NORMAL COMMANDS
     @base.command(**conf.Command.SCORE)
     async def score(self, ctx, score: int):
-        player = Player.get_player_from_user(ctx.author)
-        self.data.score(player, score)
-        self.save()
-        await self.send_ranking_msg(ctx)
+        await self.score_other(ctx, ctx.author, score)
 
     @base.command(**conf.Command.DISPLAY)
     async def display(self, ctx):
@@ -39,11 +36,7 @@ class CogUnranked(CogCommon, name='Unranked'):
 
     @base.command(**conf.Command.REMOVE)
     async def remove(self, ctx):
-        player = Player.get_player_from_user(ctx.author)
-        self.data.remove_player(player)
-        self.save()
-        await ctx.send(f'{player} removed\n')
-        await self.send_ranking_msg(ctx)
+        await self.remove_other(ctx, ctx.author)
 
     ##########################################################################
     # PRIVILEGED COMMANDS
@@ -63,7 +56,7 @@ class CogUnranked(CogCommon, name='Unranked'):
         player = Player.get_player_from_user(user)
         self.data.score(player, score)
         self.save()
-        await self.send_ranking_msg(ctx)
+        await self.send_ranking_msg(ctx, f"{player}'s score set to {score}")
 
     @base.command(**conf.Command.REMOVE_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
@@ -71,17 +64,18 @@ class CogUnranked(CogCommon, name='Unranked'):
         player = Player.get_player_from_user(user)
         self.data.remove_player(player)
         self.save()
-        await ctx.send(f'{player} removed\n')
-        await self.send_ranking_msg(ctx)
+        await self.send_ranking_msg(ctx, f'{player} removed\n')
 
     @base.command(**conf.Command.SET_MESSAGE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def set_message(self, ctx, *, msg: str):
         self.data.set_msg(msg)
         self.save()
-        await self.send_ranking_msg(ctx)
+        await self.send_ranking_msg(ctx, 'Message Set')
 
     ##########################################################################
     # HELPER FUNCTIONS
-    async def send_ranking_msg(self, ctx):
-        await ctx.send(self.data)
+    async def send_ranking_msg(self, ctx, msg_prefix: str = None):
+        msg = '' if msg_prefix is None else f'{msg_prefix}\n\n'
+        msg += str(self.data)
+        await ctx.send(msg)
