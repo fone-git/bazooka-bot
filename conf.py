@@ -66,6 +66,10 @@ class Conf:
                 'hidden': True}
 
     class Tournament:
+        BASE_GROUP = {'name': 't',
+                      'help': 'Grouping for Tournament Commands',
+                      'invoke_without_command': True}
+
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
@@ -78,7 +82,7 @@ class Conf:
                 'name': 'unreg',
                 'help': 'Unregisters you for the tournament'}
             DISPLAY = {
-                'name': 'display',
+                'name': 'disp',
                 'help': 'Shows all fixtures'}
             NEW = {
                 'name': 'new',
