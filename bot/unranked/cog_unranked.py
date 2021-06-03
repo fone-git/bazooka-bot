@@ -31,6 +31,14 @@ class CogUnranked(CogCommon, name='Unranked'):
     async def display(self, ctx):
         await self.send_ranking_msg(ctx)
 
+    @commands.command(**conf.Command.REMOVE_ME)
+    async def remove_me(self, ctx):
+        player = Player.get_player_from_user(ctx.author)
+        self.data.remove_player(player)
+        self.save()
+        await ctx.send(f'{player} removed\n')
+        await self.send_ranking_msg(ctx)
+
     ##########################################################################
     # PRIVILEGED COMMANDS
     @commands.command(**conf.Command.RESET)
@@ -57,7 +65,8 @@ class CogUnranked(CogCommon, name='Unranked'):
         player = Player.get_player_from_user(user)
         self.data.remove_player(player)
         self.save()
-        await ctx.send(f'{player} removed')
+        await ctx.send(f'{player} removed\n')
+        await self.send_ranking_msg(ctx)
 
     @commands.command(**conf.Command.SET_MESSAGE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)

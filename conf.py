@@ -165,6 +165,11 @@ class Conf:
                 'name': 'rem',
                 'help': 'Removes a player from the rankings'}
 
+            REMOVE_ME = {
+                'name': 'rem_me',
+                'help': 'Allows a player to remove themselves from the '
+                        'rankings'}
+
             SET_MESSAGE = {
                 'name': 'msg',
                 'help': 'Sets the message that is displayed along with the '
