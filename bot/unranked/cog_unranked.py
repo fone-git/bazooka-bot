@@ -22,7 +22,7 @@ class CogUnranked(CogCommon, name='Unranked'):
     # BASE GROUP
     @commands.group(**conf.BASE_GROUP)
     async def base(self, ctx):
-        await ctx.send("I'm sorry I didn't recognize that command")
+        await super().base(ctx)
 
     ##########################################################################
     # NORMAL COMMANDS
