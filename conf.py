@@ -127,7 +127,8 @@ class Conf:
             class Override:
                 BASE = {
                     'name': 'override',
-                    'hidden': True}
+                    'hidden': True,
+                    'invoke_without_command': True}
                 SET = {
                     'name': 'set',
                     'help': 'Sets the specified player to play in the '

@@ -123,7 +123,7 @@ class CogTournament(CogCommon, name='Tournament'):
         self.save()
         await ctx.send(f'Player order shuffled')
 
-    @commands.group(invoke_without_command=True, **conf.Command.Override.BASE)
+    @commands.group(**conf.Command.Override.BASE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def override(self, ctx):
         await ctx.send(f'Unrecognized subcommand')
