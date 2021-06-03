@@ -3,6 +3,7 @@ import logging
 import discord
 from discord.ext import commands
 
+from bot.registration.cog_registration import CogRegistration
 from bot.settings.cog_settings import CogSettings
 from bot.tournament.cog_tournament import CogTournament
 from bot.unranked.cog_unranked import CogUnranked
@@ -23,9 +24,11 @@ class Bot(commands.Bot):
         self.cog_settings = CogSettings(self.db)
         self.cog_tournament = CogTournament(self.db)
         self.cog_unranked = CogUnranked(self.db)
+        self.cog_registration = CogRegistration(self.db)
         self.add_cog(self.cog_settings)
         self.add_cog(self.cog_tournament)
         self.add_cog(self.cog_unranked)
+        self.add_cog(self.cog_registration)
 
         @self.check
         def check_channel(ctx):
