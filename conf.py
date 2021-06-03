@@ -169,14 +169,13 @@ class Conf:
                 'help': 'Registers the score for another player (Overwrites '
                         'if already exists)'}
 
-            REMOVE_PLAYER = {
+            REMOVE = {
                 'name': 'rem',
                 'help': 'Removes a player from the rankings'}
 
-            REMOVE_ME = {
-                'name': 'rem_me',
-                'help': 'Allows a player to remove themselves from the '
-                        'rankings'}
+            REMOVE_OTHER = {
+                'name': 'rem_other',
+                'help': 'Removes specified player from the rankings'}
 
             SET_MESSAGE = {
                 'name': 'msg',

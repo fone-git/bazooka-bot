@@ -37,8 +37,8 @@ class CogUnranked(CogCommon, name='Unranked'):
     async def display(self, ctx):
         await self.send_ranking_msg(ctx)
 
-    @base.command(**conf.Command.REMOVE_ME)
-    async def remove_me(self, ctx):
+    @base.command(**conf.Command.REMOVE)
+    async def remove(self, ctx):
         player = Player.get_player_from_user(ctx.author)
         self.data.remove_player(player)
         self.save()
@@ -65,9 +65,9 @@ class CogUnranked(CogCommon, name='Unranked'):
         self.save()
         await self.send_ranking_msg(ctx)
 
-    @base.command(**conf.Command.REMOVE_PLAYER)
+    @base.command(**conf.Command.REMOVE_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
-    async def remove_player(self, ctx, user: discord.User):
+    async def remove_other(self, ctx, user: discord.User):
         player = Player.get_player_from_user(user)
         self.data.remove_player(player)
         self.save()
