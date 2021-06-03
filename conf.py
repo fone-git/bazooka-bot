@@ -143,24 +143,27 @@ class Conf:
 
     class Unranked:
         MAX_SCORE = 10
+        BASE_GROUP = {'name': 'ur',
+                      'help': 'Grouping for Unranked Commands',
+                      'invoke_without_command': True}
 
         class Command:
             SCORE = {
-                'name': 'ur',
-                'help': 'Registers or Overwrites your score'}
+                'name': 'score',
+                'help': 'Registers your score (Overwrites if already exists)'}
 
             DISPLAY = {
-                'name': 'ur_disp',
-                'help': 'Shows the player ranking'}
+                'name': 'disp',
+                'help': 'Shows the player rankings'}
 
             RESET = {
                 'name': 'reset',
                 'help': 'Clears all data. Resets to a new unranked challenge.'}
 
             SCORE_OTHER = {
-                'name': 'ur_other',
-                'help': 'Registers or Overwrites the score of another player '
-                        'score'}
+                'name': 'score_other',
+                'help': 'Registers the score for another player (Overwrites '
+                        'if already exists)'}
 
             REMOVE_PLAYER = {
                 'name': 'rem',

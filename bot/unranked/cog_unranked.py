@@ -19,19 +19,25 @@ class CogUnranked(CogCommon, name='Unranked'):
                          data_def_constructor=Unranked)
 
     ##########################################################################
+    # BASE GROUP
+    @commands.group(**conf.BASE_GROUP)
+    async def base(self, ctx):
+        await ctx.send("I'm sorry I didn't recognize that command")
+
+    ##########################################################################
     # NORMAL COMMANDS
-    @commands.command(**conf.Command.SCORE)
+    @base.command(**conf.Command.SCORE)
     async def score(self, ctx, score: int):
         player = Player.get_player_from_user(ctx.author)
         self.data.score(player, score)
         self.save()
         await self.send_ranking_msg(ctx)
 
-    @commands.command(**conf.Command.DISPLAY)
+    @base.command(**conf.Command.DISPLAY)
     async def display(self, ctx):
         await self.send_ranking_msg(ctx)
 
-    @commands.command(**conf.Command.REMOVE_ME)
+    @base.command(**conf.Command.REMOVE_ME)
     async def remove_me(self, ctx):
         player = Player.get_player_from_user(ctx.author)
         self.data.remove_player(player)
@@ -41,7 +47,7 @@ class CogUnranked(CogCommon, name='Unranked'):
 
     ##########################################################################
     # PRIVILEGED COMMANDS
-    @commands.command(**conf.Command.RESET)
+    @base.command(**conf.Command.RESET)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def reset(self, ctx, confirm: bool = False):
         if not await self.should_exec(ctx, confirm):
@@ -51,7 +57,7 @@ class CogUnranked(CogCommon, name='Unranked'):
         self.save()
         await ctx.send("Unranked Reset")
 
-    @commands.command(**conf.Command.SCORE_OTHER)
+    @base.command(**conf.Command.SCORE_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def score_other(self, ctx, user: discord.User, score: int):
         player = Player.get_player_from_user(user)
@@ -59,7 +65,7 @@ class CogUnranked(CogCommon, name='Unranked'):
         self.save()
         await self.send_ranking_msg(ctx)
 
-    @commands.command(**conf.Command.REMOVE_PLAYER)
+    @base.command(**conf.Command.REMOVE_PLAYER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def remove_player(self, ctx, user: discord.User):
         player = Player.get_player_from_user(user)
@@ -68,7 +74,7 @@ class CogUnranked(CogCommon, name='Unranked'):
         await ctx.send(f'{player} removed\n')
         await self.send_ranking_msg(ctx)
 
-    @commands.command(**conf.Command.SET_MESSAGE)
+    @base.command(**conf.Command.SET_MESSAGE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def set_message(self, ctx, *, msg: str):
         self.data.set_msg(msg)
