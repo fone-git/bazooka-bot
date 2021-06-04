@@ -135,7 +135,8 @@ class Bot(commands.Bot):
                 f"join "
                 f"one of our alliances please post a screen shot of your "
                 f"previous season achievements in <#760521977072713758>. "
-                f"Otherwise you're welcome to just chill.")
+                f"Otherwise you're welcome to just chill or Gents are also "
+                f"welcome to check out our <#757542001708105739>.")
 
     def get_tournament_as_html(self):
         return self.cog_tournament.as_html()
