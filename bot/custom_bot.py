@@ -123,6 +123,20 @@ class Bot(commands.Bot):
         async def on_ready():
             log(f'Successfully logged in as {self.user}')
 
+        @self.event
+        async def on_member_join(member):
+            for race in member.guild.channels:
+                if race.name == "race-center":
+                    break
+            await member.guild.system_channel.send(
+                f"Welcome {member.mention}. Nice to have you here. Make "
+                f"yourself at home. If you are looking to organize a race "
+                f"tie check out our {race.mention}. If you are looking to "
+                f"join "
+                f"one of our alliances please post a screen shot of your "
+                f"previous season achievements in <#760521977072713758>. "
+                f"Otherwise you're welcome to just chill.")
+
     def get_tournament_as_html(self):
         return self.cog_tournament.as_html()
 
