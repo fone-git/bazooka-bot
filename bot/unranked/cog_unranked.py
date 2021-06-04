@@ -64,7 +64,7 @@ class CogUnranked(CogCommon, name='Unranked'):
         player = Player.get_player_from_user(user)
         self.data.remove_player(player)
         self.save()
-        await self.send_ranking_msg(ctx, f'{player} removed\n')
+        await self.send_ranking_msg(ctx, f'{player} removed')
 
     @base.command(**conf.Command.SET_MESSAGE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
