@@ -8,11 +8,13 @@ class MasterPermissions:
         TOURNAMENT = {'@officer', '@leader'}
         SETTINGS = TOURNAMENT  # Set to equal for now nothing more needed
         UNRANKED = TOURNAMENT  # Set to equal for now nothing more needed
+        REGISTRATION = TOURNAMENT  # Set to equal for now nothing more needed
         TOP = TOURNAMENT
 
     class Channels:
         TOURNAMENT = {'tournament'}
         UNRANKED = {'unranked-challenge'}
+        REGISTRATION = {'bazooka-supreme-eng'}
         TOP_ONLY = {'general', 'bazooka-supreme-eng'}
         TOP = TOP_ONLY.union(TOURNAMENT).union(UNRANKED)
         SETTINGS = TOP
@@ -21,6 +23,7 @@ class MasterPermissions:
 class DBKeys:  # Database key values
     TOURNAMENT = 'tournament'
     UNRANKED = 'unranked'
+    REGISTRATION = 'registration'
 
 
 class Conf:
@@ -66,6 +69,10 @@ class Conf:
                 'hidden': True}
 
     class Tournament:
+        BASE_GROUP = {'name': 't',
+                      'help': 'Grouping for Tournament Commands',
+                      'invoke_without_command': True}
+
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.TOURNAMENT
             ALLOWED_CHANNELS = MasterPermissions.Channels.TOURNAMENT
@@ -78,7 +85,7 @@ class Conf:
                 'name': 'unreg',
                 'help': 'Unregisters you for the tournament'}
             DISPLAY = {
-                'name': 'display',
+                'name': 'disp',
                 'help': 'Shows all fixtures'}
             NEW = {
                 'name': 'new',
@@ -127,7 +134,8 @@ class Conf:
             class Override:
                 BASE = {
                     'name': 'override',
-                    'hidden': True}
+                    'hidden': True,
+                    'invoke_without_command': True}
                 SET = {
                     'name': 'set',
                     'help': 'Sets the specified player to play in the '
@@ -142,28 +150,35 @@ class Conf:
 
     class Unranked:
         MAX_SCORE = 10
+        BASE_GROUP = {'name': 'ur',
+                      'help': 'Grouping for Unranked Commands',
+                      'invoke_without_command': True}
 
         class Command:
             SCORE = {
-                'name': 'ur',
-                'help': 'Registers or Overwrites your score'}
+                'name': 'score',
+                'help': 'Registers your score (Overwrites if already exists)'}
 
             DISPLAY = {
-                'name': 'ur_disp',
-                'help': 'Shows the player ranking'}
+                'name': 'disp',
+                'help': 'Shows the player rankings'}
 
             RESET = {
                 'name': 'reset',
                 'help': 'Clears all data. Resets to a new unranked challenge.'}
 
             SCORE_OTHER = {
-                'name': 'ur_other',
-                'help': 'Registers or Overwrites the score of another player '
-                        'score'}
+                'name': 'score_other',
+                'help': 'Registers the score for another player (Overwrites '
+                        'if already exists)'}
 
-            REMOVE_PLAYER = {
+            REMOVE = {
                 'name': 'rem',
                 'help': 'Removes a player from the rankings'}
+
+            REMOVE_OTHER = {
+                'name': 'rem_other',
+                'help': 'Removes specified player from the rankings'}
 
             SET_MESSAGE = {
                 'name': 'msg',
@@ -174,3 +189,61 @@ class Conf:
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.UNRANKED
             ALLOWED_CHANNELS = MasterPermissions.Channels.UNRANKED
+
+    class Registration:
+        BASE_GROUP = {'name': 'r',
+                      'help': 'Grouping for Registration List Commands',
+                      'invoke_without_command': True}
+
+        class Command:
+            # TODO Allow option to allow registration to only one category
+            # TODO Add option to set default category
+            # TODO Add option to set category commands to require priv
+            # TODO Add option to restrict use of all
+            REGISTER = {
+                'name': 'reg',
+                'help': 'Registers you for the category specified (If only '
+                        'one exists specification is not required)'}
+
+            REGISTER_OTHER = {
+                'name': 'reg_other',
+                'help': 'Registers another user see help for self '
+                        'registration for details on parameter'}
+
+            UNREGISTER = {
+                'name': 'unreg',
+                'help': 'Unregisters user from category passed or "all" if '
+                        'passed as parameter'}
+
+            UNREGISTER_OTHER = {
+                'name': 'unreg_other',
+                'help': 'Unregisters another user from category passed or '
+                        '"all" if passed as parameter'}
+
+            CAT_NEW = {
+                'name': 'cat_new',
+                'help': 'Creates a new category'}
+
+            CAT_REMOVE = {
+                'name': 'cat_rem',
+                'help': 'Removes a category'}
+
+            CAT_RENAME = {
+                'name': 'cat_rn',
+                'help': 'Changes the description of a category'}
+
+            DISPLAY = {
+                'name': 'disp',
+                'help': 'Shows the registered users'}
+
+            RESET = {
+                'name': 'reset',
+                'help': 'Clears all data.'}
+
+            SET_MESSAGE = {
+                'name': 'msg',
+                'help': 'Sets a general message that is displayed at the top.'}
+
+        class Permissions:
+            PRIV_ROLES = MasterPermissions.PRIV.REGISTRATION
+            ALLOWED_CHANNELS = MasterPermissions.Channels.REGISTRATION
