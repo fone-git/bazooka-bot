@@ -64,7 +64,7 @@ class Unranked:
             result = "No scores are recorded right now."
         else:
             result = f'UNRANKED CHALLENGE\n{self.message}\n\nRankings:\n'
-            for i in range(Conf.Unranked.MAX_SCORE + 1):
+            for i in range(Conf.Unranked.MAX_SCORE, -1, -1):
                 game_set = self.score_lookup[i]
                 if game_set.has_players():
                     result += f'{game_set}\n'
