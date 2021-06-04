@@ -1,4 +1,5 @@
 import logging
+from abc import abstractmethod
 
 from discord.ext import commands
 
@@ -19,6 +20,13 @@ class CogCommon(commands.Cog):
     def cog_check(self, ctx):
         return ctx.channel.name in self.conf.Permissions.ALLOWED_CHANNELS
 
+    ##########################################################################
+    # BASE GROUP
+    @abstractmethod
+    async def base(self, ctx):
+        await ctx.send("I'm sorry I didn't recognize that command")
+
+    ##########################################################################
     # HELPER FUNCTIONS
     def save(self):
         if self.db_key is not None:
@@ -46,3 +54,8 @@ class CogCommon(commands.Cog):
                            'Resend command with argument of "yes" if you are '
                            'sure.')
             return False
+
+    async def send_data_str(self, ctx, msg_prefix: str = None):
+        msg = '' if msg_prefix is None else f'{msg_prefix}\n\n'
+        msg += str(self.data)
+        await ctx.send(msg)

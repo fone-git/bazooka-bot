@@ -22,7 +22,7 @@ class Unranked:
         self.score_lookup = {}  # Maps from score to score_set object
 
         for i in range(Conf.Unranked.MAX_SCORE + 1):
-            self.score_lookup[i] = ScoreSet(i)
+            self.score_lookup[i] = ScoreSet(score=i)
 
     def score(self, player: Player, score: int):
         # Validate score
@@ -60,9 +60,12 @@ class Unranked:
         self.message = msg
 
     def __str__(self):
-        result = f'UNRANKED CHALLENGE\n{self.message}\n\nRankings:\n'
-        for i in range(Conf.Unranked.MAX_SCORE + 1):
-            game_set = self.score_lookup[i]
-            if game_set.has_players():
-                result += f'{game_set}\n'
+        if len(self.player_lookup) == 0:
+            result = "No scores are recorded right now."
+        else:
+            result = f'UNRANKED CHALLENGE\n{self.message}\n\nRankings:\n'
+            for i in range(Conf.Unranked.MAX_SCORE + 1):
+                game_set = self.score_lookup[i]
+                if game_set.has_players():
+                    result += f'{game_set}\n'
         return result

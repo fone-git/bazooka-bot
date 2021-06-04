@@ -1,6 +1,7 @@
 import os
 from threading import Thread
 
+import discord
 import flask
 from discord.ext import commands
 from waitress import serve
@@ -49,9 +50,12 @@ def main():
     global bot
     log('Main Started')
 
+    intents = discord.Intents.default()
+    intents.members = True
+
     bot = Bot(db=DBCache(get_db()),
               command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
-              description=Conf.BOT_DESCRIPTION)
+              description=Conf.BOT_DESCRIPTION, intents=intents)
 
     display_start()
     bot.run(os.getenv(Conf.ENV.TOKEN))
