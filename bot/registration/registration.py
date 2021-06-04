@@ -23,8 +23,12 @@ class Registration:
 
     def category_remove(self, number: int):
         self.confirm_cat_exists(number, True)
+        if len(self.categories) == 1:
+            raise commands.errors.UserInputError(
+                'Unable to remove only one category left')
         self.categories.pop(number)
         if number == self.max_cat_num:
+            # Max removed find new max
             self.max_cat_num = max(self.categories.keys())
 
     def category_rename(self, number: int, new_name: str):
