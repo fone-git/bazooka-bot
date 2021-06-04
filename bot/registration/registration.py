@@ -1,4 +1,4 @@
-from typing import Union
+from typing import List, Union
 
 from discord.ext import commands
 
@@ -35,11 +35,46 @@ class Registration:
         self.confirm_cat_exists(number, True)
         self.categories[number].name = new_name
 
+    def resolve_cat_number(self,
+                           cat_number:
+                           Union[int, str]) -> Union[int, List[int]]:
+        if cat_number is None:
+            if len(self.categories) == 1:
+                assert self.max_cat_num in self.categories
+                return self.max_cat_num
+            else:
+                raise commands.errors.UserInputError(
+                    'Category number required when there is more than one '
+                    'category')
+        else:
+            if isinstance(cat_number, str):
+                if cat_number == 'all':
+                    return [x for x in self.categories.keys()]
+                else:
+                    raise commands.errors.UserInputError(
+                        f'Expected a category NUMBER or "all" but got '
+                        f'{cat_number}')
+            else:
+                # Only other expected type is an int
+                assert isinstance(cat_number, int)
+                return cat_number
+
     def register(self, player: Player, cat_number: Union[int, str]):
+        cat_number = self.resolve_cat_number(cat_number)
+        if isinstance(cat_number, List):
+            for x in cat_number:
+                self.register(player, x)
+            return  # Do nothing more already called
         self.confirm_cat_exists(cat_number, True)
         self.categories[cat_number].add(player)
 
     def unregister(self, player: Player, cat_number: Union[int, str]):
+        cat_number = self.resolve_cat_number(cat_number)
+        if isinstance(cat_number, List):
+            for x in cat_number:
+                self.unregister(player, x)
+            return  # Do nothing more already called
+
         self.confirm_cat_exists(cat_number, True)
         self.categories[cat_number].remove(player)
 
