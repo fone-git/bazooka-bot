@@ -199,6 +199,7 @@ class Conf:
             # TODO Allow option to allow registration to only one category
             # TODO Add option to set default category
             # TODO Add option to set category commands to require priv
+            # TODO Add option to restrict use of all
             REGISTER = {
                 'name': 'reg',
                 'help': 'Registers you for the category specified (If only '

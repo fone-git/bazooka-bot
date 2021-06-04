@@ -77,7 +77,8 @@ class CogRegistration(CogCommon, name='Registration'):
 
     @base.command(**conf.Command.REGISTER_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
-    async def register_other(self, ctx, user: discord.User, cat_number: int):
+    async def register_other(self, ctx, user: discord.User,
+                             cat_number: Union[int, str] = None):
         player = Player.get_player_from_user(user)
         self.data.register(player, cat_number)
         self.save()
@@ -87,7 +88,8 @@ class CogRegistration(CogCommon, name='Registration'):
 
     @base.command(**conf.Command.UNREGISTER_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
-    async def unregister_other(self, ctx, user: discord.User, cat_number: int):
+    async def unregister_other(self, ctx, user: discord.User,
+                               cat_number: Union[int, str] = None):
         player = Player.get_player_from_user(user)
         self.data.unregister(player, cat_number)
         self.save()
