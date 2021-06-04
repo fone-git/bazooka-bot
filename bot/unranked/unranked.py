@@ -22,7 +22,7 @@ class Unranked:
         self.score_lookup = {}  # Maps from score to score_set object
 
         for i in range(Conf.Unranked.MAX_SCORE + 1):
-            self.score_lookup[i] = ScoreSet(i)
+            self.score_lookup[i] = ScoreSet(score=i)
 
     def score(self, player: Player, score: int):
         # Validate score
