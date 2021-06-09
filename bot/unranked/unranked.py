@@ -60,10 +60,10 @@ class Unranked:
         self.message = msg
 
     def __str__(self):
+        result = f'UNRANKED CHALLENGE\n{self.message}\n\nRankings:\n'
         if len(self.player_lookup) == 0:
-            result = "No scores are recorded right now."
+            result += "No scores are recorded right now."
         else:
-            result = f'UNRANKED CHALLENGE\n{self.message}\n\nRankings:\n'
             for i in range(Conf.Unranked.MAX_SCORE, -1, -1):
                 game_set = self.score_lookup[i]
                 if game_set.has_players():
