@@ -1,4 +1,5 @@
 import logging
+from string import Template
 
 
 # TODO Add option to chose to use qualifying round instead of alternating byes
@@ -28,7 +29,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.13'
+    VERSION = '1.13.1'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
@@ -41,6 +42,15 @@ class Conf:
         TOKEN = 'TOKEN'
 
     class TopLevel:
+        WELCOME_MSG = Template(
+            "Welcome ${mention}. Nice to have you here. Make yourself at "
+            "home. If you are looking to organize a race tie check out our "
+            "<#744875911119110245>. If you are looking to join one of our "
+            "alliances please post a screen shot of your previous season "
+            "achievements in <#760521977072713758>. Otherwise you're welcome "
+            "to just chill or Gents are also welcome to check out our "
+            "<#757542001708105739>.")
+
         class Permissions:
             ALLOWED_DM_COMMANDS = {  # Hard coded to allow for debugging
                 'export',
