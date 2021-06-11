@@ -29,7 +29,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.13.2'
+    VERSION = '1.14'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
