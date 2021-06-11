@@ -128,6 +128,11 @@ class Bot(commands.Bot):
             await member.guild.system_channel.send(conf.WELCOME_MSG.substitute(
                 mention=member.mention))
 
+        @self.event
+        async def on_member_remove(member):
+            channel = self.get_channel(conf.INTERNAL_CHANNEL_ID)
+            await channel.send(conf.MEMBER_LEAVE.substitute(name=f'{member}'))
+
     def get_tournament_as_html(self):
         return self.cog_tournament.as_html()
 

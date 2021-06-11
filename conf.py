@@ -42,6 +42,7 @@ class Conf:
         TOKEN = 'TOKEN'
 
     class TopLevel:
+        INTERNAL_CHANNEL_ID = 613723324018720787
         WELCOME_MSG = Template(
             "Welcome ${mention}. Nice to have you here. Make yourself at "
             "home. If you are looking to organize a race tie check out our "
@@ -50,6 +51,8 @@ class Conf:
             "achievements in <#760521977072713758>. Otherwise you're welcome "
             "to just chill or Gents are also welcome to check out our "
             "<#757542001708105739>.")
+        MEMBER_LEAVE = Template(
+            "Hey, just letting you know I noticed ${name} left the server...")
 
         class Permissions:
             ALLOWED_DM_COMMANDS = {  # Hard coded to allow for debugging
