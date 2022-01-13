@@ -15,7 +15,7 @@ class MasterPermissions:
     class Channels:
         TOURNAMENT = {'tournament'}
         UNRANKED = {'unranked-challenge'}
-        REGISTRATION = {'bazooka-supreme-eng'}
+        REGISTRATION = UNRANKED
         TOP_ONLY = {'general', 'bazooka-supreme-eng'}
         TOP = TOP_ONLY.union(TOURNAMENT).union(UNRANKED)
         SETTINGS = TOP
@@ -204,8 +204,8 @@ class Conf:
             ALLOWED_CHANNELS = MasterPermissions.Channels.UNRANKED
 
     class Registration:
-        BASE_GROUP = {'name': 'r',
-                      'help': 'Grouping for Registration List Commands',
+        BASE_GROUP = {'name': 'idea',
+                      'help': 'Grouping for Unranked Ideas List Commands',
                       'invoke_without_command': True}
 
         class Command:
