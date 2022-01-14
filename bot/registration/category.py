@@ -6,7 +6,7 @@ from bot.common.player_list import PlayerList
 @dataclass
 class Category(PlayerList):
     number: int = 1
-    name: str = 'General'
+    name: str = 'Default'
     _name: str = field(init=False, repr=False)
 
     def __post_init__(self):
@@ -24,5 +24,5 @@ class Category(PlayerList):
 
     def get_str_rep(self):
         players = self.players_as_str("\n")
-        return f'Category: {self.number} - {self.name} ({len(self)})\n' \
+        return f'Idea: {self.number} - {self.name} ({len(self)})\n' \
                f'{players}\n'
