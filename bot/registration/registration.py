@@ -7,10 +7,12 @@ from bot.registration.category import Category
 
 
 class Registration:
-    def __init__(self):
+    def __init__(self, are_mutually_exclusive_events: bool = False):
         self.message = ""
         self.categories = {1: Category(number=1)}
         self.max_cat_num = 1
+        self.are_mutually_exclusive_events = are_mutually_exclusive_events
+        self.player_cat_dict = {}
 
     def category_new(self, name: str, number: int):
         if number < 0:
@@ -26,6 +28,10 @@ class Registration:
         if len(self.categories) == 1:
             raise commands.errors.UserInputError(
                 'Unable to remove only one category left')
+        if self.are_mutually_exclusive_events:
+            # Clear out players from dict
+            for player in self.categories[number]:
+                self.player_cat_dict.pop(player)
         self.categories.pop(number)
         if number == self.max_cat_num:
             # Max removed find new max
@@ -38,37 +44,56 @@ class Registration:
     def resolve_cat_number(self,
                            cat_number:
                            Union[int, str]) -> Union[int, List[int]]:
+        """
+        Resolves an input into a valid category number or list of category 
+        numbers.
+        - None: Only available category or an error
+        - "all": If events are not mutually exclusive returns all category 
+                numbers
+        - single int: Returns the input
+        :param cat_number: The value to be resolved
+        :return: A valid category number or list of category numbers
+        """
         if cat_number is None:
             if len(self.categories) == 1:
                 assert self.max_cat_num in self.categories
                 return self.max_cat_num
             else:
                 raise commands.errors.UserInputError(
-                    'Category number required when there is more than one '
-                    'category')
+                    'Idea number required when there is more than one idea')
         else:
             if isinstance(cat_number, str):
                 if cat_number == 'all':
-                    return [x for x in self.categories.keys()]
+                    if self.are_mutually_exclusive_events:
+                        raise commands.errors.UserInputError(
+                            f'"all" only allowed if events are not mutually '
+                            f'exclusive')
+                    else:
+                        return [x for x in self.categories.keys()]
                 else:
                     raise commands.errors.UserInputError(
-                        f'Expected a category NUMBER or "all" but got '
+                        f'Expected a idea NUMBER or "all" but got '
                         f'{cat_number}')
             else:
                 # Only other expected type is an int
                 assert isinstance(cat_number, int)
                 return cat_number
 
-    def register(self, player: Player, cat_number: Union[int, str]):
+    def register(self, player: Player, cat_number: Union[int, str, None]):
         cat_number = self.resolve_cat_number(cat_number)
         if isinstance(cat_number, List):
             for x in cat_number:
                 self.register(player, x)
             return  # Do nothing more already called
         self.confirm_cat_exists(cat_number, True)
+        if self.are_mutually_exclusive_events:
+            # Check if player is already registered
+            if player in self.player_cat_dict:
+                self.unregister(player, self.player_cat_dict[player])
+            self.player_cat_dict[player] = cat_number
         self.categories[cat_number].add(player)
 
-    def unregister(self, player: Player, cat_number: Union[int, str]):
+    def unregister(self, player: Player, cat_number: Union[int, str, None]):
         cat_number = self.resolve_cat_number(cat_number)
         if isinstance(cat_number, List):
             for x in cat_number:
@@ -77,6 +102,7 @@ class Registration:
 
         self.confirm_cat_exists(cat_number, True)
         self.categories[cat_number].remove(player)
+        self.player_cat_dict.pop(player, "No Exception If Not Present")
 
     def set_msg(self, msg: str):
         self.message = msg
@@ -84,7 +110,12 @@ class Registration:
     def __str__(self):
 
         total_players = 0
-        result = f'REGISTRATION\n{self.message}\n\n'
+        vote_type = "SINGLE VOTE" \
+            if self.are_mutually_exclusive_events else \
+            "MULTIPLE VOTES"
+        result = f'UNRANKED IDEAS ' \
+                 f'({vote_type}' \
+                 f' ALLOWED)\n{self.message}\n\n'
         for key in self.categories.keys():
             total_players += len(self.categories[key])
             result += f'{self.categories[key]}\n'
@@ -102,5 +133,5 @@ class Registration:
         """
         if (number in self.categories) != should_exist:
             raise commands.errors.UserInputError(
-                f'Category {number} '
+                f'Idea {number} '
                 f'{"does not" if should_exist else "already"} exists')

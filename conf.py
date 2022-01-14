@@ -15,7 +15,7 @@ class MasterPermissions:
     class Channels:
         TOURNAMENT = {'tournament'}
         UNRANKED = {'unranked-challenge'}
-        REGISTRATION = {'bazooka-supreme-eng'}
+        REGISTRATION = UNRANKED
         TOP_ONLY = {'general', 'bazooka-supreme-eng'}
         TOP = TOP_ONLY.union(TOURNAMENT).union(UNRANKED)
         SETTINGS = TOP
@@ -199,13 +199,44 @@ class Conf:
                         'rankings. Can be used to display what deck to use '
                         'or other special instructions'}
 
+            ONE = {
+                'name': '1',
+                'help': 'Sets the score as 1'}
+            TWO = {
+                'name': '2',
+                'help': 'Sets the score as 2'}
+            THREE = {
+                'name': '3',
+                'help': 'Sets the score as 3'}
+            FOUR = {
+                'name': '4',
+                'help': 'Sets the score as 4'}
+            FIVE = {
+                'name': '5',
+                'help': 'Sets the score as 5'}
+            SIX = {
+                'name': '6',
+                'help': 'Sets the score as 6'}
+            SEVEN = {
+                'name': '7',
+                'help': 'Sets the score as 7'}
+            EIGHT = {
+                'name': '8',
+                'help': 'Sets the score as 8'}
+            NINE = {
+                'name': '9',
+                'help': 'Sets the score as 9'}
+            TEN = {
+                'name': '10',
+                'help': 'Sets the score as 10'}
+
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.UNRANKED
             ALLOWED_CHANNELS = MasterPermissions.Channels.UNRANKED
 
     class Registration:
-        BASE_GROUP = {'name': 'r',
-                      'help': 'Grouping for Registration List Commands',
+        BASE_GROUP = {'name': 'idea',
+                      'help': 'Grouping for Unranked Ideas List Commands',
                       'invoke_without_command': True}
 
         class Command:
@@ -214,40 +245,39 @@ class Conf:
             # TODO Add option to set category commands to require priv
             # TODO Add option to restrict use of all
             REGISTER = {
-                'name': 'reg',
-                'help': 'Registers you for the category specified (If only '
-                        'one exists specification is not required)'}
+                'name': 'vote',
+                'help': 'Votes for the idea specified'}
 
             REGISTER_OTHER = {
-                'name': 'reg_other',
-                'help': 'Registers another user see help for self '
-                        'registration for details on parameter'}
+                'name': 'vote_other',
+                'help': 'Registers another player\'s vote see help for self '
+                        'voting for details on parameter'}
 
             UNREGISTER = {
-                'name': 'unreg',
-                'help': 'Unregisters user from category passed or "all" if '
+                'name': 'unvote',
+                'help': 'Removes a players vote from idea passed or "all" if '
                         'passed as parameter'}
 
             UNREGISTER_OTHER = {
-                'name': 'unreg_other',
-                'help': 'Unregisters another user from category passed or '
-                        '"all" if passed as parameter'}
+                'name': 'unvote_other',
+                'help': 'Removes another player\'s vote from the idea passed '
+                        'or "all" if passed as parameter'}
 
             CAT_NEW = {
-                'name': 'cat_new',
-                'help': 'Creates a new category'}
+                'name': 'new',
+                'help': 'Creates a new idea'}
 
             CAT_REMOVE = {
-                'name': 'cat_rem',
-                'help': 'Removes a category'}
+                'name': 'rem',
+                'help': 'Removes an idea'}
 
             CAT_RENAME = {
-                'name': 'cat_rn',
-                'help': 'Changes the description of a category'}
+                'name': 'rename',
+                'help': 'Changes the description of an idea'}
 
             DISPLAY = {
                 'name': 'disp',
-                'help': 'Shows the registered users'}
+                'help': 'Shows the current ideas and votes'}
 
             RESET = {
                 'name': 'reset',
