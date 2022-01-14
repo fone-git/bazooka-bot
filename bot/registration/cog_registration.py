@@ -53,13 +53,17 @@ class CogRegistration(CogCommon, name='Registration'):
 
     @base.command(**conf.Command.RESET)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
-    async def reset(self, ctx, confirm: bool = False):
+    async def reset(self, ctx, are_mutually_exclusive_events: bool,
+                    confirm: bool = False):
         if not await self.should_exec(ctx, confirm):
             return
 
-        self.data = self.data_def_constructor()
+        self.data = self.data_def_constructor(are_mutually_exclusive_events)
         self.save()
-        await ctx.send("Registration Reset")
+        await ctx.send(
+            f"Registration Reset - Events "
+            f"{'are' if are_mutually_exclusive_events else 'are not'} "
+            f"mutually exclusive")
 
     @base.command(**conf.Command.CAT_REMOVE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
