@@ -245,40 +245,39 @@ class Conf:
             # TODO Add option to set category commands to require priv
             # TODO Add option to restrict use of all
             REGISTER = {
-                'name': 'reg',
-                'help': 'Registers you for the category specified (If only '
-                        'one exists specification is not required)'}
+                'name': 'vote',
+                'help': 'Votes for the idea specified'}
 
             REGISTER_OTHER = {
-                'name': 'reg_other',
-                'help': 'Registers another user see help for self '
-                        'registration for details on parameter'}
+                'name': 'vote_other',
+                'help': 'Registers another player\'s vote see help for self '
+                        'voting for details on parameter'}
 
             UNREGISTER = {
-                'name': 'unreg',
-                'help': 'Unregisters user from category passed or "all" if '
+                'name': 'unvote',
+                'help': 'Removes a players vote from idea passed or "all" if '
                         'passed as parameter'}
 
             UNREGISTER_OTHER = {
-                'name': 'unreg_other',
-                'help': 'Unregisters another user from category passed or '
-                        '"all" if passed as parameter'}
+                'name': 'unvote_other',
+                'help': 'Removes another player\'s vote from the idea passed '
+                        'or "all" if passed as parameter'}
 
             CAT_NEW = {
-                'name': 'cat_new',
-                'help': 'Creates a new category'}
+                'name': 'new',
+                'help': 'Creates a new idea'}
 
             CAT_REMOVE = {
-                'name': 'cat_rem',
-                'help': 'Removes a category'}
+                'name': 'rem',
+                'help': 'Removes an idea'}
 
             CAT_RENAME = {
-                'name': 'cat_rn',
-                'help': 'Changes the description of a category'}
+                'name': 'rename',
+                'help': 'Changes the description of an idea'}
 
             DISPLAY = {
                 'name': 'disp',
-                'help': 'Shows the registered users'}
+                'help': 'Shows the current ideas and votes'}
 
             RESET = {
                 'name': 'reset',

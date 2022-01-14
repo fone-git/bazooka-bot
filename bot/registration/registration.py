@@ -60,8 +60,7 @@ class Registration:
                 return self.max_cat_num
             else:
                 raise commands.errors.UserInputError(
-                    'Category number required when there is more than one '
-                    'category')
+                    'Idea number required when there is more than one idea')
         else:
             if isinstance(cat_number, str):
                 if cat_number == 'all':
@@ -73,7 +72,7 @@ class Registration:
                         return [x for x in self.categories.keys()]
                 else:
                     raise commands.errors.UserInputError(
-                        f'Expected a category NUMBER or "all" but got '
+                        f'Expected a idea NUMBER or "all" but got '
                         f'{cat_number}')
             else:
                 # Only other expected type is an int
@@ -111,9 +110,12 @@ class Registration:
     def __str__(self):
 
         total_players = 0
-        result = f'REGISTRATION (' \
-                 f'{"" if self.are_mutually_exclusive_events else "NOT "}' \
-                 f'MUTUALLY EXCLUSIVE)\n{self.message}\n\n'
+        vote_type = "SINGLE VOTE" \
+            if self.are_mutually_exclusive_events else \
+            "MULTIPLE VOTES"
+        result = f'UNRANKED IDEAS ' \
+                 f'({vote_type}' \
+                 f' ALLOWED)\n{self.message}\n\n'
         for key in self.categories.keys():
             total_players += len(self.categories[key])
             result += f'{self.categories[key]}\n'
@@ -131,5 +133,5 @@ class Registration:
         """
         if (number in self.categories) != should_exist:
             raise commands.errors.UserInputError(
-                f'Category {number} '
+                f'Idea {number} '
                 f'{"does not" if should_exist else "already"} exists')

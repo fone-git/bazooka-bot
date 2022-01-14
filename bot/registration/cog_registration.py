@@ -34,12 +34,12 @@ class CogRegistration(CogCommon, name='Registration'):
         await self.send_data_str(ctx)
 
     @base.command(**conf.Command.REGISTER)
-    async def register(self, ctx, cat_number: Union[int, str] = None):
-        await self.register_other(ctx, ctx.author, cat_number)
+    async def register(self, ctx, idea_number: Union[int, str] = None):
+        await self.register_other(ctx, ctx.author, idea_number)
 
     @base.command(**conf.Command.UNREGISTER)
-    async def unregister(self, ctx, cat_number: Union[int, str] = None):
-        await self.unregister_other(ctx, ctx.author, cat_number)
+    async def unregister(self, ctx, idea_number: Union[int, str] = None):
+        await self.unregister_other(ctx, ctx.author, idea_number)
 
     ##########################################################################
     # PRIVILEGED COMMANDS
@@ -49,7 +49,7 @@ class CogRegistration(CogCommon, name='Registration'):
                            name: str):
         self.data.category_new(name, number)
         self.save()
-        await self.send_data_str(ctx, f'New category "{name}" added.')
+        await self.send_data_str(ctx, f'New idea "{name}" added.')
 
     @base.command(**conf.Command.RESET)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
@@ -61,23 +61,25 @@ class CogRegistration(CogCommon, name='Registration'):
         self.data = self.data_def_constructor(are_mutually_exclusive_events)
         self.save()
         await ctx.send(
-            f"Registration Reset - Events "
-            f"{'are' if are_mutually_exclusive_events else 'are not'} "
-            f"mutually exclusive")
+            f"Ideas Reset - " +
+            ('Single vote'
+             if are_mutually_exclusive_events else
+             'Multiple votes') +
+            ' allowed')
 
     @base.command(**conf.Command.CAT_REMOVE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def category_remove(self, ctx, number: int):
         name = self.data.category_remove(number)
         self.save()
-        await self.send_data_str(ctx, f'New category "{name}" removed.')
+        await self.send_data_str(ctx, f'Idea "{name}" removed.')
 
     @base.command(**conf.Command.CAT_RENAME)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def category_rename(self, ctx, number: int, *, new_name: str):
         self.data.category_rename(number, new_name)
         self.save()
-        await self.send_data_str(ctx, f'Category renamed.')
+        await self.send_data_str(ctx, f'Idea renamed.')
 
     @base.command(**conf.Command.REGISTER_OTHER)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
@@ -87,7 +89,7 @@ class CogRegistration(CogCommon, name='Registration'):
         self.data.register(player, cat_number)
         self.save()
         await self.send_data_str(ctx,
-                                 f"{player} registered for category "
+                                 f"{player} voted for idea "
                                  f"{cat_number}")
 
     @base.command(**conf.Command.UNREGISTER_OTHER)
@@ -98,7 +100,7 @@ class CogRegistration(CogCommon, name='Registration'):
         self.data.unregister(player, cat_number)
         self.save()
         await self.send_data_str(ctx,
-                                 f'{player} removed from category '
+                                 f'{player}\'s vote removed from idea '
                                  f'{cat_number}')
 
     @base.command(**conf.Command.SET_MESSAGE)
