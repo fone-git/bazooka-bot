@@ -21,6 +21,9 @@ class Registration:
             number = self.max_cat_num + 1
             self.max_cat_num = number
 
+        if number > self.max_cat_num:
+            self.max_cat_num = number
+
         self.confirm_cat_exists(number, False)
 
         self.categories[number] = Category(number=number, name=name)
