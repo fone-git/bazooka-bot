@@ -41,16 +41,15 @@ class CogRegistration(CogCommon, name='Registration'):
     async def unregister(self, ctx, idea_number: Union[int, str] = None):
         await self.unregister_other(ctx, ctx.author, idea_number)
 
-    ##########################################################################
-    # PRIVILEGED COMMANDS
     @base.command(**conf.Command.CAT_NEW)
-    @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def category_new(self, ctx, number: typing.Optional[int] = -1, *,
                            name: str):
         self.data.category_new(name, number)
         self.save()
         await self.send_data_str(ctx, f'New idea "{name}" added.')
 
+    ##########################################################################
+    # PRIVILEGED COMMANDS
     @base.command(**conf.Command.RESET)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
     async def reset(self, ctx, are_mutually_exclusive_events: bool,
