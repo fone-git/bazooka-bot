@@ -4,7 +4,7 @@ from bot.common.player import Player
 
 
 class GameSet:
-    # Global counter for game IDs (Reset when rounds is invalidated
+    # Global counter for game IDs (Reset when round is invalidated
     next_id = 1
 
     def __init__(self, p1: Player, p2: Player, round_):

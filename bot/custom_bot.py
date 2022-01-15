@@ -35,7 +35,8 @@ class Bot(commands.Bot):
             """
             Global check on all categories
             :param ctx: The context
-            :return: True if should proceed or false to stop command execution
+            :return: True if execution should proceed or
+                False to stop command execution
             """
             if isinstance(ctx.message.channel, discord.DMChannel):
                 return ctx.command.name in conf.Permissions.ALLOWED_DM_COMMANDS

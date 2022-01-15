@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import List, Union
 
 from discord.ext import commands
@@ -9,7 +10,8 @@ from bot.registration.category import Category
 class Registration:
     def __init__(self, are_mutually_exclusive_events: bool = False):
         self.message = ""
-        self.categories = {1: Category(number=1)}
+        self.categories: OrderedDict[int, Category] = OrderedDict(
+            {1: Category(number=1)})
         self.max_cat_num = 1
         self.are_mutually_exclusive_events = are_mutually_exclusive_events
         self.player_cat_dict = {}
@@ -19,9 +21,13 @@ class Registration:
             number = self.max_cat_num + 1
             self.max_cat_num = number
 
+        if number > self.max_cat_num:
+            self.max_cat_num = number
+
         self.confirm_cat_exists(number, False)
 
         self.categories[number] = Category(number=number, name=name)
+        self._sort()
 
     def category_remove(self, number: int):
         self.confirm_cat_exists(number, True)
@@ -125,7 +131,7 @@ class Registration:
 
     def confirm_cat_exists(self, number: int, should_exist: bool):
         """
-        Checks if a category exists or not based on the number and raises a
+        Checks if a category exists or not based on the number and raises an
         exception if the expectation is not met with a suitable error message
         :param number: The number of the category to find
         :param should_exist: if true category must exist or exception is
@@ -135,3 +141,8 @@ class Registration:
             raise commands.errors.UserInputError(
                 f'Idea {number} '
                 f'{"does not" if should_exist else "already"} exists')
+
+    def _sort(self):
+        # Ignored because of error in type checker
+        # noinspection PyTypeChecker
+        self.categories = OrderedDict(sorted(self.categories.items()))
