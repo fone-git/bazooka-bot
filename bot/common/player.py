@@ -18,7 +18,7 @@ class Player:
         self._id = id_
         self.display = display
         self.disp_id = disp_id
-        self.is_dummy = is_dummy  # Used to mark place holders
+        self.is_dummy = is_dummy  # Used to mark placeholders
 
     @property
     def id(self):

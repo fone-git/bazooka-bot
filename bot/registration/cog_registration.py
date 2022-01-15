@@ -14,7 +14,7 @@ conf = Conf.Registration
 """Map class with setting for this cog to variable"""
 
 
-class CogRegistration(CogCommon, name='Registration'):
+class CogRegistration(CogCommon, name='Ideas'):
     data: Registration  # Specify type of attribute for linting
 
     def __init__(self, db: db_cache):

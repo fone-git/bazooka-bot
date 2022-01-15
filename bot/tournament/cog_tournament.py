@@ -151,7 +151,7 @@ class CogTournament(CogCommon, name='Tournament'):
 
     def fix_recreate_players(self):
         """
-        Utility method used when updated happen to player fields during a
+        Utility method used when updated happen to player fields during an
         active tournament to apply the change.
         NOTE: Only works during registration.
         """
