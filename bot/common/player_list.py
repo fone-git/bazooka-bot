@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import List, Union
 
@@ -6,7 +7,7 @@ from bot.common.player import Player
 
 
 @dataclass
-class PlayerList:
+class PlayerList(Iterable):
     """
     Stores a list of players. Does not allow duplicates. Players stored in
     order added.
@@ -59,3 +60,6 @@ class PlayerList:
     @abstractmethod
     def get_str_rep(self):
         return f'{self.players_as_str()}'
+
+    def __iter__(self):
+        return iter(self.players)
