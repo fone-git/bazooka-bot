@@ -39,8 +39,8 @@ def set_interval(interval: float, function: callable, args: list = None,
     :param function: The function to be called
     :param args: The positional arguments for the function
     :param kwargs: The key word arguments for the function
-    :return: The a thread event that can be set to cancel the timer (eg
-        result.set())
+    :return: A thread event that can be set to cancel the timer
+        (e.g. result.set())
     """
 
     class MyThread(threading.Thread):

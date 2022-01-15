@@ -10,7 +10,7 @@ def export(fn: str, data):
     """
     Saves the key value pairs from data to a yaml file with name fn
     :param fn: Name of the file to export the values to
-    :param data: They dict like object to get the keys from
+    :param data: The dict like object to get the keys from
     """
     exp_dict = {}
     for key in data.keys():

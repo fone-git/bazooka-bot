@@ -16,7 +16,7 @@ class DictPersistent:
     file each time a value is set. (Mutated objects not written to disk)
 
     NB: Reads are cheap because it is kept in memory but every set writes
-    everything to disk so they are expensive.
+    everything to disk, so writes are expensive.
     """
 
     def __init__(self, file_name: str = 'dict_persistent.yaml'):
