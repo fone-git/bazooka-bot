@@ -287,6 +287,10 @@ class Conf:
                 'name': 'msg',
                 'help': 'Sets a general message that is displayed at the top.'}
 
+            CLEAR_REGISTRATIONS = {
+                'name': 'clear_votes',
+                'help': 'Removes all current votes.'}
+
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.REGISTRATION
             ALLOWED_CHANNELS = MasterPermissions.Channels.REGISTRATION

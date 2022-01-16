@@ -115,7 +115,6 @@ class Registration:
         self.message = msg if msg is not None else ''
 
     def __str__(self):
-
         total_players = 0
         vote_type = "SINGLE VOTE" \
             if self.are_mutually_exclusive_events else \
@@ -147,3 +146,11 @@ class Registration:
         # Ignored because of error in type checker
         # noinspection PyTypeChecker
         self.categories = OrderedDict(sorted(self.categories.items()))
+
+    def clear_registrations(self):
+        for cat_number in self.categories:
+            cat = self.categories[cat_number]
+            players = [player for player in cat]
+            for player in players:
+                cat.remove(player)
+                self.player_cat_dict.pop(player, "No Exception If Not Present")
