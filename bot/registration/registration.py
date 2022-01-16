@@ -148,9 +148,36 @@ class Registration:
         self.categories = OrderedDict(sorted(self.categories.items()))
 
     def clear_registrations(self):
+        self.player_cat_dict.clear()
         for cat_number in self.categories:
             cat = self.categories[cat_number]
             players = [player for player in cat]
             for player in players:
                 cat.remove(player)
-                self.player_cat_dict.pop(player, "No Exception If Not Present")
+
+    def set_mutually_exclusive(self, are_mutually_exclusive_events):
+        if are_mutually_exclusive_events == self.are_mutually_exclusive_events:
+            return  # No action needed already equal
+
+        if are_mutually_exclusive_events:
+            # Build cat player dict and if duplicate detected abort
+            assert len(self.player_cat_dict) == 0
+            for cat_number in self.categories:
+                cat = self.categories[cat_number]
+                players = [player for player in cat]
+                for player in players:
+                    if player in self.player_cat_dict:
+                        # Abort duplicate found
+                        err_msg = (f'Change aborted! '
+                                   f'There is at least one player who has '
+                                   f'voted more than once. '
+                                   f'"{player}" has voted at least twice '
+                                   f'on {self.player_cat_dict[player]} and '
+                                   f'{cat_number}.')
+                        self.player_cat_dict.clear()
+                        raise commands.errors.UserInputError(err_msg)
+                    self.player_cat_dict[player] = cat_number
+            self.are_mutually_exclusive_events = are_mutually_exclusive_events
+        else:
+            self.are_mutually_exclusive_events = are_mutually_exclusive_events
+            self.player_cat_dict.clear()

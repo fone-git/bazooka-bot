@@ -291,6 +291,13 @@ class Conf:
                 'name': 'clear_votes',
                 'help': 'Removes all current votes.'}
 
+            SET_MUTUALLY_EXCLUSIVE = {
+                'name': 'set_vote_type',
+                'help': 'Allows changing of vote type (may fail if multiple '
+                        'votes currently exist and trying to change to '
+                        'single, would need to be brought into a valid state '
+                        'possibly via a clear).'}
+
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.REGISTRATION
             ALLOWED_CHANNELS = MasterPermissions.Channels.REGISTRATION
