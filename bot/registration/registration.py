@@ -38,10 +38,11 @@ class Registration:
             # Clear out players from dict
             for player in self.categories[number]:
                 self.player_cat_dict.pop(player)
-        self.categories.pop(number)
+        result = self.categories.pop(number).name
         if number == self.max_cat_num:
             # Max removed find new max
             self.max_cat_num = max(self.categories.keys())
+        return result
 
     def category_rename(self, number: int, new_name: str):
         self.confirm_cat_exists(number, True)
