@@ -104,7 +104,7 @@ class CogRegistration(CogCommon, name='Ideas'):
 
     @base.command(**conf.Command.SET_MESSAGE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
-    async def set_message(self, ctx, *, msg: str):
+    async def set_message(self, ctx, *, msg: str = None):
         self.data.set_msg(msg)
         self.save()
         await self.send_data_str(ctx, 'Message Set')

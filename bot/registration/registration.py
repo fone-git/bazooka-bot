@@ -112,7 +112,7 @@ class Registration:
         self.player_cat_dict.pop(player, "No Exception If Not Present")
 
     def set_msg(self, msg: str):
-        self.message = msg
+        self.message = msg if msg is not None else ''
 
     def __str__(self):
 
