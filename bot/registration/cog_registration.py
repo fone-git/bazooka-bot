@@ -104,7 +104,33 @@ class CogRegistration(CogCommon, name='Ideas'):
 
     @base.command(**conf.Command.SET_MESSAGE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
-    async def set_message(self, ctx, *, msg: str):
+    async def set_message(self, ctx, *, msg: str = None):
         self.data.set_msg(msg)
         self.save()
         await self.send_data_str(ctx, 'Message Set')
+
+    @base.command(**conf.Command.CLEAR_REGISTRATIONS)
+    @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
+    async def clear_registrations(self, ctx, confirm: bool = False):
+        if not await self.should_exec(ctx, confirm):
+            return
+        self.data.clear_registrations()
+        self.save()
+        await self.send_data_str(ctx, 'VOTES CLEARED!!!')
+
+    @base.command(**conf.Command.SET_MUTUALLY_EXCLUSIVE)
+    @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
+    async def set_mutually_exclusive(self, ctx,
+                                     are_mutually_exclusive_events: bool,
+                                     confirm: bool = False):
+        if not await self.should_exec(ctx, confirm):
+            return
+
+        self.data.set_mutually_exclusive(are_mutually_exclusive_events)
+        self.save()
+        await self.send_data_str(
+            ctx, f"Voting changed to " +
+                 ('Single vote'
+                  if are_mutually_exclusive_events else
+                  'Multiple votes') +
+                 ' allowed')
