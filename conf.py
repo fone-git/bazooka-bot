@@ -82,6 +82,9 @@ class Conf:
             EXPORT = {
                 'name': 'export',
                 'hidden': True}
+            DEBUG_DUMP = {
+                'name': 'debug_dump',
+                'hidden': True}
 
     class Tournament:
         BASE_GROUP = {'name': 't',
