@@ -29,10 +29,10 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.17'
+    VERSION = '1.17.1'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
-    SAVE_CACHE_DELAY = 30  # Minimum number of seconds between saves
+    SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
     EXPORT_DELAY = 15
     URL = 'https://bazooka-bot.one23.repl.co/'
