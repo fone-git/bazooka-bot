@@ -1,5 +1,4 @@
-from collections import OrderedDict
-from typing import List, Union
+from typing import Dict, List, Union
 
 from discord.ext import commands
 
@@ -10,8 +9,7 @@ from bot.registration.category import Category
 class Registration:
     def __init__(self, are_mutually_exclusive_events: bool = False):
         self.message = ""
-        self.categories: OrderedDict[int, Category] = OrderedDict(
-            {1: Category(number=1)})
+        self.categories: Dict[int, Category] = dict({1: Category(number=1)})
         self.max_cat_num = 1
         self.are_mutually_exclusive_events = are_mutually_exclusive_events
         self.player_cat_dict = {}
@@ -145,7 +143,7 @@ class Registration:
     def _sort(self):
         # Ignored because of error in type checker
         # noinspection PyTypeChecker
-        self.categories = OrderedDict(sorted(self.categories.items()))
+        self.categories = dict(sorted(self.categories.items()))
 
     def clear_registrations(self):
         self.player_cat_dict.clear()
