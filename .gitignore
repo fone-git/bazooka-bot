@@ -6,3 +6,4 @@
 *.pkl
 .idea/
 /dict_persistent.yaml
+/debug_dump/

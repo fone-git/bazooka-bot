@@ -29,12 +29,14 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.17.2'
+    VERSION = '1.17.3'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
+    DEBUG_DUMP_FOLDER = 'debug_dump/'
     EXPORT_DELAY = 15
+    DEBU_DUMP_DELAY = 5
     URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
 
@@ -79,6 +81,9 @@ class Conf:
                 'hidden': True}
             EXPORT = {
                 'name': 'export',
+                'hidden': True}
+            DEBUG_DUMP = {
+                'name': 'debug_dump',
                 'hidden': True}
 
     class Tournament:
