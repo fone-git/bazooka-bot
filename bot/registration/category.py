@@ -1,12 +1,11 @@
-from dataclasses import dataclass
-
 from bot.common.player_list import PlayerList
 
 
-@dataclass
 class Category(PlayerList):
-    number: int = 1
-    _name: str = 'Default'
+    def __init__(self, number: int = 1, name: str = 'Default'):
+        super().__init__()
+        self.number: int = number
+        self._name: str = name
 
     @property
     def name(self):
