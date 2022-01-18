@@ -5,6 +5,12 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+from pathlib import Path
+
+
+def mkdir_w_par(folder):
+    Path(folder).mkdir(parents=True, exist_ok=True)
+
 
 def export(fn: str, data):
     """
@@ -17,6 +23,19 @@ def export(fn: str, data):
         exp_dict[key] = data[key]
     with open(fn, 'w') as f:
         f.write(yaml.dump(exp_dict, Dumper=Dumper))
+
+
+def debug_dump(folder_name: str, data, ext: str = '.yml'):
+    """
+    Saves the data to the folder specified with each key going to separate file
+    :param folder_name: The folder to store the file for each key in
+    :param data: The dictionary like object to save
+    :param ext: The extension to put of the exported files
+    """
+    mkdir_w_par(folder_name)
+    for key in data.keys():
+        with open(f'{folder_name}{key}{ext}', 'w') as f:
+            f.write(str(data[key]))
 
 
 def is_power_of_2(value):

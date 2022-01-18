@@ -9,7 +9,7 @@ from bot.tournament.cog_tournament import CogTournament
 from bot.unranked.cog_unranked import CogUnranked
 from conf import Conf
 from utils.log import log
-from utils.misc import export
+from utils.misc import debug_dump, export
 from utils.rate_limited_execution import RateLimitedExecution
 
 conf = Conf.TopLevel
@@ -98,6 +98,17 @@ class Bot(commands.Bot):
                                                          self.export)
             await ctx.author.send("Export Request Acknowledged")
 
+        @self.command(**conf.Command.DEBUG_DUMP)
+        @commands.check(is_dm_or_priv_role)
+        async def debug_dump_cmd(ctx):
+            """
+            Requests that the bot saves to a file for debugging
+            :param ctx: The Context
+            """
+            RateLimitedExecution.get_instance().register(Conf.DEBU_DUMP_DELAY,
+                                                         self.debug_dump)
+            await ctx.author.send("Debug Dump Request Acknowledged")
+
         @self.event
         async def on_command_error(ctx, error):
             if isinstance(error, commands.errors.CommandNotFound):
@@ -139,3 +150,6 @@ class Bot(commands.Bot):
 
     def export(self):
         export(Conf.EXPORT_FILE_NAME, self.db)
+
+    def debug_dump(self):
+        debug_dump(Conf.DEBUG_DUMP_FOLDER, self.db)
