@@ -13,16 +13,16 @@ class Player:
     considered equal and ALL players with ID "None" are considered equal
     """
 
-    def __init__(self, id_: Union[int, None], display: str, disp_id: Any, *,
+    def __init__(self, play_id: Union[int, None], display: str, disp_id: Any, *,
                  is_dummy: bool = False):
-        self._id = id_
+        self.play_id = play_id
         self.display = display
         self.disp_id = disp_id
         self.is_dummy = is_dummy  # Used to mark placeholders
 
     @property
     def id(self):
-        return self._id
+        return self.play_id
 
     def __eq__(self, other):
         if isinstance(other, Player):
