@@ -15,14 +15,14 @@ class Player:
 
     def __init__(self, play_id: Union[int, None], display: str, disp_id: Any, *,
                  is_dummy: bool = False):
-        self.play_id = play_id
+        self.player_id = play_id
         self.display = display
         self.disp_id = disp_id
         self.is_dummy = is_dummy  # Used to mark placeholders
 
     @property
     def id(self):
-        return self.play_id
+        return self.player_id
 
     def __eq__(self, other):
         if isinstance(other, Player):
