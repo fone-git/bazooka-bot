@@ -34,7 +34,9 @@ class Conf:
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
+    DEBUG_DUMP_FOLDER = 'debug_dump/'
     EXPORT_DELAY = 15
+    DEBU_DUMP_DELAY = 5
     URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
 
