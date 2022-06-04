@@ -17,7 +17,8 @@ class MasterPermissions:
         TOURNAMENT = {'tournament'}
         UNRANKED = {'unranked-challenge'}
         REGISTRATION = UNRANKED
-        TOP_ONLY = {'general', 'bazooka-internal-chatroom-eng'}
+        TOP_ONLY = {'general', 'bazooka-internal-chatroom-eng',
+                    'de-bug-bot-channel'}
         TOP = TOP_ONLY.union(TOURNAMENT).union(UNRANKED)
         SETTINGS = TOP
 
