@@ -135,15 +135,16 @@ class Bot(commands.Bot):
         async def on_ready():
             log(f'Successfully logged in as {self.user}')
 
-        @self.event
-        async def on_member_join(member):
-            await member.guild.system_channel.send(conf.WELCOME_MSG.substitute(
-                mention=member.mention))
+        # TODO: Re-enable member event features
+        # @self.event
+        # async def on_member_join(member):
+        #     await member.guild.system_channel.send(
+        #     conf.WELCOME_MSG.substitute(mention=member.mention))
 
-        @self.event
-        async def on_member_remove(member):
-            channel = self.get_channel(conf.INTERNAL_CHANNEL_ID)
-            await channel.send(conf.MEMBER_LEAVE.substitute(name=f'{member}'))
+        # @self.event
+        # async def on_member_remove(member):
+        #     channel = self.get_channel(conf.INTERNAL_CHANNEL_ID)
+        #     await channel.send(conf.MEMBER_LEAVE.substitute(name=f'{member}'))
 
     def get_tournament_as_html(self):
         return self.cog_tournament.as_html()

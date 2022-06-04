@@ -3,6 +3,7 @@ from string import Template
 
 
 # TODO Add option to chose to use qualifying round instead of alternating byes
+# TODO: Use channel id's instead of names to make more resilient
 
 class MasterPermissions:
     class PRIV:
@@ -16,7 +17,8 @@ class MasterPermissions:
         TOURNAMENT = {'tournament'}
         UNRANKED = {'unranked-challenge'}
         REGISTRATION = UNRANKED
-        TOP_ONLY = {'general', 'bazooka-supreme-eng'}
+        TOP_ONLY = {'general', 'bazooka-internal-chatroom-eng',
+                    'de-bug-bot-channel'}
         TOP = TOP_ONLY.union(TOURNAMENT).union(UNRANKED)
         SETTINGS = TOP
 
@@ -29,7 +31,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.17.4'
+    VERSION = '1.18.0'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
