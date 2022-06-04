@@ -51,7 +51,7 @@ def main():
     log('Main Started')
 
     intents = discord.Intents.default()
-    intents.members = True
+    # intents.members = True #TODO: Re-enable member event features
 
     bot = Bot(db=DBCache(get_db()),
               command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
