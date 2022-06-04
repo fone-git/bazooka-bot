@@ -105,7 +105,7 @@ class Bot(commands.Bot):
             Requests that the bot saves to a file for debugging
             :param ctx: The Context
             """
-            RateLimitedExecution.get_instance().register(Conf.DEBU_DUMP_DELAY,
+            RateLimitedExecution.get_instance().register(Conf.DEBUG_DUMP_DELAY,
                                                          self.debug_dump)
             await ctx.author.send("Debug Dump Request Acknowledged")
 
