@@ -1,7 +1,8 @@
 from typing import Union
 
+from opylib.log import log
+
 from utils.dict_persistent import DictPersistent
-from utils.log import log
 
 
 def get_db() -> Union[dict, DictPersistent]:

@@ -1,6 +1,7 @@
 import logging
 
-from utils.log import log
+from opylib.log import log
+
 from utils.timer_funcs import set_timeout
 
 

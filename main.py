@@ -4,12 +4,12 @@ from threading import Thread
 import discord
 import flask
 from discord.ext import commands
+from opylib.log import log, setup_log
 from waitress import serve
 
 from bot.custom_bot import Bot
 from conf import Conf
 from utils.db_cache import DBCache
-from utils.log import log, setup_logging
 from utils.repl_support import get_db
 
 #######################################################################
@@ -48,6 +48,7 @@ def display_start():
 
 def main():
     global bot
+    setup_log(Conf.LOG_LEVEL)
     log('Main Started')
 
     intents = discord.Intents.default()
@@ -62,5 +63,4 @@ def main():
 
 
 if __name__ == '__main__':
-    setup_logging(Conf.LOG_LEVEL)
     main()

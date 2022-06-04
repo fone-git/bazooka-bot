@@ -4,12 +4,12 @@ from typing import Iterable, List, Union
 
 from discord import Embed
 from discord.ext import commands
+from opylib.log import log
 
 from bot.common.player import Player
 from bot.tournament.game_set import GameSet
 from bot.tournament.round import Round
 from conf import Conf
-from utils.log import log
 from utils.misc import is_power_of_2
 
 

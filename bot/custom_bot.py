@@ -2,13 +2,13 @@ import logging
 
 import discord
 from discord.ext import commands
+from opylib.log import log
 
 from bot.registration.cog_registration import CogRegistration
 from bot.settings.cog_settings import CogSettings
 from bot.tournament.cog_tournament import CogTournament
 from bot.unranked.cog_unranked import CogUnranked
 from conf import Conf
-from utils.log import log
 from utils.misc import debug_dump, export
 from utils.rate_limited_execution import RateLimitedExecution
 

@@ -2,9 +2,9 @@ import logging
 from datetime import datetime
 
 import yaml
+from opylib.log import log
 
 from conf import Conf
-from utils.log import log
 from utils.timer_funcs import set_timeout
 
 try:
