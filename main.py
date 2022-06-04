@@ -4,11 +4,12 @@ from threading import Thread
 import discord
 import flask
 from discord.ext import commands
-from opylib.log import log, setup_log
+from opylib.log import log, set_log_level, setup_log
 from waitress import serve
 
 from bot.custom_bot import Bot
 from conf import Conf
+from utils.connect_manager import ConnectManager
 from utils.db_cache import DBCache
 from utils.repl_support import get_db
 
@@ -45,21 +46,28 @@ def display_start():
 
 ##############################################################################
 
+def connect():
+    bot.run(os.getenv(Conf.ENV.TOKEN))
+
 
 def main():
     global bot
-    setup_log(Conf.LOG_LEVEL)
+    setup_log(None, only_std_out=True)
+    set_log_level(Conf.LOG_LEVEL)
+    
     log('Main Started')
 
     intents = discord.Intents.default()
     # intents.members = True #TODO: Re-enable member event features
 
-    bot = Bot(db=DBCache(get_db()),
+    db = get_db()
+    bot = Bot(db=DBCache(db),
               command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
               description=Conf.BOT_DESCRIPTION, intents=intents)
 
     display_start()
-    bot.run(os.getenv(Conf.ENV.TOKEN))
+
+    ConnectManager(connect).try_connect()
 
 
 if __name__ == '__main__':
