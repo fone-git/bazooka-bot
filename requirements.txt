@@ -1,4 +1,5 @@
-flask>=1.1.2
+flask~=2.1.2
 pyyaml>=5.4.1
-waitress>=1.4.4
+waitress~=2.1.2
 discord>=1.0.1
+opylib==0.4.0
