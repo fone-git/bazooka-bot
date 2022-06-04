@@ -3,6 +3,7 @@ from string import Template
 
 
 # TODO Add option to chose to use qualifying round instead of alternating byes
+# TODO: Use channel id's instead of names to make more resilient
 
 class MasterPermissions:
     class PRIV:
@@ -16,7 +17,7 @@ class MasterPermissions:
         TOURNAMENT = {'tournament'}
         UNRANKED = {'unranked-challenge'}
         REGISTRATION = UNRANKED
-        TOP_ONLY = {'general', 'bazooka-supreme-eng'}
+        TOP_ONLY = {'general', 'bazooka-internal-chatroom-eng'}
         TOP = TOP_ONLY.union(TOURNAMENT).union(UNRANKED)
         SETTINGS = TOP
 
