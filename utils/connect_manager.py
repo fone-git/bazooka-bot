@@ -7,6 +7,7 @@ from typing import Optional
 from opylib.log import log, log_exception
 
 from conf import Conf, DBKeys
+from utils.db_cache import DBCache
 from utils.timer_funcs import set_timeout
 
 REF_DATE_IN_PAST = datetime.fromtimestamp(0)
@@ -29,9 +30,9 @@ class ConnFailInfo:
 
 
 class ConnectManager:
-    def __init__(self, func: callable, db):
+    def __init__(self, func: callable, db: DBCache):
         self.func: callable = func
-        self.db = db
+        self.db: DBCache = db
         self.retry_timer: Optional[Timer] = None
         self._next_attempt_time: Optional[datetime] = None
         self.connected = False
@@ -62,21 +63,21 @@ class ConnectManager:
                 self.num_fails_to_timedelta(fail_info.fail_count))
 
     @classmethod
-    def get_last_conn_success(cls, db) -> Optional[datetime]:
+    def get_last_conn_success(cls, db: DBCache) -> Optional[datetime]:
         return db.get(DBKeys.CM_LAST_CONN_SUCCESS_DT)
 
     @classmethod
-    def set_last_conn_success(cls, value: datetime, db):
+    def set_last_conn_success(cls, value: datetime, db: DBCache):
         db[DBKeys.CM_LAST_CONN_SUCCESS_DT] = value
 
     @classmethod
-    def get_last_conn_fail_info(cls, db) -> ConnFailInfo:
+    def get_last_conn_fail_info(cls, db: DBCache) -> ConnFailInfo:
         if db.get(DBKeys.CM_LAST_CONN_FAIL_INFO, should_yaml=True) is None:
             cls.init_last_conn_fail_info(db)
         return db[DBKeys.CM_LAST_CONN_FAIL_INFO, True]
 
     @classmethod
-    def set_last_conn_fail_info(cls, value: ConnFailInfo, db):
+    def set_last_conn_fail_info(cls, value: ConnFailInfo, db: DBCache):
         db[DBKeys.CM_LAST_CONN_FAIL_INFO, True] = value
 
     def get_time_before_connect_allowed(self) -> Optional[timedelta]:
@@ -122,7 +123,7 @@ class ConnectManager:
                 log('Active retry timer already in progress')
 
     @classmethod
-    def status(cls, db):
+    def status(cls, db: DBCache):
         last_fail_info = cls.get_last_conn_fail_info(db)
         return (
             f'Server Time Now: {datetime.now()}\n'
@@ -131,7 +132,7 @@ class ConnectManager:
         )
 
     @classmethod
-    def reset_fail_count(cls, db):
+    def reset_fail_count(cls, db: DBCache):
         last_fail = cls.get_last_conn_fail_info(db)
         cls.set_last_conn_fail_info(
             ConnFailInfo(last_fail.last_time, 0, ''), db)
@@ -156,5 +157,5 @@ class ConnectManager:
         log(f'Set retry timer for {sec_to_next_attempt / 60} minutes')
 
     @classmethod
-    def init_last_conn_fail_info(cls, db):
+    def init_last_conn_fail_info(cls, db: DBCache):
         cls.set_last_conn_fail_info(ConnFailInfo(REF_DATE_IN_PAST, 0, ''), db)
