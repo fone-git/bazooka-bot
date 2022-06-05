@@ -107,7 +107,7 @@ class ConnectManager:
                     datetime.now(), last_info.fail_count + 1, str(e))
                 self.set_last_conn_fail_info(new_fail_info, self.db)
                 self.inc_next_attempt_time(new_fail_info)
-                self.set_next_attempt()
+                self.request_retry_attempt()
         else:
             if self.retry_timer is None or not self.retry_timer.is_alive():
                 # Second part of if condition not tested because the first
@@ -115,7 +115,7 @@ class ConnectManager:
                 # later should not happen because nothing should call this
                 # function while a timer has already been created until that
                 # timer fired, at which time it should retry not come here
-                self.set_next_attempt()
+                self.request_retry_attempt()
             else:
                 # Not tested, code should NOT reach here because calls are
                 # not made to try_connect except once in main and by timer
@@ -148,7 +148,7 @@ class ConnectManager:
         )
         return msg.replace('\n', '<br />')
 
-    def set_next_attempt(self):
+    def request_retry_attempt(self):
         sec_to_next_attempt = \
             (self.next_attempt_time - datetime.now()).total_seconds()
         assert sec_to_next_attempt > 0
