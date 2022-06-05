@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -9,6 +10,7 @@ from bot.settings.cog_settings import CogSettings
 from bot.tournament.cog_tournament import CogTournament
 from bot.unranked.cog_unranked import CogUnranked
 from conf import Conf
+from utils.connect_manager import ConnectManager
 from utils.misc import debug_dump, export
 from utils.rate_limited_execution import RateLimitedExecution
 
@@ -133,7 +135,17 @@ class Bot(commands.Bot):
 
         @self.event
         async def on_ready():
-            log(f'Successfully logged in as {self.user}')
+            conn_status = (
+                f'Successfully logged in as {self.user}\n'
+                f'{ConnectManager.status(self.db)}')
+            log(conn_status)
+            ConnectManager.reset_fail_count(self.db)
+            ConnectManager.set_last_conn_success(datetime.now(), self.db)
+            channel = self.get_channel(conf.DEBUG_CHANNEL_ID)
+            if channel is not None:
+                await channel.send(conn_status)
+            else:
+                log(f'Unable fo find channel with ID: {conf.DEBUG_CHANNEL_ID}')
 
         # TODO: Re-enable member event features
         # @self.event

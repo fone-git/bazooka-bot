@@ -19,6 +19,7 @@ Global Variables
 """
 
 bot: Bot
+connect_manager: ConnectManager
 
 ##############################################################################
 """ 
@@ -33,7 +34,8 @@ web_interface = flask.Flask('Board')
 @web_interface.route('/')
 def home():
     return flask.render_template(
-        'board.html', content=bot.get_tournament_as_html())
+        'board.html', content=bot.get_tournament_as_html(),
+        status=connect_manager.status_as_html())
 
 
 def run():
@@ -51,10 +53,10 @@ def connect():
 
 
 def main():
-    global bot
+    global bot, connect_manager
     setup_log(None, only_std_out=True)
     set_log_level(Conf.LOG_LEVEL)
-    
+
     log('Main Started')
 
     intents = discord.Intents.default()
@@ -64,10 +66,11 @@ def main():
     bot = Bot(db=DBCache(db),
               command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
               description=Conf.BOT_DESCRIPTION, intents=intents)
+    connect_manager = ConnectManager(connect, db)
 
     display_start()
 
-    ConnectManager(connect).try_connect()
+    connect_manager.try_connect()
 
 
 if __name__ == '__main__':
