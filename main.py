@@ -62,8 +62,8 @@ def main():
     intents = discord.Intents.default()
     # intents.members = True #TODO: Re-enable member event features
 
-    db = get_db()
-    bot = Bot(db=DBCache(db),
+    db = DBCache(get_db())
+    bot = Bot(db=db,
               command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
               description=Conf.BOT_DESCRIPTION, intents=intents)
     connect_manager = ConnectManager(connect, db)
