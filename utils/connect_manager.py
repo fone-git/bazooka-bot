@@ -35,7 +35,17 @@ class ConnectManager:
         self.db: DBCache = db
         self.retry_timer: Optional[Timer] = None
         self._next_attempt_time: Optional[datetime] = None
-        self.connected = False
+        self._connected = False
+        self._init_time = datetime.now()
+        assert not self.connected, 'Should not be connected before trying'
+
+    @property
+    def connected(self) -> bool:
+        if not self._connected:
+            last_conn_time = self.get_last_conn_success(self.db)
+            if last_conn_time is not None and self._init_time < last_conn_time:
+                self._connected = True
+        return self._connected
 
     @staticmethod
     def num_fails_to_timedelta(num_fails) -> timedelta:
