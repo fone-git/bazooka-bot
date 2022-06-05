@@ -1,14 +1,16 @@
 import logging
+from datetime import datetime
 
 import discord
 from discord.ext import commands
+from opylib.log import log
 
 from bot.registration.cog_registration import CogRegistration
 from bot.settings.cog_settings import CogSettings
 from bot.tournament.cog_tournament import CogTournament
 from bot.unranked.cog_unranked import CogUnranked
 from conf import Conf
-from utils.log import log
+from utils.connect_manager import ConnectManager
 from utils.misc import debug_dump, export
 from utils.rate_limited_execution import RateLimitedExecution
 
@@ -105,7 +107,7 @@ class Bot(commands.Bot):
             Requests that the bot saves to a file for debugging
             :param ctx: The Context
             """
-            RateLimitedExecution.get_instance().register(Conf.DEBU_DUMP_DELAY,
+            RateLimitedExecution.get_instance().register(Conf.DEBUG_DUMP_DELAY,
                                                          self.debug_dump)
             await ctx.author.send("Debug Dump Request Acknowledged")
 
@@ -133,7 +135,17 @@ class Bot(commands.Bot):
 
         @self.event
         async def on_ready():
-            log(f'Successfully logged in as {self.user}')
+            conn_status = (
+                f'Successfully logged in as {self.user}\n'
+                f'{ConnectManager.status(self.db)}')
+            log(conn_status)
+            ConnectManager.reset_fail_count(self.db)
+            ConnectManager.set_last_conn_success(datetime.now(), self.db)
+            channel = self.get_channel(conf.DEBUG_CHANNEL_ID)
+            if channel is not None:
+                await channel.send(conn_status)
+            else:
+                log(f'Unable fo find channel with ID: {conf.DEBUG_CHANNEL_ID}')
 
         # TODO: Re-enable member event features
         # @self.event

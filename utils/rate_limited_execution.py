@@ -1,6 +1,7 @@
 import logging
 
-from utils.log import log
+from opylib.log import log
+
 from utils.timer_funcs import set_timeout
 
 
@@ -40,7 +41,7 @@ class RateLimitedExecution:
         :param function: The function to be called
         :param args: The positional arguments for the function
         :param kwargs: The key word arguments for the function
-        :return: True if was not already pending otherwise False
+        :return: True if was NOT already pending otherwise False
         """
         if self.is_pending(function):
             log(f'[RateLimit] Request to register ignored. Already pending '

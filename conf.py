@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 from string import Template
 
 
@@ -27,26 +28,30 @@ class DBKeys:  # Database key values
     TOURNAMENT = 'tournament'
     UNRANKED = 'unranked'
     REGISTRATION = 'registration'
+    CM_LAST_CONN_SUCCESS_DT = 'cm_last_conn_success_date_time'
+    CM_LAST_CONN_FAIL_INFO = 'cm_last_conn_fail'
 
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.18.0'
+    VERSION = '1.19.0'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
     DEBUG_DUMP_FOLDER = 'debug_dump/'
     EXPORT_DELAY = 15
-    DEBU_DUMP_DELAY = 5
+    DEBUG_DUMP_DELAY = 5
     URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
+    FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
 
     class TopLevel:
         INTERNAL_CHANNEL_ID = 613723324018720787
+        DEBUG_CHANNEL_ID = 863277419972395029
         WELCOME_MSG = Template(
             "Welcome ${mention}. Nice to have you here. Make yourself at "
             "home. If you are looking to organize a race tie check out our "

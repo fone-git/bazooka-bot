@@ -4,12 +4,13 @@ from threading import Thread
 import discord
 import flask
 from discord.ext import commands
+from opylib.log import log, set_log_level, setup_log
 from waitress import serve
 
 from bot.custom_bot import Bot
 from conf import Conf
+from utils.connect_manager import ConnectManager
 from utils.db_cache import DBCache
-from utils.log import log, setup_logging
 from utils.repl_support import get_db
 
 #######################################################################
@@ -18,6 +19,7 @@ Global Variables
 """
 
 bot: Bot
+connect_manager: ConnectManager
 
 ##############################################################################
 """ 
@@ -32,7 +34,8 @@ web_interface = flask.Flask('Board')
 @web_interface.route('/')
 def home():
     return flask.render_template(
-        'board.html', content=bot.get_tournament_as_html())
+        'board.html', content=bot.get_tournament_as_html(),
+        status=connect_manager.status_as_html())
 
 
 def run():
@@ -45,22 +48,30 @@ def display_start():
 
 ##############################################################################
 
+def connect():
+    bot.run(os.getenv(Conf.ENV.TOKEN))
+
 
 def main():
-    global bot
+    global bot, connect_manager
+    setup_log(None, only_std_out=True)
+    set_log_level(Conf.LOG_LEVEL)
+
     log('Main Started')
 
     intents = discord.Intents.default()
     # intents.members = True #TODO: Re-enable member event features
 
-    bot = Bot(db=DBCache(get_db()),
+    db = get_db()
+    bot = Bot(db=DBCache(db),
               command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
               description=Conf.BOT_DESCRIPTION, intents=intents)
+    connect_manager = ConnectManager(connect, db)
 
     display_start()
-    bot.run(os.getenv(Conf.ENV.TOKEN))
+
+    connect_manager.try_connect()
 
 
 if __name__ == '__main__':
-    setup_logging(Conf.LOG_LEVEL)
     main()
