@@ -64,11 +64,11 @@ class ConnectManager:
 
     @classmethod
     def get_last_conn_success(cls, db: DBCache) -> Optional[datetime]:
-        return db.get(DBKeys.CM_LAST_CONN_SUCCESS_DT)
+        return db.get(DBKeys.CM_LAST_CONN_SUCCESS_DT, should_yaml=True)
 
     @classmethod
     def set_last_conn_success(cls, value: datetime, db: DBCache):
-        db[DBKeys.CM_LAST_CONN_SUCCESS_DT] = value
+        db[DBKeys.CM_LAST_CONN_SUCCESS_DT, True] = value
 
     @classmethod
     def get_last_conn_fail_info(cls, db: DBCache) -> ConnFailInfo:
