@@ -71,13 +71,13 @@ class ConnectManager:
 
     @classmethod
     def get_last_conn_fail_info(cls, db) -> ConnFailInfo:
-        if db.get(DBKeys.CM_LAST_CONN_FAIL_INFO) is None:
+        if db.get(DBKeys.CM_LAST_CONN_FAIL_INFO, should_yaml=True) is None:
             cls.init_last_conn_fail_info(db)
-        return db[DBKeys.CM_LAST_CONN_FAIL_INFO]
+        return db[DBKeys.CM_LAST_CONN_FAIL_INFO, True]
 
     @classmethod
     def set_last_conn_fail_info(cls, value: ConnFailInfo, db):
-        db[DBKeys.CM_LAST_CONN_FAIL_INFO] = value
+        db[DBKeys.CM_LAST_CONN_FAIL_INFO, True] = value
 
     def get_time_before_connect_allowed(self) -> Optional[timedelta]:
         """
