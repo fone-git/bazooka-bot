@@ -1,6 +1,7 @@
 """
 Simple script to clear out retry info
 """
+from opylib.log import log, setup_log
 
 from utils.connect_manager import ConnectManager
 from utils.db_cache import DBCache
@@ -12,10 +13,12 @@ def do_nothing():
 
 
 def main():
+    setup_log(None, only_std_out=True)
     db = DBCache(get_db())
-    print(ConnectManager.status(db))
+    log(ConnectManager.status(db))
     ConnectManager.init_last_conn_fail_info(db)
-    print("Connections Allowed Again")
+    db.purge()
+    log(f"Connections Allowed Again")
 
 
 if __name__ == '__main__':
