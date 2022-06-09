@@ -23,7 +23,7 @@ class ConnFailInfo:
         last_time = None if self.last_time == REF_DATE_IN_PAST else \
             self.last_time
         return (
-            f'Last Fail Date/Time: {last_time}\n'
+            f'Last Fail Connection: {last_time}\n'
             f'Fail Count: {self.fail_count}\n'
             f'Last Error Message: "{self.err_msg}"'
         )
