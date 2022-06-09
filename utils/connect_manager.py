@@ -1,14 +1,13 @@
 import math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from threading import Timer
+from time import sleep
 from typing import Optional
 
 from opylib.log import log, log_exception
 
 from conf import Conf, DBKeys
 from utils.db_cache import DBCache
-from utils.timer_funcs import set_timeout
 
 REF_DATE_IN_PAST = datetime.fromtimestamp(0)
 
@@ -30,10 +29,15 @@ class ConnFailInfo:
 
 
 class ConnectManager:
+    """
+    Uses blocking wait so that it will work on all version of python.
+    Also stops the main thread from ending
+    See: https://bugs.python.org/issue43007
+    """
+
     def __init__(self, func: callable, db: DBCache):
         self.func: callable = func
         self.db: DBCache = db
-        self.retry_timer: Optional[Timer] = None
         self._next_attempt_time: Optional[datetime] = None
         self._connected = False
         self._init_time = datetime.now()
@@ -101,12 +105,17 @@ class ConnectManager:
         time_left = self.next_attempt_time - datetime.now()
         return None if time_left.total_seconds() <= 0 else time_left
 
-    def try_connect(self):
-        time_before_conn = self.get_time_before_connect_allowed()
-        if time_before_conn is None:
+    def do_try_connect(self):
+        while True:
+            time_before_conn = self.get_time_before_connect_allowed()
+            if time_before_conn is not None:
+                log(f'Going to sleep for '
+                    f'{time_before_conn.total_seconds() / 60:.2} minutes')
+                sleep(time_before_conn.total_seconds())  # Use blocking sleep
             try:
                 log('Going to attempt to connect')
                 self.func()
+                break  # No exception so break
             except Exception as e:
                 log_exception(e)
 
@@ -118,19 +127,7 @@ class ConnectManager:
                     datetime.now(), last_info.fail_count + 1, str(e))
                 self.set_last_conn_fail_info(new_fail_info, self.db)
                 self.inc_next_attempt_time(new_fail_info)
-                self.request_retry_attempt()
-        else:
-            if self.retry_timer is None or not self.retry_timer.is_alive():
-                # Second part of if condition not tested because the first
-                # should only happen on startup while still on cool down and the
-                # later should not happen because nothing should call this
-                # function while a timer has already been created until that
-                # timer fired, at which time it should retry not come here
-                self.request_retry_attempt()
-            else:
-                # Not tested, code should NOT reach here because calls are
-                # not made to try_connect except once in main and by timer
-                log('Active retry timer already in progress')
+                # Go to top of loop and sleep
 
     @classmethod
     def status(cls, db: DBCache):
@@ -158,13 +155,6 @@ class ConnectManager:
             f'{self.status(self.db)}'
         )
         return msg.replace('\n', '<br />')
-
-    def request_retry_attempt(self):
-        sec_to_next_attempt = \
-            (self.next_attempt_time - datetime.now()).total_seconds()
-        assert sec_to_next_attempt > 0
-        self.retry_timer = set_timeout(sec_to_next_attempt, self.try_connect)
-        log(f'Set retry timer for {sec_to_next_attempt / 60} minutes')
 
     @classmethod
     def init_last_conn_fail_info(cls, db: DBCache):

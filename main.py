@@ -70,7 +70,7 @@ def main():
 
     display_start()
 
-    connect_manager.try_connect()
+    connect_manager.do_try_connect()
 
 
 if __name__ == '__main__':
