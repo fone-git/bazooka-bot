@@ -114,7 +114,7 @@ class ConnectManager:
                 sleep(time_before_conn.total_seconds())  # Use blocking sleep
             try:
                 log('Going to attempt to connect')
-                self.func()
+                self.func(self.db)
                 break  # No exception so break
             except Exception as e:
                 log_exception(e)
