@@ -110,11 +110,11 @@ class ConnectManager:
             time_before_conn = self.get_time_before_connect_allowed()
             if time_before_conn is not None:
                 log(f'Going to sleep for '
-                    f'{time_before_conn.total_seconds() / 60:.2} minutes')
+                    f'{time_before_conn.total_seconds() / 60:.2f} minutes')
                 sleep(time_before_conn.total_seconds())  # Use blocking sleep
             try:
                 log('Going to attempt to connect')
-                self.func()
+                self.func(self.db)
                 break  # No exception so break
             except Exception as e:
                 log_exception(e)
