@@ -45,6 +45,7 @@ class Conf:
     URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
     FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
+    MAX_ERR_MSG_LEN = 30
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
