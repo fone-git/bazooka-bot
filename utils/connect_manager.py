@@ -114,6 +114,7 @@ class ConnectManager:
                 sleep(time_before_conn.total_seconds())  # Use blocking sleep
             try:
                 log('Going to attempt to connect')
+                # TODO: Use new thread to for bot in case event loop is closed
                 self.func(self.db)
                 break  # No exception so break
             except Exception as e:
@@ -123,8 +124,11 @@ class ConnectManager:
                 last_info = self.get_last_conn_fail_info(self.db)
 
                 # Register Failed attempt
+                err_count = last_info.fail_count + 1
+                err_msg = f'{last_info.err_msg}\n' \
+                          f'{err_count}: {str(e)[:Conf.MAX_ERR_MSG_LEN]}'
                 new_fail_info = ConnFailInfo(
-                    datetime.now(), last_info.fail_count + 1, str(e))
+                    datetime.now(), err_count, err_msg)
                 self.set_last_conn_fail_info(new_fail_info, self.db)
                 self.inc_next_attempt_time(new_fail_info)
                 # Go to top of loop and sleep
