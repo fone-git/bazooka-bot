@@ -55,6 +55,13 @@ def display_start():
 
 ##############################################################################
 
+def testing_fail(db):
+    # Reduce delay during testing
+    last_info = ConnectManager.get_last_conn_fail_info(db)
+    if last_info.fail_count < 2:
+        raise Exception('Manual Test exception')
+
+
 def connect(db):
     global bot
     intents = discord.Intents.default()
@@ -64,6 +71,7 @@ def connect(db):
         command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
         description=Conf.BOT_DESCRIPTION,
         intents=intents)
+    # testing_fail(db)
     bot.run(os.getenv(Conf.ENV.TOKEN))
 
 
