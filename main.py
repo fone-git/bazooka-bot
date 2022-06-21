@@ -1,5 +1,6 @@
+import os
 from threading import Thread
-from typing import List, Optional
+from typing import Optional
 
 import discord
 import flask
@@ -52,29 +53,16 @@ def display_start():
 
 ##############################################################################
 
-def connect(db_in):
-    def do_connect(db, bot_exception: List[Exception]):
-        try:
-            global bot
-            intents = discord.Intents.default()
-            intents.members = True
-            bot = Bot(
-                db=db,
-                command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
-                description=Conf.BOT_DESCRIPTION,
-                intents=intents)
-            # bot.run(os.getenv(Conf.ENV.TOKEN))
-            bot.run(None)
-        except Exception as e:
-            bot_exception.append(e)
-
-    bot_start_err: List[Exception] = []
-    t = Thread(target=do_connect, args=(db_in, bot_start_err))
-    t.start()
-    t.join()
-    if len(bot_start_err) > 0:
-        assert len(bot_start_err) == 1
-        raise bot_start_err[0]
+def connect(db):
+    global bot
+    intents = discord.Intents.default()
+    intents.members = True
+    bot = Bot(
+        db=db,
+        command_prefix=commands.when_mentioned_or(Conf.COMMAND_PREFIX),
+        description=Conf.BOT_DESCRIPTION,
+        intents=intents)
+    bot.run(os.getenv(Conf.ENV.TOKEN))
 
 
 def main():

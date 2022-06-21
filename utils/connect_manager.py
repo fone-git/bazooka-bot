@@ -114,6 +114,7 @@ class ConnectManager:
                 sleep(time_before_conn.total_seconds())  # Use blocking sleep
             try:
                 log('Going to attempt to connect')
+                # TODO: Use new thread to for bot in case event loop is closed
                 self.func(self.db)
                 break  # No exception so break
             except Exception as e:
