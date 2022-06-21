@@ -112,7 +112,7 @@ class Registration:
     def set_msg(self, msg: str):
         self.message = msg if msg is not None else ''
 
-    def __str__(self):
+    def disp(self, *, show_players: bool) -> str:
         total_players = 0
         vote_type = "SINGLE VOTE" \
             if self.are_mutually_exclusive_events else \
@@ -126,6 +126,9 @@ class Registration:
 
         result += f'Total Number of Players: {total_players}'
         return result
+
+    def __str__(self):
+        return self.disp(show_players=False)
 
     def confirm_cat_exists(self, number: int, should_exist: bool):
         """

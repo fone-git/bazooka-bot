@@ -298,6 +298,11 @@ class Conf:
                 'name': 'disp',
                 'help': 'Shows the current ideas and votes'}
 
+            DISPLAY_ALL = {
+                'name': 'disp_all',
+                'help': 'Shows the current ideas, votes and who voted for '
+                        'each idea'}
+
             RESET = {
                 'name': 'reset',
                 'help': 'Clears all data.'}
