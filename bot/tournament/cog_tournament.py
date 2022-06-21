@@ -3,13 +3,13 @@ import traceback
 
 import discord
 from discord.ext import commands
+from opylib import db_cache
 from opylib.log import log
 
 from bot.common.cog_common import CogCommon
 from bot.common.player import Player
 from bot.tournament.tournament import Tournament
 from conf import Conf, DBKeys
-from utils import db_cache
 
 conf = Conf.Tournament
 """Map class with setting for this cog to variable"""

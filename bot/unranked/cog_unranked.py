@@ -1,11 +1,11 @@
 import discord
 from discord.ext import commands
+from opylib import db_cache
 
 from bot.common.cog_common import CogCommon
 from bot.common.player import Player
 from bot.unranked.unranked import Unranked
 from conf import Conf, DBKeys
-from utils import db_cache
 
 conf = Conf.Unranked
 """Map class with setting for this cog to variable"""

@@ -4,6 +4,7 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 from opylib.log import log
+from opylib.rate_limited_execution import RateLimitedExecution
 
 from bot.registration.cog_registration import CogRegistration
 from bot.settings.cog_settings import CogSettings
@@ -12,7 +13,6 @@ from bot.unranked.cog_unranked import CogUnranked
 from conf import Conf
 from utils.connect_manager import ConnectManager
 from utils.misc import debug_dump, export
-from utils.rate_limited_execution import RateLimitedExecution
 
 conf = Conf.TopLevel
 """Map class with setting for this cog to variable"""
@@ -139,8 +139,13 @@ class Bot(commands.Bot):
                 f'Successfully logged in as {self.user}\n'
                 f'{ConnectManager.status(self.db)}')
             log(conn_status)
+            if len(conn_status) > Conf.MAX_DISCORD_MSG_LEN:
+                log(f'CONNECTION MESSAGE EXCEEDS LIMIT: {len(conn_status)}. '
+                    f'Truncated')
+                conn_status = conn_status[:Conf.MAX_DISCORD_MSG_LEN]
             ConnectManager.reset_fail_count(self.db)
             ConnectManager.set_last_conn_success(datetime.now(), self.db)
+            ConnectManager.start_heartbeat(self.db)
             channel = self.get_channel(conf.DEBUG_CHANNEL_ID)
             if channel is not None:
                 await channel.send(conn_status)

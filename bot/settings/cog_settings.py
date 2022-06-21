@@ -1,6 +1,7 @@
+from opylib import db_cache
+
 from bot.common.cog_common import CogCommon
 from conf import Conf
-from utils import db_cache
 
 conf = Conf.Settings
 """Map class with setting for this cog to variable"""

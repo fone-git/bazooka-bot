@@ -1,10 +1,10 @@
 """
 Simple script to clear out data from the DB. Saved to export as precaution
 """
+from opylib.replit_support import get_db
 
 from conf import Conf
 from utils.misc import export
-from utils.repl_support import get_db
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper

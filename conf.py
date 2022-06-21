@@ -30,12 +30,14 @@ class DBKeys:  # Database key values
     REGISTRATION = 'registration'
     CM_LAST_CONN_SUCCESS_DT = 'cm_last_conn_success_date_time'
     CM_LAST_CONN_FAIL_INFO = 'cm_last_conn_fail'
+    CM_LAST_HEARTBEAT = 'cm_last_heartbeat'
 
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.19.8'
+    VERSION = '1.20.0'
     LOG_LEVEL = logging.INFO
+    DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
@@ -44,8 +46,12 @@ class Conf:
     DEBUG_DUMP_DELAY = 5
     URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
-    FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
-    MAX_ERR_MSG_LEN = 100
+    MAX_DISCORD_MSG_LEN = 2000
+
+    class ConnectionManager:
+        FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
+        MAX_ERR_MSG_LEN = 100
+        HEARTBEAT_FREQ = timedelta(minutes=1)
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
