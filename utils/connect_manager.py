@@ -5,6 +5,7 @@ from time import sleep
 from typing import Optional
 
 from opylib.log import log, log_exception
+from opylib.sys_tools import restart_script
 
 from conf import Conf, DBKeys
 from utils.db_cache import DBCache
@@ -106,32 +107,32 @@ class ConnectManager:
         return None if time_left.total_seconds() <= 0 else time_left
 
     def do_try_connect(self):
-        while True:
-            time_before_conn = self.get_time_before_connect_allowed()
-            if time_before_conn is not None:
-                log(f'Going to sleep for '
-                    f'{time_before_conn.total_seconds() / 60:.2f} minutes')
-                sleep(time_before_conn.total_seconds())  # Use blocking sleep
-            try:
-                log('Going to attempt to connect')
-                # TODO: Use new thread to for bot in case event loop is closed
-                self.func(self.db)
-                break  # No exception so break
-            except Exception as e:
-                log_exception(e)
+        time_before_conn = self.get_time_before_connect_allowed()
+        if time_before_conn is not None:
+            log(f'Going to sleep for '
+                f'{time_before_conn.total_seconds() / 60:.2f} minutes')
+            sleep(time_before_conn.total_seconds())  # Use blocking sleep
+        try:
+            log('Going to attempt to connect')
+            self.func(self.db)
+        except Exception as e:
+            log_exception(e)
 
-                # Get last fail info
-                last_info = self.get_last_conn_fail_info(self.db)
+            # Get last fail info
+            last_info = self.get_last_conn_fail_info(self.db)
 
-                # Register Failed attempt
-                err_count = last_info.fail_count + 1
-                err_msg = f'{last_info.err_msg}\n' \
-                          f'{err_count}: {str(e)[:Conf.MAX_ERR_MSG_LEN]}'
-                new_fail_info = ConnFailInfo(
-                    datetime.now(), err_count, err_msg)
-                self.set_last_conn_fail_info(new_fail_info, self.db)
-                self.inc_next_attempt_time(new_fail_info)
-                # Go to top of loop and sleep
+            # Register Failed attempt
+            err_count = last_info.fail_count + 1
+            err_msg = f'{last_info.err_msg}\n' \
+                      f'{err_count}: {str(e)[:Conf.MAX_ERR_MSG_LEN]}'
+            new_fail_info = ConnFailInfo(
+                datetime.now(), err_count, err_msg)
+            self.set_last_conn_fail_info(new_fail_info, self.db)
+            self.inc_next_attempt_time(new_fail_info)
+
+            # Restart script to prevent "Event loop is closed" exception
+            self.db.purge()  # Save error info before restart
+            restart_script()
 
     @classmethod
     def status(cls, db: DBCache):
