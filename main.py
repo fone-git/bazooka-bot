@@ -1,4 +1,3 @@
-import logging
 import os
 from threading import Thread
 from typing import Optional
@@ -81,7 +80,7 @@ def main():
     setup_log(None, only_std_out=True)
     set_log_level(Conf.LOG_LEVEL)
     log('Main Started')
-    db = DBCache(get_db(), purge_loglevel=logging.INFO)
+    db = DBCache(get_db(), purge_loglevel=Conf.DB_CACHE_PURGE_LOGLEVEL)
     display_start()
     connect_manager = ConnectManager(connect, db)
     connect_manager.do_try_connect()

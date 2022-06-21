@@ -37,6 +37,7 @@ class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
     VERSION = '1.19.8'
     LOG_LEVEL = logging.INFO
+    DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
