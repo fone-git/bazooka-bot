@@ -145,6 +145,7 @@ class Bot(commands.Bot):
                 conn_status = conn_status[:Conf.MAX_DISCORD_MSG_LEN]
             ConnectManager.reset_fail_count(self.db)
             ConnectManager.set_last_conn_success(datetime.now(), self.db)
+            ConnectManager.start_heartbeat(self.db)
             channel = self.get_channel(conf.DEBUG_CHANNEL_ID)
             if channel is not None:
                 await channel.send(conn_status)

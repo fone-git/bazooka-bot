@@ -7,6 +7,7 @@ from typing import Optional
 from opylib.db_cache import DBCache
 from opylib.log import log, log_exception
 from opylib.sys_tools import restart_script
+from opylib.timer import set_interval
 
 from conf import Conf, DBKeys
 
@@ -138,9 +139,12 @@ class ConnectManager:
     @classmethod
     def status(cls, db: DBCache):
         last_fail_info = cls.get_last_conn_fail_info(db)
+        last_heartbeat = cls.get_last_heartbeat(db)
         return (
             f'Server Time Now: {datetime.now()}\n'
             f'Last successful connection: {cls.get_last_conn_success(db)}\n'
+            f'Last Heartbeat: {last_heartbeat}\n'
+            f'Time since heartbeat: {datetime.now() - last_heartbeat}\n'
             f'{last_fail_info}\n'
         )
 
@@ -165,3 +169,21 @@ class ConnectManager:
     @classmethod
     def init_last_conn_fail_info(cls, db: DBCache):
         cls.set_last_conn_fail_info(ConnFailInfo(REF_DATE_IN_PAST, 0, ''), db)
+
+    @classmethod
+    def get_last_heartbeat(cls, db) -> datetime:
+        result = db.get(DBKeys.CM_LAST_HEARTBEAT, should_yaml=True)
+        if result is None:
+            result = REF_DATE_IN_PAST
+            db[DBKeys.CM_LAST_HEARTBEAT, True] = result
+        return result
+
+    @classmethod
+    def start_heartbeat(cls, db):
+        cls.heartbeat_record(db)  # Record heartbeat now
+        set_interval(
+            conf.HEARTBEAT_FREQ.total_seconds(), cls.heartbeat_record, [db])
+
+    @classmethod
+    def heartbeat_record(cls, db):
+        db[DBKeys.CM_LAST_HEARTBEAT, True] = datetime.now()

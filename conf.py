@@ -30,6 +30,7 @@ class DBKeys:  # Database key values
     REGISTRATION = 'registration'
     CM_LAST_CONN_SUCCESS_DT = 'cm_last_conn_success_date_time'
     CM_LAST_CONN_FAIL_INFO = 'cm_last_conn_fail'
+    CM_LAST_HEARTBEAT = 'cm_last_heartbeat'
 
 
 class Conf:
@@ -49,6 +50,7 @@ class Conf:
     class ConnectionManager:
         FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
         MAX_ERR_MSG_LEN = 100
+        HEARTBEAT_FREQ = timedelta(minutes=1)
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
