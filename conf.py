@@ -34,7 +34,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.19.7'
+    VERSION = '1.19.8'
     LOG_LEVEL = logging.INFO
     COMMAND_PREFIX = 'bb'
     SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
@@ -45,7 +45,7 @@ class Conf:
     URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
     FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
-    MAX_ERR_MSG_LEN = 30
+    MAX_ERR_MSG_LEN = 100
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
