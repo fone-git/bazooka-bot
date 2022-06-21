@@ -46,6 +46,7 @@ class Conf:
     EMBED_COLOR = 0x373977
     FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
     MAX_ERR_MSG_LEN = 100
+    MAX_DISCORD_MSG_LEN = 2000
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
