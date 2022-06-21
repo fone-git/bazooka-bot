@@ -48,7 +48,9 @@ def run():
 
 
 def display_start():
-    Thread(target=run).start()
+    t = Thread(target=run)
+    t.setDaemon(True)
+    t.start()
 
 
 ##############################################################################
