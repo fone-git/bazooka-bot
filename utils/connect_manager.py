@@ -4,11 +4,11 @@ from datetime import datetime, timedelta
 from time import sleep
 from typing import Optional
 
+from opylib.db_cache import DBCache
 from opylib.log import log, log_exception
 from opylib.sys_tools import restart_script
 
 from conf import Conf, DBKeys
-from utils.db_cache import DBCache
 
 REF_DATE_IN_PAST = datetime.fromtimestamp(0)
 conf = Conf.ConnectionManager

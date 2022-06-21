@@ -2,9 +2,9 @@
 Simple script to load the export into the DB
 """
 import yaml
+from opylib.replit_support import get_db
 
 from conf import Conf
-from utils.repl_support import get_db
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper

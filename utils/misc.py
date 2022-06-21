@@ -1,15 +1,10 @@
 import yaml
+from opylib.files_folders import mkdir
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
-
-from pathlib import Path
-
-
-def mkdir_w_par(folder):
-    Path(folder).mkdir(parents=True, exist_ok=True)
 
 
 def export(fn: str, data):
@@ -32,7 +27,7 @@ def debug_dump(folder_name: str, data, ext: str = '.yml'):
     :param data: The dictionary like object to save
     :param ext: The extension to put of the exported files
     """
-    mkdir_w_par(folder_name)
+    mkdir(folder_name)
     for key in data.keys():
         with open(f'{folder_name}{key}{ext}', 'w') as f:
             f.write(str(data[key]))

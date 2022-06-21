@@ -2,9 +2,8 @@ import logging
 from abc import abstractmethod
 
 from discord.ext import commands
+from opylib import db_cache
 from opylib.log import log
-
-from utils import db_cache
 
 
 class CogCommon(commands.Cog):

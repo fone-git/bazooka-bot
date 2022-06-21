@@ -1,10 +1,10 @@
 """
 Dumps each key in the db to separate file in one folder for debugging
 """
+from opylib.replit_support import get_db
 
 from conf import Conf
 from utils.misc import debug_dump
-from utils.repl_support import get_db
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper

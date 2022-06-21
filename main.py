@@ -1,3 +1,4 @@
+import logging
 import os
 from threading import Thread
 from typing import Optional
@@ -5,14 +6,14 @@ from typing import Optional
 import discord
 import flask
 from discord.ext import commands
+from opylib.db_cache import DBCache
 from opylib.log import log, set_log_level, setup_log
+from opylib.replit_support import get_db
 from waitress import serve
 
 from bot.custom_bot import Bot
 from conf import Conf
 from utils.connect_manager import ConnectManager
-from utils.db_cache import DBCache
-from utils.repl_support import get_db
 
 #######################################################################
 """
@@ -80,7 +81,7 @@ def main():
     setup_log(None, only_std_out=True)
     set_log_level(Conf.LOG_LEVEL)
     log('Main Started')
-    db = DBCache(get_db())
+    db = DBCache(get_db(), purge_loglevel=logging.INFO)
     display_start()
     connect_manager = ConnectManager(connect, db)
     connect_manager.do_try_connect()

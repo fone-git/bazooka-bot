@@ -4,6 +4,7 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 from opylib.log import log
+from opylib.rate_limited_execution import RateLimitedExecution
 
 from bot.registration.cog_registration import CogRegistration
 from bot.settings.cog_settings import CogSettings
@@ -12,7 +13,6 @@ from bot.unranked.cog_unranked import CogUnranked
 from conf import Conf
 from utils.connect_manager import ConnectManager
 from utils.misc import debug_dump, export
-from utils.rate_limited_execution import RateLimitedExecution
 
 conf = Conf.TopLevel
 """Map class with setting for this cog to variable"""
