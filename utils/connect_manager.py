@@ -24,7 +24,7 @@ class ConnFailInfo:
         return (
             f'Last Fail Connection: {last_time}\n'
             f'Fail Count: {self.fail_count}\n'
-            f'Last Error Message: "{self.err_msg}"'
+            f'Error Messages: {self.err_msg}'
         )
 
 
