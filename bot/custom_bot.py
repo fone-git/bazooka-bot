@@ -151,6 +151,7 @@ class Bot(commands.Bot):
                 await channel.send(conn_status)
             else:
                 log(f'Unable fo find channel with ID: {conf.DEBUG_CHANNEL_ID}')
+            self.db.purge()  # Ensure logon information is saved
 
         @self.event
         async def on_member_join(member):
