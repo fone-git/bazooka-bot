@@ -27,11 +27,9 @@ class CogUnranked(CogCommon, name='Unranked'):
         else:
             try:
                 score = int(args[0])
-            except Exception as e:
-                raise commands.errors.UserInputError(
-                    f'Unable to convert {args[0]} into an integer. Error '
-                    f'message: {e}')
-            await self.score_other(ctx, ctx.author, score)
+                await self.score_other(ctx, ctx.author, score)
+            except ValueError:
+                await super().base(ctx)
 
     ##########################################################################
     # NORMAL COMMANDS
@@ -74,6 +72,14 @@ class CogUnranked(CogCommon, name='Unranked'):
         self.data.remove_player(player)
         self.save()
         await self.send_data_str(ctx, f'{player} removed')
+
+    @base.command(**conf.Command.ANY_SCORE)
+    @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
+    async def any_score(self, ctx, enabled: bool = True):
+        self.data.allow_any_score_value(enabled)
+        self.save()
+        status = 'enabled' if enabled else 'disabled'
+        await ctx.send(f'Any score value {status}')
 
     @base.command(**conf.Command.SET_MESSAGE)
     @commands.has_any_role(*conf.Permissions.PRIV_ROLES)

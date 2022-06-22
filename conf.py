@@ -213,6 +213,10 @@ class Conf:
                 'name': 'rem_other',
                 'help': 'Removes specified player from the rankings'}
 
+            ANY_SCORE = {
+                'name': 'any_score',
+                'help': 'Allows any integer'}
+
             SET_MESSAGE = {
                 'name': 'msg',
                 'help': 'Sets the message that is displayed along with the '
