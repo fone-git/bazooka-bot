@@ -35,7 +35,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.21.0'
+    VERSION = '1.22.0'
     LOG_LEVEL = logging.INFO
     DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
@@ -183,7 +183,8 @@ class Conf:
     class Unranked:
         MAX_SCORE = 10
         BASE_GROUP = {'name': 'ur',
-                      'help': 'Grouping for Unranked Commands',
+                      'help': 'Grouping for Unranked Commands. '
+                              'Number only corresponds to a score.',
                       'invoke_without_command': True}
 
         class Command:
@@ -212,42 +213,15 @@ class Conf:
                 'name': 'rem_other',
                 'help': 'Removes specified player from the rankings'}
 
+            ANY_SCORE = {
+                'name': 'any_score',
+                'help': 'Allows any integer'}
+
             SET_MESSAGE = {
                 'name': 'msg',
                 'help': 'Sets the message that is displayed along with the '
                         'rankings. Can be used to display what deck to use '
                         'or other special instructions'}
-
-            ONE = {
-                'name': '1',
-                'help': 'Sets the score as 1'}
-            TWO = {
-                'name': '2',
-                'help': 'Sets the score as 2'}
-            THREE = {
-                'name': '3',
-                'help': 'Sets the score as 3'}
-            FOUR = {
-                'name': '4',
-                'help': 'Sets the score as 4'}
-            FIVE = {
-                'name': '5',
-                'help': 'Sets the score as 5'}
-            SIX = {
-                'name': '6',
-                'help': 'Sets the score as 6'}
-            SEVEN = {
-                'name': '7',
-                'help': 'Sets the score as 7'}
-            EIGHT = {
-                'name': '8',
-                'help': 'Sets the score as 8'}
-            NINE = {
-                'name': '9',
-                'help': 'Sets the score as 9'}
-            TEN = {
-                'name': '10',
-                'help': 'Sets the score as 10'}
 
         class Permissions:
             PRIV_ROLES = MasterPermissions.PRIV.UNRANKED
