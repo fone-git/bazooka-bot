@@ -122,7 +122,10 @@ class Registration:
                  f' ALLOWED)\n{self.message}\n\n'
         for key in self.categories.keys():
             total_players += len(self.categories[key])
-            result += f'{self.categories[key]}\n'
+            if show_players:
+                result += self.categories[key].get_str_rep(True) + '\n'
+            else:
+                result += f'{self.categories[key]}\n'
 
         result += f'Total Number of Players: {total_players}'
         return result

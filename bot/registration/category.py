@@ -16,7 +16,6 @@ class Category(PlayerList):
         self._name = value
         self._invalidate_calculated()
 
-    def get_str_rep(self):
-        players = self.players_as_str("\n")
-        return f'Idea: {self.number} - {self.name} ({len(self)})\n' \
-               f'{players}\n'
+    def get_str_rep(self, show_players=False):
+        players = '' if not show_players else (self.players_as_str("\n") + '\n')
+        return f'Idea: {self.number} ({len(self)}) - {self.name}\n{players}'
