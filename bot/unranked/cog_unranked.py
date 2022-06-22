@@ -21,8 +21,17 @@ class CogUnranked(CogCommon, name='Unranked'):
     ##########################################################################
     # BASE GROUP
     @commands.group(**conf.BASE_GROUP)
-    async def base(self, ctx):
-        await super().base(ctx)
+    async def base(self, ctx, *args):
+        if len(args) != 1:
+            await super().base(ctx)
+        else:
+            try:
+                score = int(args[0])
+            except Exception as e:
+                raise commands.errors.UserInputError(
+                    f'Unable to convert {args[0]} into an integer. Error '
+                    f'message: {e}')
+            await self.score_other(ctx, ctx.author, score)
 
     ##########################################################################
     # NORMAL COMMANDS
@@ -37,48 +46,6 @@ class CogUnranked(CogCommon, name='Unranked'):
     @base.command(**conf.Command.REMOVE)
     async def remove(self, ctx):
         await self.remove_other(ctx, ctx.author)
-
-    ##########################################################################
-    # CONVENIENCE COMMANDS TO FACILITATE FREQUENT USE CASE
-    @base.command(**conf.Command.ONE)
-    async def one(self, ctx):
-        await self.score_other(ctx, ctx.author, 1)
-
-    @base.command(**conf.Command.TWO)
-    async def two(self, ctx):
-        await self.score_other(ctx, ctx.author, 2)
-
-    @base.command(**conf.Command.THREE)
-    async def three(self, ctx):
-        await self.score_other(ctx, ctx.author, 3)
-
-    @base.command(**conf.Command.FOUR)
-    async def four(self, ctx):
-        await self.score_other(ctx, ctx.author, 4)
-
-    @base.command(**conf.Command.FIVE)
-    async def five(self, ctx):
-        await self.score_other(ctx, ctx.author, 5)
-
-    @base.command(**conf.Command.SIX)
-    async def six(self, ctx):
-        await self.score_other(ctx, ctx.author, 6)
-
-    @base.command(**conf.Command.SEVEN)
-    async def seven(self, ctx):
-        await self.score_other(ctx, ctx.author, 7)
-
-    @base.command(**conf.Command.EIGHT)
-    async def eight(self, ctx):
-        await self.score_other(ctx, ctx.author, 8)
-
-    @base.command(**conf.Command.NINE)
-    async def nine(self, ctx):
-        await self.score_other(ctx, ctx.author, 9)
-
-    @base.command(**conf.Command.TEN)
-    async def ten(self, ctx):
-        await self.score_other(ctx, ctx.author, 10)
 
     ##########################################################################
     # PRIVILEGED COMMANDS
