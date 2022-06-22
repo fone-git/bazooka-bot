@@ -33,6 +33,10 @@ class CogRegistration(CogCommon, name='Ideas'):
     async def display(self, ctx):
         await self.send_data_str(ctx)
 
+    @base.command(**conf.Command.DISPLAY_ALL)
+    async def display_all(self, ctx):
+        await ctx.send(self.data.disp(show_players=True))
+
     @base.command(**conf.Command.REGISTER)
     async def register(self, ctx, idea_number: Union[int, str] = None):
         await self.register_other(ctx, ctx.author, idea_number)
