@@ -35,7 +35,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.22.0'
+    VERSION = '1.23.0'
     LOG_LEVEL = logging.INFO
     DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
@@ -47,6 +47,7 @@ class Conf:
     URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
     MAX_DISCORD_MSG_LEN = 2000
+    HEARTBEAT_DELTA_HIGHLIGHT_THRESHOLD = timedelta(minutes=5)
 
     class ConnectionManager:
         FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)

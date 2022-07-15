@@ -10,6 +10,7 @@ from opylib.sys_tools import restart_script
 from opylib.timer import set_interval
 
 from conf import Conf, DBKeys
+from utils.misc import discord_make_bold
 
 REF_DATE_IN_PAST = datetime.fromtimestamp(0)
 conf = Conf.ConnectionManager
@@ -137,14 +138,20 @@ class ConnectManager:
             restart_script()
 
     @classmethod
-    def status(cls, db: DBCache):
+    def status(cls, db: DBCache, add_discord_highlights=False):
         last_fail_info = cls.get_last_conn_fail_info(db)
         last_heartbeat = cls.get_last_heartbeat(db)
+        heartbeat_delta = datetime.now() - last_heartbeat
+        if (
+                add_discord_highlights and
+                heartbeat_delta >= Conf.HEARTBEAT_DELTA_HIGHLIGHT_THRESHOLD
+        ):
+            heartbeat_delta = discord_make_bold(heartbeat_delta)
         return (
             f'Server Time Now: {datetime.now()}\n'
             f'Last successful connection: {cls.get_last_conn_success(db)}\n'
             f'Last Heartbeat: {last_heartbeat}\n'
-            f'Time since heartbeat: {datetime.now() - last_heartbeat}\n'
+            f'Time since heartbeat: {heartbeat_delta}\n'
             f'{last_fail_info}\n'
         )
 
