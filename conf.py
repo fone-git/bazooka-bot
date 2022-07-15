@@ -47,6 +47,7 @@ class Conf:
     URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
     MAX_DISCORD_MSG_LEN = 2000
+    HEARTBEAT_DELTA_HIGHLIGHT_THRESHOLD = timedelta(minutes=5)
 
     class ConnectionManager:
         FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
