@@ -49,7 +49,7 @@ def run():
 
 def display_start():
     t = Thread(target=run)
-    t.setDaemon(True)
+    t.daemon = True
     t.start()
 
 
