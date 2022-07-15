@@ -50,3 +50,7 @@ def is_power_of_2(value):
     # 2 - If we subtract 1 from a number which is power of 2,
     #   then all the bits after the set-bit (there is only one set bit as per
     #   point-1) will become set and the set bit will be unset. i.e:
+
+
+def discord_make_bold(value) -> str:
+    return f'**{value}**'

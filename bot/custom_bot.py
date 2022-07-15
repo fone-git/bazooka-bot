@@ -135,9 +135,10 @@ class Bot(commands.Bot):
 
         @self.event
         async def on_ready():
+            status = ConnectManager.status(self.db, add_discord_highlights=True)
             conn_status = (
                 f'Successfully logged in as {self.user}\n'
-                f'{ConnectManager.status(self.db)}')
+                f'{status}')
             log(conn_status)
             if len(conn_status) > Conf.MAX_DISCORD_MSG_LEN:
                 log(f'CONNECTION MESSAGE EXCEEDS LIMIT: {len(conn_status)}. '
