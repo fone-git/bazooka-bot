@@ -39,7 +39,7 @@ class Conf:
     LOG_LEVEL = logging.INFO
     DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
-    SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
+    SAVE_CACHE_DELAY = 600  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
     DEBUG_DUMP_FOLDER = 'debug_dump/'
     EXPORT_DELAY = 15
