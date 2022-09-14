@@ -73,7 +73,6 @@ class Conf:
 
         class Permissions:
             ALLOWED_DM_COMMANDS = {  # Hard coded to allow for debugging
-                'export',
                 'version',
                 'ping',
             }
