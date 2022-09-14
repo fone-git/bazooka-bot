@@ -78,7 +78,7 @@ class Bot(commands.Bot):
             Requests that the bot saves to secondary storage immediately
             :param ctx: The Context
             """
-            self.cog_tournament.save()
+            self.db.purge()
             await ctx.author.send("Saved")
 
         def is_dm_or_priv_role(ctx):
