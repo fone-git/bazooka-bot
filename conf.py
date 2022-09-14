@@ -35,7 +35,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.28'
+    VERSION = '1.29'
     LOG_LEVEL = logging.INFO
     DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
@@ -52,7 +52,7 @@ class Conf:
     class ConnectionManager:
         FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
         MAX_ERR_MSG_LEN = 100
-        HEARTBEAT_FREQ = timedelta(minutes=1)
+        HEARTBEAT_FREQ = timedelta(seconds=30)
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
