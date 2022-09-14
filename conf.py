@@ -44,7 +44,7 @@ class Conf:
     DEBUG_DUMP_FOLDER = 'debug_dump/'
     EXPORT_DELAY = 15
     DEBUG_DUMP_DELAY = 5
-    URL = 'https://bazooka-bot.one23.repl.co/'
+    # URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
     MAX_DISCORD_MSG_LEN = 2000
     HEARTBEAT_DELTA_HIGHLIGHT_THRESHOLD = timedelta(minutes=5)

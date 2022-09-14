@@ -353,8 +353,8 @@ class Tournament:
         return result
 
     def as_embed(self) -> Embed:
-        result = Embed(title='HTML Display', color=Conf.EMBED_COLOR,
-                       url=Conf.URL)
+        result = Embed(title='HTML Display', color=Conf.EMBED_COLOR)
+        # url=Conf.URL)
         if len(self.players) > 0:
             for i, round_ in enumerate(self.rounds):
                 result.add_field(name=f'--- Round {i + 1} ---',
