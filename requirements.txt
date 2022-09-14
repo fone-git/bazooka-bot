@@ -1,5 +1,5 @@
 flask~=2.1.2
 pyyaml>=5.4.1
 waitress~=2.1.2
-discord==1.7.3
+discord.py==1.7.3
 opylib>=0.7.0
