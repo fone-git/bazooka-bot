@@ -35,16 +35,16 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.23.0'
+    VERSION = '1.24'
     LOG_LEVEL = logging.INFO
     DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
-    SAVE_CACHE_DELAY = 15  # Minimum number of seconds between saves
+    SAVE_CACHE_DELAY = 600  # Minimum number of seconds between saves
     EXPORT_FILE_NAME = 'export.yaml'
     DEBUG_DUMP_FOLDER = 'debug_dump/'
     EXPORT_DELAY = 15
     DEBUG_DUMP_DELAY = 5
-    URL = 'https://bazooka-bot.one23.repl.co/'
+    # URL = 'https://bazooka-bot.one23.repl.co/'
     EMBED_COLOR = 0x373977
     MAX_DISCORD_MSG_LEN = 2000
     HEARTBEAT_DELTA_HIGHLIGHT_THRESHOLD = timedelta(minutes=5)

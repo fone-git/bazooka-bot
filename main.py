@@ -47,7 +47,7 @@ def run():
     serve(web_interface, host="0.0.0.0", port=8080)
 
 
-def display_start():
+def web_server_start():
     t = Thread(target=run)
     t.daemon = True
     t.start()
@@ -81,7 +81,7 @@ def main():
     set_log_level(Conf.LOG_LEVEL)
     log('Main Started')
     db = DBCache(get_db(), purge_loglevel=Conf.DB_CACHE_PURGE_LOGLEVEL)
-    display_start()
+    # web_server_start()
     connect_manager = ConnectManager(connect, db)
     connect_manager.do_try_connect()
 
