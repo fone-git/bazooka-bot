@@ -80,7 +80,9 @@ def main():
     setup_log(None, only_std_out=True)
     set_log_level(Conf.LOG_LEVEL)
     log('Main Started')
-    db = DBCache(get_db(), purge_loglevel=Conf.DB_CACHE_PURGE_LOGLEVEL)
+    db = DBCache(get_db(),
+                 save_cache_delay=Conf.SAVE_CACHE_DELAY,
+                 purge_loglevel=Conf.DB_CACHE_PURGE_LOGLEVEL)
     # web_server_start()
     connect_manager = ConnectManager(connect, db)
     connect_manager.do_try_connect()
