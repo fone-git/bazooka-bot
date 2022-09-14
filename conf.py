@@ -35,7 +35,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.26'
+    VERSION = '1.27'
     LOG_LEVEL = logging.INFO
     DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
@@ -73,7 +73,6 @@ class Conf:
 
         class Permissions:
             ALLOWED_DM_COMMANDS = {  # Hard coded to allow for debugging
-                'export',
                 'version',
                 'ping',
             }
