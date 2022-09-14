@@ -52,7 +52,7 @@ class Conf:
     class ConnectionManager:
         FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
         MAX_ERR_MSG_LEN = 100
-        HEARTBEAT_FREQ = timedelta(minutes=1)
+        HEARTBEAT_FREQ = timedelta(seconds=30)
 
     class ENV:  # Environment variable names
         TOKEN = 'TOKEN'
