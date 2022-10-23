@@ -35,7 +35,7 @@ class DBKeys:  # Database key values
 
 class Conf:
     BOT_DESCRIPTION = "Bazooka Alliance BOT"
-    VERSION = '1.29'
+    VERSION = '1.30'
     LOG_LEVEL = logging.INFO
     DB_CACHE_PURGE_LOGLEVEL = logging.DEBUG
     COMMAND_PREFIX = 'bb'
@@ -48,6 +48,7 @@ class Conf:
     EMBED_COLOR = 0x373977
     MAX_DISCORD_MSG_LEN = 2000
     HEARTBEAT_DELTA_HIGHLIGHT_THRESHOLD = timedelta(minutes=5)
+    UPTIME_INTERVAL = 24
 
     class ConnectionManager:
         FAILED_CONNECT_INITIAL_DELAY = timedelta(minutes=15)
@@ -98,6 +99,9 @@ class Conf:
                 'hidden': True}
             DEBUG_DUMP = {
                 'name': 'debug_dump',
+                'hidden': True}
+            UPTIME = {
+                'name': 'uptime',
                 'hidden': True}
 
     class Tournament:

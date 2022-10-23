@@ -194,3 +194,12 @@ class ConnectManager:
     @classmethod
     def heartbeat_record(cls, db):
         db[DBKeys.CM_LAST_HEARTBEAT, True] = datetime.now()
+
+    @classmethod
+    def get_uptime(cls, db: DBCache) -> str:
+        if cls.connected:
+            return f"Time since connected: " \
+                   f"{datetime.now() - cls.get_last_conn_success(db)}"
+        else:
+            log("UPTIME Requested but not connected")
+            return "Uptime unavailable, not connected"
