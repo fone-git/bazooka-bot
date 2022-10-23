@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from opylib.log import log
 from opylib.rate_limited_execution import RateLimitedExecution
 
@@ -153,6 +153,7 @@ class Bot(commands.Bot):
             else:
                 log(f'Unable fo find channel with ID: {conf.DEBUG_CHANNEL_ID}')
             self.db.purge()  # Ensure logon information is saved
+            self.uptime.start()
 
         @self.event
         async def on_member_join(member):
@@ -172,3 +173,13 @@ class Bot(commands.Bot):
 
     def debug_dump(self):
         debug_dump(Conf.DEBUG_DUMP_FOLDER, self.db)
+
+    @tasks.loop(hours=Conf.UPTIME_INTERVAL)
+    async def uptime(self):
+        channel = self.get_channel(conf.DEBUG_CHANNEL_ID)
+        if channel is not None:
+            uptime = ConnectManager.get_uptime(self.db)
+            log(uptime)
+            await channel.send(uptime)
+        else:
+            log(f'Unable fo find channel with ID: {conf.DEBUG_CHANNEL_ID}')
