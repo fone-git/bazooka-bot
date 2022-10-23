@@ -100,6 +100,9 @@ class Conf:
             DEBUG_DUMP = {
                 'name': 'debug_dump',
                 'hidden': True}
+            UPTIME = {
+                'name': 'uptime',
+                'hidden': True}
 
     class Tournament:
         BASE_GROUP = {'name': 't',

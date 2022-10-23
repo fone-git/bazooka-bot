@@ -81,6 +81,15 @@ class Bot(commands.Bot):
             self.db.purge()
             await ctx.author.send("Saved")
 
+        @self.command(**conf.Command.UPTIME)
+        @commands.has_any_role(*conf.Permissions.PRIV_ROLES)
+        async def uptime(ctx):
+            """
+            Gives the uptime of the bot
+            :param ctx: The Context
+            """
+            await ctx.send(ConnectManager.get_uptime(self.db))
+
         def is_dm_or_priv_role(ctx):
             if isinstance(ctx.message.channel, discord.DMChannel):
                 return True
